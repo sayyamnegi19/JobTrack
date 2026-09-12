@@ -119,6 +119,9 @@ STATIC_URL = 'static/'
 
 AUTH_USER_MODEL = "accounts.User"
 
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
