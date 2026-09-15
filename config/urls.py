@@ -25,6 +25,7 @@ def dashboard(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", dashboard, name="dashboard"),
     path("accounts/", include("accounts.urls")),
-    path("", dashboard, name="dashboard")
+    path("applications/", include("applications.urls"))
 ]
