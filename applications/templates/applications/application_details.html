@@ -1,60 +1,191 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ application.job_title }} - JobTrack</title>
-</head>
-<body>
-    
-    <h2> {{ application.job_title }} </h2>
-    <h3> {{ application.company }} </h3>
+{% extends "base.html" %}
 
-    <p>
-        <strong>Location: </strong> {{ application.location }}
-    </p>
+{% block title %}
+{{ application.job_title }} - JobTrack
+{% endblock %}
 
-    <p>
-        <strong>Job Type: </strong> {{ application.job_type }}
-    </p>
+{% block extra_css %}
 
-    <p>
-        <strong>Status: </strong> {{ application.job_status }}
-    </p>
+<style>
+    .max-w-900 {
+        max-width: 900px;
+    }
+    .hover-primary:hover span {
+        color: var(--bs-primary) !important;
+    }
+    .transition {
+        transition: all 0.2s ease-in-out;
+    }
+    .tracking-wide {
+        letter-spacing: 0.05em;
+    }
+</style>
 
-    <p>
-        <strong>Salary: {{ application.salary | default:"Not Specified"}} </strong>
-    </p>
+{% endblock %}
 
-    {% if application.job_url %}
-        <p>
-            <strong>Job Posting: </strong>
-            <a href="{{ application.job_url }}" target="_blank">
-                 View Job
+{% block content %}
+<div class="container py-5 px-3 px-md-4 bg-light min-vh-100">
+    <div class="max-w-900 mx-auto">
+        
+        <!-- 1. BACK NAVIGATION -->
+        <div class="mb-4">
+            <a href="{% url 'applications:list' %}" class="text-decoration-none text-muted small fw-semibold d-inline-flex align-items-center gap-2 hover-primary transition">
+                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                    <i class="bi bi-arrow-left text-dark"></i>
+                </div>
+                <span>Back to Applications</span>
             </a>
-        </p>
-    {% endif %}
+        </div>
 
-    {% if application.notes %}
-        <h3>Notes: </h3>
-        <p> {{ application.notes }} </p>
-    {% endif %}
+        <!-- 2 & 3. APPLICATION HEADER & COMPANY/JOB VISUAL -->
+        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden mb-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold fs-3 shadow-sm flex-shrink-0" style="width: 60px; height: 60px;">
+                            <i class="bi bi-building"></i>
+                        </div>
+                        <div>
+                            <h1 class="h3 fw-bold text-dark mb-1">{{ application.job_title }}</h1>
+                            <p class="text-muted fs-5 mb-0 d-flex align-items-center gap-2">
+                                <i class="bi bi-briefcase text-secondary fs-6"></i> {{ application.company }}
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <!-- Colored Status Badge Matching Application List Page -->
+                        <span class="badge 
+                            {% if 'interview'|lower in application.job_status|lower %} bg-success bg-opacity-10 text-success 
+                            {% elif 'reject'|lower in application.job_status|lower %} bg-danger bg-opacity-10 text-danger 
+                            {% elif 'offer'|lower in application.job_status|lower %} bg-warning bg-opacity-10 text-warning 
+                            {% else %} bg-primary bg-opacity-10 text-primary {% endif %} 
+                            px-3 py-2 rounded-pill fw-semibold fs-6">
+                            {{ application.job_status }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <a href="{% url 'applications:edit' application.pk %}">
-        Edit Application
-    </a>
+        <!-- 4. MAIN DETAILS CARD -->
+        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden mb-4">
+            <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
+                <h2 class="h5 fw-bold text-dark mb-0">Application Details</h2>
+                <hr class="text-muted opacity-10 mt-3 mb-0">
+            </div>
+            <div class="card-body p-4 p-md-5 pt-4">
+                <div class="row g-4">
+                    
+                    <!-- Location Item -->
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Location</span>
+                                <span class="text-dark fw-medium">{{ application.location|default:"Not specified" }}</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <br><br>
+                    <!-- Job Type Item -->
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <i class="bi bi-clock-fill"></i>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Job Type</span>
+                                <span class="text-dark fw-medium">{{ application.job_type }}</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <a href="{% url 'applications:delete' application.pk %}">
-        Delete Application
-    </a>
+                    <!-- Application Date Item -->
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <i class="bi bi-calendar-event-fill"></i>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Application Date</span>
+                                <span class="text-dark fw-medium">{{ application.application_date }}</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <br><br>
+                    <!-- Salary Item -->
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <i class="bi bi-currency-rupee"></i>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Salary</span>
+                                <span class="text-dark fw-medium">{{ application.salary|default:"Not specified" }}</span>
+                            </div>
+                        </div>
+                    </div>
 
-    <a href="{% url 'applications:list' %}">
-        Back to Applications
-    </a>
+                    <!-- Job Posting URL Item -->
+                    {% if application.job_url %}
+                    <div class="col-12 pt-2">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <i class="bi bi-link-45deg"></i>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Job Posting</span>
+                                <a href="{{ application.job_url }}" target="_blank" rel="noopener noreferrer" class="text-primary fw-semibold text-decoration-none d-inline-flex align-items-center gap-1 mt-1">
+                                    <span>View Original Job Posting</span>
+                                    <i class="bi bi-box-arrow-up-right fs-6"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
 
-</body>
-</html>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. NOTES SECTION -->
+        {% if application.notes %}
+        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden mb-4">
+            <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-journal-text text-primary fs-5"></i>
+                    <h2 class="h5 fw-bold text-dark mb-0">Notes</h2>
+                </div>
+                <hr class="text-muted opacity-10 mt-3 mb-0">
+            </div>
+            <div class="card-body p-4 p-md-5 pt-4">
+                <div class="bg-light p-4 rounded-3 text-secondary text-break" style="line-height: 1.6;">
+                    {{ application.notes|linebreaksbr }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 6. ACTION BUTTONS -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+                <a href="{% url 'applications:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-arrow-left"></i> Back to Applications
+                </a>
+                <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-sm-auto">
+                    <a href="{% url 'applications:edit' application.pk %}" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-pencil-square"></i> Edit Application
+                    </a>
+                    <a href="{% url 'applications:delete' application.pk %}" class="btn btn-outline-danger px-4 py-2.5 fw-semibold rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-trash"></i> Delete Application
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

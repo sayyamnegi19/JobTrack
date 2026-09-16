@@ -1,45 +1,214 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Applications - JobTrack</title>
-</head>
-<body>
-    
-    <h2>My Job Applications: </h2>
+{% extends "base.html" %}
 
-    <a href="{% url 'applications:add' %}">
-        Add Application
-    </a>
+{% block extra_css %}
 
-    {% if applications %}
+<style>
+    .max-w-1200 {
+        max-width: 1200px;
+    }
+    .max-w-400 {
+        max-width: 400px;
+    }
+    .hover-shadow {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.08)!important;
+    }
+    /* Ensures card links function seamlessly without disrupting internal layout */
+    .stretched-link-custom::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        content: "";
+    }
+    .card {
+        position: relative;
+    }
+    .z-index-relative {
+        position: relative;
+        z-index: 2;
+    }
+</style>
 
-            {% for application in applications %}
+{% endblock %}
 
-                <div>
-                    <h3>
-                        <a href="{% url 'applications:details' application.pk %}">
-                            {{ application.job_title }}
-                        </a>
-                    </h3>
-                    <p>
-                        {{ application.company }}
-                    </p>
-                    <p>
-                        Status: {{ application.job_status }}
-                    </p>
-                    <p>
-                        Applied on: {{ application.application_date }}
-                    </p>
+{% block content %}
+<div class="container-fluid py-4 px-3 px-md-4 bg-light min-vh-100">
+    <div class="max-w-1200 mx-auto">
+        
+        <!-- PAGE HEADER -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+                <h1 class="h3 fw-bold text-dark mb-1">My Applications</h1>
+                <p class="text-muted small mb-0">Track and manage all your job applications in one place.</p>
+            </div>
+            <div>
+                <a href="{% url 'applications:add' %}" class="btn btn-primary px-3 py-2 fw-semibold shadow-sm d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-plus-lg"></i> Add Application
+                </a>
+            </div>
+        </div>
+
+        <!-- OVERVIEW / SUMMARY CARDS -->
+        <!-- Note: These statistics require extra Django view context variables (e.g., total_applications, pending_applications, interview_applications, rejected_applications) to show real-time numbers dynamically. They use placeholders or can be tied to context variables if provided. -->
+        <!--
+        <div class="row g-3 mb-4">
+            <div class="col-sm-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small d-block mb-1">Total Applications</span>
+                            <h3 class="fw-bold text-dark mb-0">{{ total_applications|default:"--" }}</h3>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3 fs-4">
+                            <i class="bi bi-folder-fill"></i>
+                        </div>
+                    </div>
                 </div>
-            {% endfor %}
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small d-block mb-1">Applied / Pending</span>
+                            <h3 class="fw-bold text-info mb-0">{{ pending_applications|default:"--" }}</h3>
+                        </div>
+                        <div class="bg-info bg-opacity-10 text-info p-3 rounded-3 fs-4">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small d-block mb-1">Interviews</span>
+                            <h3 class="fw-bold text-success mb-0">{{ interview_applications|default:"--" }}</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 text-success p-3 rounded-3 fs-4">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small d-block mb-1">Rejected</span>
+                            <h3 class="fw-bold text-danger mb-0">{{ rejected_applications|default:"--" }}</h3>
+                        </div>
+                        <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-3 fs-4">
+                            <i class="bi bi-x-octagon-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    -->
+        <!-- SEARCH / FILTER TOOLBAR (Visual Placeholder UI) -->
+    <!--
+        <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0 text-muted ps-3"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control bg-light border-0 py-2 small" placeholder="Search applications..." disabled>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select bg-light border-0 py-2 small text-muted" disabled>
+                        <option selected>Filter by Status</option>
+                        <option>Applied</option>
+                        <option>Interviewing</option>
+                        <option>Offer</option>
+                        <option>Rejected</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select bg-light border-0 py-2 small text-muted" disabled>
+                        <option selected>Sort by: Recent</option>
+                        <option>Company Name</option>
+                        <option>Application Date</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    -->
+        <!-- MAIN APPLICATION SECTION -->
+        <div class="mb-3">
+            <h2 class="h5 fw-bold text-dark mb-3">Your Applications</h2>
+        </div>
 
-    {% else %}
+        {% if applications %}
+            <div class="row g-3">
+                {% for application in applications %}
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between transition hover-shadow">
+                            <div>
+                                <!-- Top Row: Icon placeholder & Status Badge -->
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold" style="width: 45px; height: 45px;">
+                                        <i class="bi bi-building fs-5"></i>
+                                    </div>
+                                    <!-- Dynamic status badge with fallback styling -->
+                                    <span class="badge 
+                                        {% if 'interview'|lower in application.job_status|lower %} bg-success bg-opacity-10 text-success 
+                                        {% elif 'reject'|lower in application.job_status|lower %} bg-danger bg-opacity-10 text-danger 
+                                        {% elif 'offer'|lower in application.job_status|lower %} bg-warning bg-opacity-10 text-warning 
+                                        {% else %} bg-primary bg-opacity-10 text-primary {% endif %} 
+                                        px-3 py-2 rounded-pill fw-semibold small">
+                                        {{ application.job_status }}
+                                    </span>
+                                </div>
 
-        <p> No applications yet. </p>
+                                <!-- Job Title & Company Details -->
+                                <h3 class="h6 fw-bold mb-1">
+                                    <a href="{% url 'applications:details' application.pk %}" class="text-dark text-decoration-none stretched-link-custom">
+                                        {{ application.job_title }}
+                                    </a>
+                                </h3>
+                                <p class="text-muted small mb-3">
+                                    <i class="bi bi-briefcase me-1"></i> {{ application.company }}
+                                </p>
+                            </div>
 
-    {% endif %}
+                            <!-- Footer Row: Date & Action Link -->
+                            <div class="pt-3 border-top d-flex align-items-center justify-content-between text-muted small mt-2">
+                                <span><i class="bi bi-calendar-event me-1"></i> {{ application.application_date }}</span>
+                                <a href="{% url 'applications:details' application.pk %}" class="text-primary fw-semibold text-decoration-none z-index-relative">
+                                    View Details <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- EMPTY STATE -->
+            <div class="card border-0 shadow-sm rounded-4 p-5 bg-white text-center my-5">
+                <div class="max-w-400 mx-auto py-4">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center p-4 mb-3 fs-2 shadow-sm" style="width: 80px; height: 80px;">
+                        <i class="bi bi-folder2-open"></i>
+                    </div>
+                    <h3 class="h5 fw-bold text-dark mb-2">No applications yet</h3>
+                    <p class="text-muted small mb-4">
+                        Start tracking your job search by adding your first application. Keep all notes, dates, and interview stages organized in one place.
+                    </p>
+                    <a href="{% url 'applications:add' %}" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm">
+                        <i class="bi bi-plus-lg me-1"></i> Add Your First Application
+                    </a>
+                </div>
+            </div>
+        {% endif %}
 
-</body>
-</html>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+
+{% block title %} Home - JobTrack {% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="py-5 bg-light border-bottom">
+    <div class="container py-xxl-4">
+        <div class="row align-items-center g-5">
+            <!-- Hero Text Content -->
+            <div class="col-lg-6 text-center text-lg-start">
+                <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-3">
+                    <i class="bi bi-rocket-takeoff me-1"></i> Your Ultimate Career Companion
+                </span>
+                <h1 class="display-4 fw-bold text-dark mb-3 lh-sm">
+                    Track Your Job Search. <span class="text-primary">Stay Organized.</span> Get Hired.
+                </h1>
+                <p class="lead text-muted mb-4">
+                    JobTrack helps you effortlessly manage applications, interviews, rejections, and upcoming schedules all in one clean, powerful dashboard.
+                </p>
+                <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg px-4 shadow-sm">
+                            Dashboard <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg px-4 shadow-sm">
+                            Get Started <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                        <a href="{% url 'accounts:login' %}" class="btn btn-outline-dark btn-lg px-4">
+                            Login
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="mt-4 text-muted small">
+                    <span class="me-3"><i class="bi bi-check-circle-fill text-success me-1"></i> Free to use</span>
+                    <span><i class="bi bi-check-circle-fill text-success me-1"></i> No spreadsheets needed</span>
+                </div>
+            </div>
+
+            <!-- Hero Dashboard Mockup (Using Bootstrap Components) -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white">
+                    <div class="card-header bg-dark text-white px-4 py-3 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-danger rounded-circle p-1"></span>
+                            <span class="badge bg-warning rounded-circle p-1"></span>
+                            <span class="badge bg-success rounded-circle p-1"></span>
+                        </div>
+                        <span class="small font-monospace text-muted">JobTrack Dashboard Preview</span>
+                    </div>
+                    <div class="card-body p-4 bg-light">
+                        <!-- Quick Stats Mini Row -->
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border-start border-primary border-4">
+                                    <small class="text-muted d-block">Applications</small>
+                                    <h4 class="fw-bold mb-0 text-dark">24</h4>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border-start border-success border-4">
+                                    <small class="text-muted d-block">Interviews</small>
+                                    <h4 class="fw-bold mb-0 text-success">6</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mini Table Preview -->
+                        <div class="bg-white rounded-3 shadow-sm p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="fw-semibold small text-dark">Recent Applications</span>
+                                <span class="badge bg-light text-dark border">View All</span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0 small">
+                                    <thead class="text-muted border-bottom">
+                                        <tr>
+                                            <th>Role</th>
+                                            <th>Company</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-medium">Frontend Dev</td>
+                                            <td>TechCorp</td>
+                                            <td><span class="badge bg-success bg-opacity-10 text-success">Interview</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-medium">Backend Engineer</td>
+                                            <td>DataFlow</td>
+                                            <td><span class="badge bg-warning bg-opacity-10 text-warning">Pending</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-medium">Full Stack Lead</td>
+                                            <td>InnoSoft</td>
+                                            <td><span class="badge bg-info bg-opacity-10 text-info">Applied</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="py-5 bg-white">
+    <div class="container py-xxl-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-primary fw-semibold text-uppercase tracking-wider small">Features</span>
+            <h2 class="fw-bold text-dark mt-1">Everything You Need to Manage Your Job Search</h2>
+            <p class="text-muted">Powerful features built to remove the chaos out of looking for your next career move.</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4 p-3 bg-light hover-shadow transition">
+                    <div class="card-body">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-inline-flex align-items-center justify-content-center p-3 mb-3 fs-4">
+                            <i class="bi bi-briefcase-fill"></i>
+                        </div>
+                        <h3 class="h5 fw-bold text-dark">Track Job Applications</h3>
+                        <p class="text-muted small mb-0">Log company names, job roles, application dates, salary info, and direct links effortlessly.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Feature 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4 p-3 bg-light hover-shadow transition">
+                    <div class="card-body">
+                        <div class="bg-success bg-opacity-10 text-success rounded-3 d-inline-flex align-items-center justify-content-center p-3 mb-3 fs-4">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </div>
+                        <h3 class="h5 fw-bold text-dark">Manage Interviews</h3>
+                        <p class="text-muted small mb-0">Keep track of interview stages, rounds, technical tests, and recruiter meeting links in one spot.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Feature 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4 p-3 bg-light hover-shadow transition">
+                    <div class="card-body">
+                        <div class="bg-warning bg-opacity-10 text-warning rounded-3 d-inline-flex align-items-center justify-content-center p-3 mb-3 fs-4">
+                            <i class="bi bi-alarm-fill"></i>
+                        </div>
+                        <h3 class="h5 fw-bold text-dark">Upcoming Interviews</h3>
+                        <p class="text-muted small mb-0">Never miss a meeting with dedicated notifications and timeline alerts for scheduled interviews.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Feature 4 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4 p-3 bg-light hover-shadow transition">
+                    <div class="card-body">
+                        <div class="bg-danger bg-opacity-10 text-danger rounded-3 d-inline-flex align-items-center justify-content-center p-3 mb-3 fs-4">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </div>
+                        <h3 class="h5 fw-bold text-dark">Track Rejections</h3>
+                        <p class="text-muted small mb-0">Learn from feedback, clear out dead leads, and maintain closure across all your historical submissions.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Feature 5 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4 p-3 bg-light hover-shadow transition">
+                    <div class="card-body">
+                        <div class="bg-info bg-opacity-10 text-info rounded-3 d-inline-flex align-items-center justify-content-center p-3 mb-3 fs-4">
+                            <i class="bi bi-pie-chart-fill"></i>
+                        </div>
+                        <h3 class="h5 fw-bold text-dark">Application Status</h3>
+                        <p class="text-muted small mb-0">Dynamically update stages from Applied to Interviewing, Offered, or Declined with clear tags.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Feature 6 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4 p-3 bg-light hover-shadow transition">
+                    <div class="card-body">
+                        <div class="bg-secondary bg-opacity-10 text-secondary rounded-3 d-inline-flex align-items-center justify-content-center p-3 mb-3 fs-4">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+                        <h3 class="h5 fw-bold text-dark">Job Search Overview</h3>
+                        <p class="text-muted small mb-0">Gain high-level insights and visual progress indicators to keep your momentum moving forward.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS SECTION -->
+<section class="py-5 bg-light border-top border-bottom">
+    <div class="container py-xxl-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-primary fw-semibold text-uppercase tracking-wider small">Workflow</span>
+            <h2 class="fw-bold text-dark mt-1">How JobTrack Works</h2>
+            <p class="text-muted">Get up and running in under a minute with our simple 3-step process.</p>
+        </div>
+
+        <div class="row g-4 text-center">
+            <!-- Step 1 -->
+            <div class="col-md-4">
+                <div class="card border-0 bg-transparent h-100 p-3">
+                    <div class="card-body">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center fw-bold fs-4 mb-4 shadow" style="width: 60px; height: 60px;">
+                            1
+                        </div>
+                        <h3 class="h5 fw-bold text-dark">Add Your Applications</h3>
+                        <p class="text-muted small">Quickly record details of every job you apply to, including role, company description, and portals.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 2 -->
+            <div class="col-md-4">
+                <div class="card border-0 bg-transparent h-100 p-3">
+                    <div class="card-body">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center fw-bold fs-4 mb-4 shadow" style="width: 60px; height: 60px;">
+                            2
+                        </div>
+                        <h3 class="h5 fw-bold text-dark">Track Your Progress</h3>
+                        <p class="text-muted small">Move cards through interview phases, update application statuses, and add notes after every conversation.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 3 -->
+            <div class="col-md-4">
+                <div class="card border-0 bg-transparent h-100 p-3">
+                    <div class="card-body">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center fw-bold fs-4 mb-4 shadow" style="width: 60px; height: 60px;">
+                            3
+                        </div>
+                        <h3 class="h5 fw-bold text-dark">Land Your Next Opportunity</h3>
+                        <p class="text-muted small">Compare offers, stay calm with organized schedules, and secure your next dream job position.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DASHBOARD PREVIEW SECTION -->
+<section class="py-5 bg-white">
+    <div class="container py-xxl-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-primary fw-semibold text-uppercase tracking-wider small">Preview</span>
+            <h2 class="fw-bold text-dark mt-1">A Visual Look Inside Your Dashboard</h2>
+            <p class="text-muted">Designed to cut clutter and display high-impact metrics straight away.</p>
+        </div>
+
+        <div class="card border-0 shadow-lg rounded-4 p-4 bg-light">
+            <div class="row g-4 mb-4">
+                <!-- Stat Card 1 -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted small d-block">Total Applications</span>
+                                <h3 class="fw-bold text-dark mb-0">24</h3>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3 fs-4">
+                                <i class="bi bi-folder-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Stat Card 2 -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted small d-block">Interviews</span>
+                                <h3 class="fw-bold text-success mb-0">6</h3>
+                            </div>
+                            <div class="bg-success bg-opacity-10 text-success p-3 rounded-3 fs-4">
+                                <i class="bi bi-chat-dots-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Stat Card 3 -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted small d-block">Upcoming Interviews</span>
+                                <h3 class="fw-bold text-warning mb-0">3</h3>
+                            </div>
+                            <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-3 fs-4">
+                                <i class="bi bi-calendar-event-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Stat Card 4 -->
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted small d-block">Rejections</span>
+                                <h3 class="fw-bold text-danger mb-0">8</h3>
+                            </div>
+                            <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-3 fs-4">
+                                <i class="bi bi-x-octagon-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization / Progress Bar Breakdown -->
+            <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+                <h5 class="fw-bold text-dark mb-3 small text-uppercase">Pipeline Distribution</h5>
+                <div class="progress mb-3" style="height: 12px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 35%;" title="Applied"></div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" title="Interviewing"></div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: 15%;" title="Offer"></div>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" title="Rejected"></div>
+                </div>
+                <div class="d-flex flex-wrap gap-4 text-muted small">
+                    <div><span class="badge bg-primary rounded-circle p-1 me-1"></span> Applied (35%)</div>
+                    <div><span class="badge bg-success rounded-circle p-1 me-1"></span> Interviewing (25%)</div>
+                    <div><span class="badge bg-warning rounded-circle p-1 me-1"></span> Offer (15%)</div>
+                    <div><span class="badge bg-danger rounded-circle p-1 me-1"></span> Rejected (25%)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CALL TO ACTION SECTION -->
+<section class="py-5 bg-primary text-white">
+    <div class="container py-xxl-4 text-center">
+        <div class="max-w-700 mx-auto">
+            <h2 class="fw-bold display-6 mb-3">Take Control of Your Job Search</h2>
+            <p class="lead opacity-75 mb-4">
+                Stop managing your applications across random spreadsheets and scattered notes. Keep everything structured, searchable, and organized with JobTrack.
+            </p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg px-5 py-3 fw-semibold text-primary shadow-sm">
+                Go to Dashboard <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        {% else %}
+            <a href="{% url 'accounts:register' %}" class="btn btn-light btn-lg px-5 py-3 fw-semibold text-primary shadow-sm">
+                Start Tracking Your Applications <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,24 +1,138 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page_title }} - JobTrack</title>
-</head>
-<body>
-    <h2> {{ page_title }} </h2>
+{% extends "base.html" %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
+{% block title %}
+{{ page_title }} - JobTrack
+{% endblock %}
 
-        <button type="submit">
-            Save Application
-        </button>
-    </form>
+{% block content %}
+<div class="container py-5 px-3 px-md-4 bg-light min-vh-100">
+    <div class="max-w-800 mx-auto">
+        
+        <!-- BACK LINK -->
+        <div class="mb-4">
+            <a href="{% url 'applications:list' %}" class="text-decoration-none text-muted small fw-semibold d-inline-flex align-items-center gap-2 hover-primary transition">
+                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                    <i class="bi bi-arrow-left text-dark"></i>
+                </div>
+                <span>Back to Applications</span>
+            </a>
+        </div>
 
-    <a href="{% url 'applications:list' %}">
-        Cancel
-    </a>
-</body>
-</html>
+        <!-- MAIN FORM CARD -->
+        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden">
+            
+            <!-- Card Header with Icon Accent -->
+            <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm" style="width: 52px; height: 52px;">
+                        <i class="bi bi-briefcase-fill"></i>
+                    </div>
+                    <div>
+                        <h1 class="h4 fw-bold text-dark mb-1">{{ page_title }}</h1>
+                        <p class="text-muted small mb-0">Fill in the details below to keep your job search pipeline accurate and up to date.</p>
+                    </div>
+                </div>
+                <hr class="text-muted opacity-10 mt-4 mb-0">
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body p-4 p-md-5 pt-4">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <!-- NON-FIELD ERRORS -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger py-2 small rounded-3 mb-4 shadow-sm" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <div><i class="bi bi-exclamation-circle-fill me-1"></i> {{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- DYNAMIC FIELD GRID -->
+                    <div class="row g-4">
+                        {% for field in form %}
+                            <div class="col-md-6 {% if field.field.widget.input_type == 'textarea' or 'note' in field.name|lower or 'url' in field.name|lower or 'link' in field.name|lower or 'description' in field.name|lower %}col-md-12{% endif %}">
+                                <div class="form-group">
+                                    <label for="{{ field.id_for_label }}" class="form-label small fw-bold text-secondary mb-2 text-uppercase tracking-wide" style="font-size: 0.75rem;">
+                                        {{ field.label }}
+                                        {% if field.field.required %}<span class="text-danger ms-1">*</span>{% endif %}
+                                    </label>
+                                    
+                                    <!-- Django Field Element -->
+                                    {{ field }}
+
+                                    {% if field.help_text %}
+                                        <div class="form-text text-muted mt-1" style="font-size: 0.75rem;">{{ field.help_text|safe }}</div>
+                                    {% endif %}
+
+                                    {% if field.errors %}
+                                        <div class="invalid-feedback d-block small mt-1">
+                                            {% for error in field.errors %}
+                                                <span><i class="bi bi-exclamation-triangle me-1"></i>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- ACTION BUTTONS -->
+                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 pt-4 mt-5 border-top">
+                        <a href="{% url 'applications:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm w-100 w-sm-auto order-1 order-sm-2 rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-check2-circle fs-5"></i> Save Application
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .max-w-800 {
+        max-width: 800px;
+    }
+    .hover-primary:hover span {
+        color: var(--bs-primary) !important;
+    }
+    .transition {
+        transition: all 0.2s ease-in-out;
+    }
+    /* Professional SaaS input controls */
+    input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="date"], select, textarea {
+        display: block;
+        width: 100%;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fcfdfd;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        appearance: none;
+        border-radius: 0.5rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    }
+    input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+        color: #212529;
+        background-color: #fff;
+        border-color: #0d6efd;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    }
+    textarea {
+        min-height: 120px;
+    }
+    .tracking-wide {
+        letter-spacing: 0.05em;
+    }
+</style>
+{% endblock %}

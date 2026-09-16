@@ -1,33 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Application - JobTrack</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h2>Delete Application</h2>
+{% block title %}
+Delete Application - JobTrack
+{% endblock %}
 
-    <p>
-        Are you sure you want to delete 
-        <strong> {{ application.job_title }} </strong> 
-        at 
-        <strong> {{ application.company }} </strong>?
-    </p>
+{% block extra_css %}
 
-    <form method="POST">
+<style>
+    .tracking-wide {
+        letter-spacing: 0.05em;
+    }
+</style>
 
-        {% csrf_token %}
-        <button type="submit">
-            Yes, Delete
-        </button>
+{% endblock %}
 
-    </form>
+{% block content %}
+<div class="container-fluid min-vh-100 d-flex flex-column justify-content-center bg-light py-5 px-3">
+    <div class="row justify-content-center w-100 mx-auto">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            
+            <!-- DELETE CONFIRMATION CARD -->
+            <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden text-center p-4 p-sm-5">
+                <div class="card-body p-0">
+                    
+                    <!-- Trash Icon Symbol -->
+                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-4 shadow-sm" style="width: 70px; height: 70px;">
+                        <i class="bi bi-trash3 fs-3"></i>
+                    </div>
 
-    <a href="{% url 'applications:details' application.pk %}">
-        Cancel
-    </a>
+                    <!-- Main Heading -->
+                    <h1 class="h3 fw-bold text-dark mb-2">Delete Application?</h1>
+                    
+                    <!-- Confirmation Message -->
+                    <p class="text-muted small mb-4">
+                        Are you sure you want to delete your application for the role below? This action cannot be undone.
+                    </p>
 
-</body>
-</html>
+                    <!-- Application Summary Box -->
+                    <div class="bg-light border rounded-3 p-3 mb-4 text-start shadow-sm">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 45px; height: 45px;">
+                                <i class="bi bi-building fs-5"></i>
+                            </div>
+                            <div class="overflow-hidden">
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.65rem;">Job Title & Company</span>
+                                <h2 class="h6 fw-bold text-dark mb-0 text-truncate">{{ application.job_title }}</h2>
+                                <p class="text-muted small mb-0 text-truncate"><i class="bi bi-briefcase me-1"></i>{{ application.company }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DELETE FORM & ACTIONS -->
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+                            <a href="{% url 'applications:details' application.pk %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 rounded-3 order-2 order-sm-1">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger px-4 py-2.5 fw-semibold shadow-sm w-100 rounded-3 d-inline-flex align-items-center justify-content-center gap-2 order-1 order-sm-2">
+                                <i class="bi bi-trash3"></i> Yes, Delete
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

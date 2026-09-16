@@ -1,27 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - JobTrack</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Login to JobTrack</h1>
+{% block extra_css %}
 
-    <form method="post">
-        {% csrf_token %}
+<style>
+    /* Styling hook to ensure Django default widget outputs match Bootstrap form-control requirements cleanly */
+    input[type="text"], input[type="password"], input[type="email"] {
+        display: block;
+        width: 100%;
+        padding: 0.55rem 0.75rem;
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #f8f9fa;
+        background-clip: padding-box;
+        border: 1px solid #dee2e6;
+        appearance: none;
+        border-radius: 0.5rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+        color: #212529;
+        background-color: #fff;
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+</style>
 
-        {{ form.as_p }}
+{% endblock %}
 
-        <button type="submit">Login</button>
-    </form>
+{% block content %}
+<div class="container-fluid min-vh-100 d-flex flex-column justify-content-center bg-light py-4">
+    <div class="row justify-content-center align-items-center w-100 mx-auto" style="max-width: 1000px;">
+        
+        <!-- Left Column: Branding / Visual Section -->
+        <div class="col-lg-6 d-none d-lg-flex flex-column justify-content-center p-5 text-dark">
+            <div class="mb-4">
+                <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-3">
+                    <i class="bi bi-briefcase-fill me-1"></i> JobTrack
+                </span>
+                <h1 class="display-6 fw-bold mb-3 text-dark">
+                    Your job search, <span class="text-primary">organized.</span>
+                </h1>
+                <p class="text-muted lead fs-6 mb-0">
+                    Track applications, manage interviews, and stay on top of your job search — all in one place.
+                </p>
+            </div>
+            <div class="d-flex gap-3 text-muted small">
+                <div><i class="bi bi-check-circle-fill text-success me-1"></i> Centralized Dashboard</div>
+                <div><i class="bi bi-check-circle-fill text-success me-1"></i> Zero Spreadsheets</div>
+            </div>
+        </div>
 
-    <p>
-        Don't have an account?
-        <a href="{% url 'accounts:register' %}">
-            Register
-        </a>
-    </p>
+        <!-- Right Column: Login Card -->
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4 p-4 p-sm-5 bg-white">
+                
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-dark fs-3">Welcome Back</h2>
+                    <p class="text-muted small mb-0">Sign in to continue to your JobTrack dashboard.</p>
+                </div>
 
-</body>
-</html>
+                <!-- Non-field Errors -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger py-2 small rounded-3" role="alert">
+                        {% for error in form.non_field_errors %}
+                            <div><i class="bi bi-exclamation-circle-fill me-1"></i> {{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label small fw-semibold text-secondary">
+                                {{ field.label }}
+                                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                            </label>
+                            
+                            <!-- Render form field with Bootstrap classes -->
+                            {{ field }}
+
+                            {% if field.errors %}
+                                <div class="invalid-feedback d-block small mt-1">
+                                    {% for error in field.errors %}
+                                        <span><i class="bi bi-exclamation-triangle me-1"></i>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary py-2 fw-semibold shadow-sm">
+                            Sign In <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4 pt-3 border-top">
+                    <p class="small text-muted mb-0">
+                        Don't have an account? 
+                        <a href="{% url 'accounts:register' %}" class="text-primary fw-semibold text-decoration-none">Create one</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

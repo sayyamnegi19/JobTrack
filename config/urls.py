@@ -18,14 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.views.generic import TemplateView
 
 @login_required
 def dashboard(request):
     return HttpResponse("Welcome to job track.")
 
 urlpatterns = [
+    path("", TemplateView.as_view(template_name='home.html'), name="home"),
     path('admin/', admin.site.urls),
-    path("", dashboard, name="dashboard"),
+    path("dashboard/", dashboard, name="dashboard"),
     path("accounts/", include("accounts.urls")),
     path("applications/", include("applications.urls"))
 ]
