@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ interview.round_name }} - JobTrack
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    .max-w-900 {
+        max-width: 900px;
+    }
+    .hover-primary:hover span {
+        color: var(--bs-primary) !important;
+    }
+    .transition {
+        transition: all 0.2s ease-in-out;
+    }
+    .tracking-wide {
+        letter-spacing: 0.05em;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 px-3 px-md-4 bg-light min-vh-100">
+    <div class="max-w-900 mx-auto">
+        
+        <!-- BACK NAVIGATION -->
+        <div class="mb-4">
+            <a href="{% url 'interviews:list' %}" class="text-decoration-none text-muted small fw-semibold d-inline-flex align-items-center gap-2 hover-primary transition">
+                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                    <i class="bi bi-arrow-left text-dark"></i>
+                </div>
+                <span>Back to Interviews</span>
+            </a>
+        </div>
+
+        <!-- INTERVIEW HEADER & VISUAL -->
+        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden mb-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold fs-3 shadow-sm flex-shrink-0" style="width: 60px; height: 60px;">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                        <div>
+                            <h1 class="h3 fw-bold text-dark mb-1">{{ interview.round_name }}</h1>
+                            <p class="text-muted fs-5 mb-0 d-flex flex-wrap align-items-center gap-2 text-break">
+                                <span class="d-inline-flex align-items-center gap-1"><i class="bi bi-briefcase text-secondary fs-6"></i> {{ interview.application.job_title }}</span>
+                                <span class="text-muted">at</span>
+                                <span class="d-inline-flex align-items-center gap-1 fw-medium text-dark"><i class="bi bi-building text-secondary fs-6"></i> {{ interview.application.company }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <!-- Dynamic Semantic Status Badge -->
+                        <span class="badge 
+                            {% if 'complet'|lower in interview.get_status_display|lower or 'pass'|lower in interview.get_status_display|lower %} bg-success bg-opacity-10 text-success 
+                            {% elif 'cancel'|lower in interview.get_status_display|lower or 'reject'|lower in interview.get_status_display|lower %} bg-danger bg-opacity-10 text-danger 
+                            {% elif 'sched'|lower in interview.get_status_display|lower or 'upcoming'|lower in interview.get_status_display|lower %} bg-primary bg-opacity-10 text-primary 
+                            {% else %} bg-secondary bg-opacity-10 text-secondary {% endif %} 
+                            px-3 py-2 rounded-pill fw-semibold fs-6">
+                            {{ interview.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN DETAILS CARD -->
+        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden mb-4">
+            <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
+                <h2 class="h5 fw-bold text-dark mb-0">Interview Details</h2>
+                <hr class="text-muted opacity-10 mt-3 mb-0">
+            </div>
+            <div class="card-body p-4 p-md-5 pt-4">
+                <div class="row g-4">
+                    
+                    <!-- Interview Type Item -->
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <i class="bi bi-briefcase-fill"></i>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Interview Type</span>
+                                <span class="text-dark fw-medium">{{ interview.get_interview_type_display }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Item -->
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <i class="bi bi-circle-check"></i>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Status</span>
+                                <span class="text-dark fw-medium">{{ interview.get_status_display }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scheduled At Item -->
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <i class="bi bi-clock-fill"></i>
+                            </div>
+                            <div>
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Scheduled At</span>
+                                <span class="text-dark fw-medium">{{ interview.scheduled_at }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location Item (Conditional) -->
+                    {% if interview.location %}
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+                            <div class="text-break">
+                                <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Location</span>
+                                <span class="text-dark fw-medium">{{ interview.location }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTES SECTION (Conditional) -->
+        {% if interview.notes %}
+        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden mb-4">
+            <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-sticky text-primary fs-5"></i>
+                    <h2 class="h5 fw-bold text-dark mb-0">Notes</h2>
+                </div>
+                <hr class="text-muted opacity-10 mt-3 mb-0">
+            </div>
+            <div class="card-body p-4 p-md-5 pt-4">
+                <div class="bg-light p-4 rounded-3 text-secondary text-break" style="line-height: 1.6;">
+                    {{ interview.notes|linebreaksbr }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- ACTION BUTTONS -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+                <a href="{% url 'interviews:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-arrow-left"></i> Back to Interviews
+                </a>
+                <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-sm-auto">
+                    <a href="{% url 'interviews:edit' interview.pk %}" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-pencil"></i> Edit Interview
+                    </a>
+                    <a href="{% url 'interviews:delete' interview.pk %}" class="btn btn-outline-danger px-4 py-2.5 fw-semibold rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-trash3"></i> Delete Interview
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}
+Interviews - JobTrack
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    .max-w-1200 {
+        max-width: 1200px;
+    }
+    .max-w-400 {
+        max-width: 400px;
+    }
+    .hover-shadow {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.08)!important;
+    }
+    /* Stretched link styling to make the entire card clickable while keeping internal buttons operational */
+    .stretched-link-custom::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        content: "";
+    }
+    .card {
+        position: relative;
+    }
+    .z-index-relative {
+        position: relative;
+        z-index: 2;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 px-3 px-md-4 bg-light min-vh-100">
+    <div class="max-w-1200 mx-auto">
+        
+        <!-- PAGE HEADER -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+                <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-2">
+                    <i class="bi bi-calendar-check me-1"></i> Interview Scheduler
+                </span>
+                <h1 class="h3 fw-bold text-dark mb-1">Interviews</h1>
+                <p class="text-muted small mb-0">Manage your upcoming and past career interviews in one place.</p>
+            </div>
+            <div>
+                <a href="{% url 'interviews:add' %}" class="btn btn-primary px-3 py-2 fw-semibold shadow-sm d-inline-flex align-items-center gap-2 rounded-3">
+                    <i class="bi bi-plus-lg"></i> Add Interview
+                </a>
+            </div>
+        </div>
+
+        <!-- INTERVIEWS LIST / GRID SECTION -->
+        {% if interviews %}
+            <div class="row g-4">
+                {% for interview in interviews %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between hover-shadow transition position-relative">
+                            <div>
+                                <!-- Top Row: Round Name & Status Badge -->
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 42px; height: 42px;">
+                                            <i class="bi bi-calendar-event fs-5"></i>
+                                        </div>
+                                    </div>
+                                    <!-- Dynamic status badge with contextual styling fallbacks -->
+                                    <span class="badge 
+                                        {% if 'complet'|lower in interview.status|lower or 'pass'|lower in interview.status|lower %} bg-success bg-opacity-10 text-success 
+                                        {% elif 'cancel'|lower in interview.status|lower or 'reject'|lower in interview.status|lower %} bg-danger bg-opacity-10 text-danger 
+                                        {% elif 'sched'|lower in interview.status|lower or 'upcoming'|lower in interview.status|lower %} bg-primary bg-opacity-10 text-primary 
+                                        {% else %} bg-secondary bg-opacity-10 text-secondary {% endif %} 
+                                        px-3 py-2 rounded-pill fw-semibold small">
+                                        {{ interview.status }}
+                                    </span>
+                                </div>
+
+                                <!-- Round Name -->
+                                <h2 class="h5 fw-bold text-dark mb-2">
+                                    <a href="{% url 'interviews:details' interview.pk %}" class="text-dark text-decoration-none stretched-link-custom">
+                                        {{ interview.round_name }}
+                                    </a>
+                                </h2>
+
+                                <!-- Company & Job Title Details -->
+                                <div class="mb-3">
+                                    <p class="fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                        <i class="bi bi-building text-secondary"></i> {{ interview.application.company }}
+                                    </p>
+                                    <p class="text-muted small mb-0 d-flex align-items-center gap-1">
+                                        <i class="bi bi-briefcase text-secondary"></i> {{ interview.application.job_title }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Footer Row: Schedule Date/Time & Action Link -->
+                            <div class="pt-3 border-top d-flex align-items-center justify-content-between text-muted small mt-2">
+                                <span class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-clock text-secondary"></i> {{ interview.scheduled_at }}
+                                </span>
+                                <a href="{% url 'interviews:details' interview.pk %}" class="text-primary fw-semibold text-decoration-none z-index-relative d-inline-flex align-items-center gap-1">
+                                    View Details <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- EMPTY STATE -->
+            <div class="card border-0 shadow-sm rounded-4 p-5 bg-white text-center my-5">
+                <div class="max-w-400 mx-auto py-4">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center p-4 mb-3 fs-2 shadow-sm" style="width: 80px; height: 80px;">
+                        <i class="bi bi-calendar-x"></i>
+                    </div>
+                    <h2 class="h5 fw-bold text-dark mb-2">No interviews yet</h2>
+                    <p class="text-muted small mb-4">
+                        Add an interview to keep track of your upcoming and past interview schedules, rounds, and notes.
+                    </p>
+                    <a href="{% url 'interviews:add' %}" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm rounded-3">
+                        <i class="bi bi-plus-lg me-1"></i> Add Interview
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
