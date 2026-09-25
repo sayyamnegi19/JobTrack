@@ -79,7 +79,7 @@ def update_interview(request, pk):
     )
 
     if request.method == "POST":
-        form = Interview(
+        form = InterviewForm(
             request.POST,
             instance=interview
         )
@@ -92,6 +92,7 @@ def update_interview(request, pk):
             form.save()
 
             messages.success(
+                request,
                 "Interview updated succesfully."
             )
 
@@ -100,7 +101,7 @@ def update_interview(request, pk):
                 pk=interview.pk
             )
     else:
-        form = Interview(
+        form = InterviewForm(
             instance=interview
         )
 
