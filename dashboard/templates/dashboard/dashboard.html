@@ -4,6 +4,39 @@
 Dashboard - JobTrack
 {% endblock %}
 
+{% block extra_css %}
+
+<style>
+    .tracking-wider {
+        letter-spacing: 0.05em;
+    }
+    .tracking-wide {
+        letter-spacing: 0.05em;
+    }
+    .hover-primary:hover {
+        color: var(--bs-primary) !important;
+    }
+    /* Pure CSS variables mapping block preventing template linter issues */
+    .progress {
+        --applied-w: {% if total_applications > 0 %}{% widthratio applied_count total_applications 100 %}{% else %}0{% endif %}%;
+        --interview-w: {% if total_applications > 0 %}{% widthratio interview_count total_applications 100 %}{% else %}0{% endif %}%;
+        --offer-w: {% if total_applications > 0 %}{% widthratio offer_count total_applications 100 %}{% else %}0{% endif %}%;
+        --rejected-w: {% if total_applications > 0 %}{% widthratio rejected_count total_applications 100 %}{% else %}0{% endif %}%;
+    }
+
+    .hover-shadow {
+        transition: all 0.2s ease-in-out;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 .4rem .8rem rgba(0,0,0,.06)!important;
+        border-color: var(--bs-primary) !important;
+        background-color: #ffffff !important;
+    }
+</style>
+
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid py-4 px-3 px-md-5 bg-light min-vh-100 d-flex flex-column justify-content-between">
     <div class="w-100 mx-auto" style="max-width: 1400px;">
@@ -181,6 +214,86 @@ Dashboard - JobTrack
             </div>
         </div>
 
+        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white overflow-hidden">
+            <!-- Section Header -->
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 42px; height: 42px;">
+                        <i class="bi bi-calendar-event fs-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="h5 fw-bold text-dark mb-1">Upcoming Interviews</h2>
+                        <p class="text-muted small mb-0">Stay prepared for your upcoming interview rounds.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                {% if upcoming_interviews %}
+                    <div class="list-group list-group-flush gap-3">
+                        {% for interview in upcoming_interviews %}
+                            <a href="{% url 'interviews:details' interview.pk %}"
+                            class="list-group-item list-group-item-action border rounded-4 p-3 bg-light hover-shadow transition text-decoration-none">
+                                
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                                    
+                                    <!-- Left Side: Interview Info -->
+                                    <div class="d-flex align-items-start gap-3">
+                                        <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center fw-bold flex-shrink-0 mt-1" style="width: 38px; height: 38px;">
+                                            <i class="bi bi-camera-video fs-6"></i>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <h3 class="h6 fw-bold text-dark mb-0">
+                                                    {{ interview.round_name }}
+                                                </h3>
+                                                <span class="badge bg-primary bg-opacity-10 text-primary px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.7rem;">
+                                                    {{ interview.interview_type }}
+                                                </span>
+                                            </div>
+                                            <p class="text-muted small mb-0 d-flex align-items-center gap-1 text-break">
+                                                <span class="fw-medium text-dark">{{ interview.application.job_title }}</span>
+                                                <span>at</span>
+                                                <span class="fw-semibold text-secondary"><i class="bi bi-building me-1"></i>{{ interview.application.company }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Right Side: Date & Time Badge -->
+                                    <div class="d-flex align-items-center justify-content-between justify-content-md-end gap-3 pt-2 pt-md-0 border-top border-md-0">
+                                        <div class="text-start text-md-end">
+                                            <div class="fw-bold text-dark small d-flex align-items-center gap-1">
+                                                <i class="bi bi-calendar3 text-muted"></i> {{ interview.scheduled_at|date:"d M Y" }}
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.75rem;">
+                                                <i class="bi bi-clock me-1"></i> {{ interview.scheduled_at|time:"h:i A" }}
+                                            </div>
+                                        </div>
+                                        <div class="text-primary d-none d-sm-block">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <!-- Professional Compact Empty State -->
+                    <div class="text-center py-4">
+                        <div class="bg-light text-muted rounded-circle d-inline-flex align-items-center justify-content-center p-3 mb-2" style="width: 56px; height: 56px;">
+                            <i class="bi bi-calendar-x fs-4"></i>
+                        </div>
+                        <h3 class="h6 fw-bold text-dark mb-1">No upcoming interviews</h3>
+                        <p class="text-muted small mb-0">
+                            You don't have any scheduled interviews at the moment.
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
         <!-- RECENT APPLICATIONS TABLE SECTION -->
         <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden mb-4">
             <div class="card-header bg-white border-0 pt-4 px-4 px-md-4 pb-0 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
@@ -258,22 +371,4 @@ Dashboard - JobTrack
     </div>
 </div>
 
-<style>
-    .tracking-wider {
-        letter-spacing: 0.05em;
-    }
-    .tracking-wide {
-        letter-spacing: 0.05em;
-    }
-    .hover-primary:hover {
-        color: var(--bs-primary) !important;
-    }
-    /* Pure CSS variables mapping block preventing template linter issues */
-    .progress {
-        --applied-w: {% if total_applications > 0 %}{% widthratio applied_count total_applications 100 %}{% else %}0{% endif %}%;
-        --interview-w: {% if total_applications > 0 %}{% widthratio interview_count total_applications 100 %}{% else %}0{% endif %}%;
-        --offer-w: {% if total_applications > 0 %}{% widthratio offer_count total_applications 100 %}{% else %}0{% endif %}%;
-        --rejected-w: {% if total_applications > 0 %}{% widthratio rejected_count total_applications 100 %}{% else %}0{% endif %}%;
-    }
-</style>
 {% endblock %}

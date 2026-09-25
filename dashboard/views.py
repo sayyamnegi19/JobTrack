@@ -1,15 +1,24 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from applications.models import JobApplication
+from django.utils import timezone
+from interviews.models import Interview
 
 # Create your views here.
 @login_required
 def dashboard(request):
     user = request.user
+    now = timezone.now()
 
     applications = JobApplication.objects.filter(
         user=user
     )
+
+    upcoming_interviews = Interview.objects.filter(
+        application__user=user,
+        scheduled_at__gte=now,
+        status=Interview.Status.UPCOMING
+    ).select_related("application").order_by("scheduled_at")[:5]
 
     context = {
         "total_applications": applications.count(),
@@ -30,7 +39,8 @@ def dashboard(request):
         ).count(),
         "recent_applications": applications.order_by(
             "-created_at"
-        )[:5]
+        )[:5],
+        "upcoming_interviews": upcoming_interviews
     }
 
     return render(
