@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, password_validation
 
 User = get_user_model()
 
@@ -32,6 +32,16 @@ class RegisterationForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match!")
 
         return cleaned_data
+
+    def _post_clean(self):
+        super()._post_clean()
+
+        password = self.cleaned_data.get("password")
+        if password:
+            try:
+                password_validation.validate_password(password, self.instance)
+            except forms.ValidationError as error:
+                self.add_error("password", error)
 
     def save(self, commit = True):
         user = super().save(commit=False)
