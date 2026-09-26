@@ -33,11 +33,23 @@ class CustomUserAdmin(UserAdmin):
             }
         ),
         (
-            "Personel Info",
+            "Personal Info",
             {
                 "fields": (
                     "first_name",
                     "last_name"
+                )
+            }
+        ),
+        (
+            "Permissions",
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions"
                 )
             }
         ),
@@ -59,6 +71,7 @@ class CustomUserAdmin(UserAdmin):
                 "classes": ("wide",),
                 "fields": (
                     "email",
+                    "usable_password",
                     "password1",
                     "password2",
                     "is_active",
