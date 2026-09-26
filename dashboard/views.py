@@ -37,6 +37,15 @@ def dashboard(request):
         "offer_count": applications.filter(
             job_status=JobApplication.Status.OFFER
         ).count(),
+        "saved_count": applications.filter(
+            job_status=JobApplication.Status.SAVED
+        ).count(),
+        "withdrawn_count": applications.filter(
+            job_status=JobApplication.Status.WITHDRAWN
+        ).count(),
+        "accepted_count": applications.filter(
+            job_status=JobApplication.Status.ACCEPTED
+        ).count(),
         "recent_applications": applications.order_by(
             "-created_at"
         )[:5],
