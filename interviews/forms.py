@@ -20,7 +20,8 @@ class InterviewForm(forms.ModelForm):
             "scheduled_at": forms.DateTimeInput(
                 attrs={
                     "type": "datetime-local",
-                }
+                },
+                format="%Y-%m-%dT%H:%M",
             ),
             "notes": forms.Textarea(
                 attrs={
