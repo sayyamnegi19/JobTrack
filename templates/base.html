@@ -71,11 +71,24 @@
 
     <main>
         {% if messages %}
-            <div class="container mt-3">
+            <div class="toast-container position-fixed end-0 p-3" style="top: 4.5rem; z-index: 1090;">
                 {% for message in messages %}
-                    <div class="alert {% if message.level_tag == 'error' %}alert-danger{% else %}alert-{{ message.level_tag }}{% endif %} alert-dismissible fade show shadow-sm" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="toast align-items-center border-0 shadow
+                        {% if message.level_tag == 'success' %}text-bg-success
+                        {% elif message.level_tag == 'error' %}text-bg-danger
+                        {% elif message.level_tag == 'warning' %}text-bg-warning
+                        {% elif message.level_tag == 'info' %}text-bg-info
+                        {% else %}text-bg-secondary{% endif %}"
+                        role="alert" aria-live="assertive" aria-atomic="true"
+                        data-bs-autohide="true" data-bs-delay="4000">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                {{ message }}
+                            </div>
+                            <button type="button"
+                                    class="btn-close {% if message.level_tag != 'warning' and message.level_tag != 'info' %}btn-close-white{% endif %} me-2 m-auto"
+                                    data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -87,5 +100,10 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll(".toast").forEach(function (toastEl) {
+            new bootstrap.Toast(toastEl).show();
+        });
+    </script>
 </body>
 </html>
