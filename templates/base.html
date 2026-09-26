@@ -70,6 +70,17 @@
     </nav>
 
     <main>
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert {% if message.level_tag == 'error' %}alert-danger{% else %}alert-{{ message.level_tag }}{% endif %} alert-dismissible fade show shadow-sm" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block content %}
 
         {% endblock %}
