@@ -248,7 +248,7 @@ Dashboard - JobTrack
                                                     {{ interview.round_name }}
                                                 </h3>
                                                 <span class="badge bg-primary bg-opacity-10 text-primary px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.7rem;">
-                                                    {{ interview.interview_type }}
+                                                    {{ interview.get_interview_type_display }}
                                                 </span>
                                             </div>
                                             <p class="text-muted small mb-0 d-flex align-items-center gap-1 text-break">
@@ -337,7 +337,7 @@ Dashboard - JobTrack
                                                 {% elif 'review'|lower in application.job_status|lower %} bg-warning bg-opacity-10 text-warning 
                                                 {% else %} bg-primary bg-opacity-10 text-primary {% endif %} 
                                                 px-3 py-2 rounded-pill fw-semibold small">
-                                                {{ application.job_status }}
+                                                {{ application.get_job_status_display }}
                                             </span>
                                         </td>
                                         <td class="text-muted text-end pe-3 py-3 small">

@@ -82,7 +82,7 @@ Interviews - JobTrack
                                         {% elif 'sched'|lower in interview.status|lower or 'upcoming'|lower in interview.status|lower %} bg-primary bg-opacity-10 text-primary 
                                         {% else %} bg-secondary bg-opacity-10 text-secondary {% endif %} 
                                         px-3 py-2 rounded-pill fw-semibold small">
-                                        {{ interview.status }}
+                                        {{ interview.get_status_display }}
                                     </span>
                                 </div>
 

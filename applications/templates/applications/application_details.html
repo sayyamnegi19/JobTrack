@@ -60,7 +60,7 @@
                             {% elif 'offer'|lower in application.job_status|lower %} bg-warning bg-opacity-10 text-warning 
                             {% else %} bg-primary bg-opacity-10 text-primary {% endif %} 
                             px-3 py-2 rounded-pill fw-semibold fs-6">
-                            {{ application.job_status }}
+                            {{ application.get_job_status_display }}
                         </span>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                             </div>
                             <div>
                                 <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Job Type</span>
-                                <span class="text-dark fw-medium">{{ application.job_type }}</span>
+                                <span class="text-dark fw-medium">{{ application.get_job_type_display }}</span>
                             </div>
                         </div>
                     </div>

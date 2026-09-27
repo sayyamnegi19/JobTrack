@@ -164,7 +164,7 @@
                                         {% elif 'offer'|lower in application.job_status|lower %} bg-warning bg-opacity-10 text-warning 
                                         {% else %} bg-primary bg-opacity-10 text-primary {% endif %} 
                                         px-3 py-2 rounded-pill fw-semibold small">
-                                        {{ application.job_status }}
+                                        {{ application.get_job_status_display }}
                                     </span>
                                 </div>
 
