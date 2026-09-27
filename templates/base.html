@@ -47,9 +47,12 @@
                                 Interviews
                             </a>
 
-                            <a href="{% url 'accounts:logout' %}" class="nav-link link-light link-opacity-100 link-opacity-75-hover">
-                                Logout
-                            </a>
+                            <form method="post" action="{% url 'accounts:logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link link-light link-opacity-100 link-opacity-75-hover bg-transparent border-0 text-start">
+                                    Logout
+                                </button>
+                            </form>
                         
                         {% else %}
                             
