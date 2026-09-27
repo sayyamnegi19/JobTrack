@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.functions import Lower
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 # Create your models here.
@@ -8,7 +9,7 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError("The email field must be set.")
 
-        email = self.normalize_email(email)
+        email = self.normalize_email(email.strip()).lower()
         user = self.model(
             email=email,
             **extra_fields
@@ -17,6 +18,9 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
+
+    def get_by_natural_key(self, username):
+        return self.get(**{f"{self.model.USERNAME_FIELD}__iexact": username})
 
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
@@ -42,3 +46,16 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    class Meta(AbstractUser.Meta):
+        constraints = [
+            models.UniqueConstraint(
+                Lower("email"),
+                name="unique_email_case_insensitive",
+            )
+        ]
+
+    def clean(self):
+        super().clean()
+        if self.email:
+            self.email = self.email.strip().lower()

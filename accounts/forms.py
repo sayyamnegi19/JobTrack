@@ -22,6 +22,14 @@ class RegisterationForm(forms.ModelForm):
             "last_name"
         ]
 
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("A user with this email already exists.")
+
+        return email
+
     def clean(self):
         cleaned_data = super().clean()
 
