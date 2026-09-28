@@ -62,9 +62,9 @@ Interviews - JobTrack
         </div>
 
         <!-- INTERVIEWS LIST / GRID SECTION -->
-        {% if interviews %}
+        {% if page_obj %}
             <div class="row g-4">
-                {% for interview in interviews %}
+                {% for interview in page_obj %}
                     <div class="col-md-6 col-lg-4">
                         <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between hover-shadow transition position-relative">
                             <div>
@@ -134,6 +134,8 @@ Interviews - JobTrack
                 </div>
             </div>
         {% endif %}
+
+        {% include "includes/pagination.html" %}
 
     </div>
 </div>

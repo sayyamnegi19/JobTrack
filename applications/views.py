@@ -1,21 +1,26 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import JobApplication
 from .forms import JobApplicationForm
 
+PAGE_SIZE = 12
+
 # Create your views here.
 @login_required
 def application_list(request):
     applications = JobApplication.objects.filter(
         user=request.user
-    ).order_by("-application_date", "-created_at")
+    ).order_by("-application_date", "-created_at", "-pk")
+
+    page_obj = Paginator(applications, PAGE_SIZE).get_page(request.GET.get("page"))
 
     return render(
         request,
         "applications/application_list.html",
         {
-            "applications": applications
+            "page_obj": page_obj
         }
     )
 

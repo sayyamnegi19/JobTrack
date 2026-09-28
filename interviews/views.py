@@ -1,20 +1,25 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Interview
 from .forms import InterviewForm
 
+PAGE_SIZE = 12
+
 @login_required
 def interview_list(request):
     interviews = Interview.objects.filter(
         application__user=request.user
-    ).select_related("application").order_by("scheduled_at")
+    ).select_related("application").order_by("scheduled_at", "pk")
+
+    page_obj = Paginator(interviews, PAGE_SIZE).get_page(request.GET.get("page"))
 
     return render(
         request,
         "interviews/interviews_list.html",
         {
-            "interviews": interviews
+            "page_obj": page_obj
         }
     )
 

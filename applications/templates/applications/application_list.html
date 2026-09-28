@@ -146,9 +146,9 @@
             <h2 class="h5 fw-bold text-dark mb-3">Your Applications</h2>
         </div>
 
-        {% if applications %}
+        {% if page_obj %}
             <div class="row g-3">
-                {% for application in applications %}
+                {% for application in page_obj %}
                     <div class="col-md-6 col-xl-4">
                         <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between transition hover-shadow">
                             <div>
@@ -207,6 +207,8 @@
                 </div>
             </div>
         {% endif %}
+
+        {% include "includes/pagination.html" %}
 
     </div>
 </div>
