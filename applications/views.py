@@ -9,7 +9,7 @@ from .forms import JobApplicationForm
 def application_list(request):
     applications = JobApplication.objects.filter(
         user=request.user
-    ).order_by("-application_date")
+    ).order_by("-application_date", "-created_at")
 
     return render(
         request,
