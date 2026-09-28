@@ -55,7 +55,7 @@ Dashboard - JobTrack
                 </p>
             </div>
             <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2">
-                <a href="{% url 'applications:list' %}" class="btn btn-outline-dark px-3 py-2.5 fw-semibold shadow-sm rounded-3 bg-white text-center">
+                <a href="{% url 'applications:list' %}" class="btn btn-outline-dark px-3 py-2.5 fw-semibold shadow-sm rounded-3 text-center">
                     <i class="bi bi-folder2-open me-1"></i> View All Applications
                 </a>
                 <a href="{% url 'applications:add' %}" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm rounded-3 d-inline-flex align-items-center justify-content-center gap-2 text-center">
@@ -86,14 +86,14 @@ Dashboard - JobTrack
             <div class="col-sm-6 col-xl-3">
                 <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-success border-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Active Interviews</span>
+                        <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Interview Stage</span>
                         <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center p-3 fs-4 flex-shrink-0" style="width: 48px; height: 48px;">
                             <i class="bi bi-chat-dots-fill"></i>
                         </div>
                     </div>
                     <h2 class="display-6 fw-bold text-success mb-1">{{ interview_count }}</h2>
                     <div class="d-flex align-items-center gap-2 text-muted small pt-2 border-top">
-                        <span><i class="bi bi-calendar-check text-success me-1"></i>Scheduled or underway</span>
+                        <span><i class="bi bi-calendar-check text-success me-1"></i>Applications in the interview stage</span>
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@ Dashboard - JobTrack
                         </div>
 
                         <!-- Dynamic Progress Bar -->
-                        <div class="progress mb-4 shadow-none bg-light rounded-pill overflow-hidden" style="height: 14px;">
+                        <div class="progress mb-4 shadow-none bg-grey rounded-pill overflow-hidden" style="height: 14px;">
                             <div class="progress-bar bg-primary" role="progressbar" 
                                  style="width: var(--applied-w);" 
                                  title="Applied: {{ applied_count }}"></div>

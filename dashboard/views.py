@@ -44,7 +44,7 @@ def dashboard(request):
             job_status=JobApplication.Status.ACCEPTED
         ).count(),
         "recent_applications": applications.order_by(
-            "-created_at"
+            "-application_date", "-created_at"
         )[:5],
         "upcoming_interviews": upcoming_interviews
     }
