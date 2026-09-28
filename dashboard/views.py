@@ -25,9 +25,6 @@ def dashboard(request):
         "applied_count": applications.filter(
             job_status=JobApplication.Status.APPLIED
         ).count(),
-        "under_review_count": applications.filter(
-            job_status=JobApplication.Status.UNDER_REVIEW
-        ).count(),
         "interview_count": applications.filter(
             job_status=JobApplication.Status.INTERVIEW
         ).count(),
