@@ -14,5 +14,5 @@ JobTrack is a job application tracking platform built with Django.
 
 - Python
 - Django
-- SQLite (development)
+- PostgreSQL
 - Git & GitHub
