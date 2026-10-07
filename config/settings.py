@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'accounts',
     'applications',
     'dashboard',
-    'interviews'
+    'interviews',
+    'resumes',
 ]
 
 MIDDLEWARE = [
@@ -128,6 +129,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Uploaded files (resumes)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 AUTH_USER_MODEL = "accounts.User"
 
 LOGIN_URL = "/accounts/login/"
@@ -142,3 +147,12 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
+GEMINI_EMBEDDING_MODEL = os.getenv("GEMINI_EMBEDDING_MODEL", "gemini-embedding-2")
+
+# Token/cost guards
+ATS_MAX_RESUME_CHARS = 15000
+ATS_MAX_JD_CHARS = 10000
+ATS_DAILY_LIMIT = 20
