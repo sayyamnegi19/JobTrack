@@ -3,4 +3,5 @@ __pycache__/
 *.py[cod]
 *.sqlite3
 .env
+media/
 .DS_Store
