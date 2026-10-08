@@ -14,6 +14,8 @@ from pathlib import Path
 from docx import Document
 from pypdf import PdfReader
 
+from .text_utils import clean_text
+
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt"}
 
 # 5 MB is far beyond any real resume; anything bigger is a mistake or abuse.
@@ -52,28 +54,6 @@ def validate_upload(uploaded_file):
         )
 
     return extension
-
-
-def clean_text(text):
-    """
-    Normalize the messy whitespace that PDF/DOCX extraction leaves behind.
-
-    Each line gets inner whitespace collapsed, then runs of 3+ blank lines
-    are squeezed to a single blank line. Keeps the text readable for both
-    the user and the AI (and every wasted character costs tokens).
-    """
-    lines = []
-
-    for raw_line in text.replace("\r\n", "\n").replace("\r", "\n").split("\n"):
-        line = " ".join(raw_line.split())
-        lines.append(line)
-
-    cleaned = "\n".join(lines)
-
-    while "\n\n\n" in cleaned:
-        cleaned = cleaned.replace("\n\n\n", "\n\n")
-
-    return cleaned.strip()
 
 
 def extract_pdf_text(uploaded_file):
