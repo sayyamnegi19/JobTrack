@@ -48,5 +48,19 @@ class JobApplication(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def status_tone(self):
+        """Bootstrap contextual color for this status (used by templates)."""
+        return {
+            self.Status.SAVED: "secondary",
+            self.Status.APPLIED: "primary",
+            self.Status.UNDER_REVIEW: "info",
+            self.Status.INTERVIEW: "success",
+            self.Status.REJECTED: "danger",
+            self.Status.OFFER: "warning",
+            self.Status.WITHDRAWN: "secondary",
+            self.Status.ACCEPTED: "success",
+        }.get(self.job_status, "primary")
+
     def __str__(self):
         return f"{self.job_title} at {self.company}"

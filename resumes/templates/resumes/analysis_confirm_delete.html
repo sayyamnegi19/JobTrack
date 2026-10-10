@@ -39,13 +39,13 @@ Delete Analysis - JobTrack
                         </div>
                     </div>
 
-                    <form method="POST">
+                    <form method="POST" data-loading>
                         {% csrf_token %}
                         <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
                             <a href="{% url 'resumes:analysis_detail' analysis.pk %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 rounded-3 order-2 order-sm-1">
                                 Cancel
                             </a>
-                            <button type="submit" class="btn btn-danger px-4 py-2.5 fw-semibold shadow-sm w-100 rounded-3 d-inline-flex align-items-center justify-content-center gap-2 order-1 order-sm-2">
+                            <button type="submit" data-loading-text="Deleting…" class="btn btn-danger px-4 py-2.5 fw-semibold shadow-sm w-100 rounded-3 d-inline-flex align-items-center justify-content-center gap-2 order-1 order-sm-2">
                                 <i class="bi bi-trash3"></i> Yes, Delete
                             </button>
                         </div>
@@ -58,9 +58,4 @@ Delete Analysis - JobTrack
     </div>
 </div>
 
-<style>
-    .tracking-wide {
-        letter-spacing: 0.05em;
-    }
-</style>
 {% endblock %}

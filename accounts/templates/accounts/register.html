@@ -1,44 +1,14 @@
 {% extends "base.html" %}
 
-{% block extra_css %}
-
-<style>
-    input[type="text"], input[type="password"], input[type="email"] {
-        display: block;
-        width: 100%;
-        padding: 0.4rem 0.65rem;
-        font-size: 0.875rem;
-        font-weight: 400;
-        line-height: 1.4;
-        color: #212529;
-        background-color: #f8f9fa;
-        background-clip: padding-box;
-        border: 1px solid #dee2e6;
-        appearance: none;
-        border-radius: 0.4rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
-    input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
-        color: #212529;
-        background-color: #fff;
-        border-color: #86b7fe;
-        outline: 0;
-        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-    }
-    .form-text ul {
-        padding-left: 1rem;
-        margin-bottom: 0;
-        font-size: 0.65rem;
-    }
-</style>
-
+{% block title %}
+Register - JobTrack
 {% endblock %}
 
 {% block content %}
 <div class="container-fluid min-vh-100 d-flex flex-column justify-content-center bg-light py-4">
-    <div class="row justify-content-center align-items-center w-100 mx-auto" style="max-width: 1000px;">
-        
-        <!-- Left Column: Branding / Visual Section (Matched identically to login.html) -->
+    <div class="row justify-content-center align-items-center w-100 mx-auto max-w-900">
+
+        <!-- Left Column: Branding / Visual Section (matched to login) -->
         <div class="col-lg-6 d-none d-lg-flex flex-column justify-content-center p-5 text-dark">
             <div class="mb-4">
                 <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-3">
@@ -57,16 +27,15 @@
             </div>
         </div>
 
-        <!-- Right Column: Registration Card (Multi-column layout to control vertical length) -->
+        <!-- Right Column: Registration Card -->
         <div class="col-lg-6">
             <div class="card border-0 shadow-lg rounded-4 p-4 p-sm-4 bg-white">
-                
+
                 <div class="text-center mb-3">
                     <h2 class="fw-bold text-dark fs-4 mb-1">Create Your Account</h2>
                     <p class="text-muted small mb-0">Start organizing your job search with JobTrack.</p>
                 </div>
 
-                <!-- Non-field Errors -->
                 {% if form.non_field_errors %}
                     <div class="alert alert-danger py-2 small rounded-3 mb-3" role="alert">
                         {% for error in form.non_field_errors %}
@@ -75,38 +44,23 @@
                     </div>
                 {% endif %}
 
-                <form method="POST" novalidate>
+                <form method="POST" novalidate data-loading>
                     {% csrf_token %}
 
                     <div class="row g-2">
                         {% for field in form %}
                             <div class="col-md-6 {% if field.name == 'password1' or field.name == 'password2' or field.name == 'email' or field.field.widget.input_type == 'textarea' %}col-md-12{% endif %}">
-                                <div class="mb-2">
-                                    <label for="{{ field.id_for_label }}" class="form-label small fw-semibold text-secondary mb-1" style="font-size: 0.8rem;">
-                                        {{ field.label }}
-                                        {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
-                                    </label>
-                                    
-                                    {{ field }}
-
-                                    {% if field.help_text %}
-                                        <div class="form-text text-muted" style="font-size: 0.68rem; line-height: 1.2;">{{ field.help_text|safe }}</div>
-                                    {% endif %}
-
-                                    {% if field.errors %}
-                                        <div class="invalid-feedback d-block small mt-1" style="font-size: 0.75rem;">
-                                            {% for error in field.errors %}
-                                                <span><i class="bi bi-exclamation-triangle me-1"></i>{{ error }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
+                                {% if field.field.widget.input_type == 'password' %}
+                                    {% include "includes/field.html" with field=field password_toggle=True %}
+                                {% else %}
+                                    {% include "includes/field.html" with field=field %}
+                                {% endif %}
                             </div>
                         {% endfor %}
                     </div>
 
                     <div class="d-grid mt-3">
-                        <button type="submit" class="btn btn-primary py-2 fw-semibold shadow-sm">
+                        <button type="submit" data-loading-text="Creating account…" class="btn btn-primary py-2 fw-semibold shadow-sm">
                             Create Account <i class="bi bi-arrow-right ms-1"></i>
                         </button>
                     </div>
@@ -114,7 +68,7 @@
 
                 <div class="text-center mt-3 pt-2 border-top">
                     <p class="small text-muted mb-0">
-                        Already have an account? 
+                        Already have an account?
                         <a href="{% url 'accounts:login' %}" class="text-primary fw-semibold text-decoration-none">Login</a>
                     </p>
                 </div>
@@ -124,5 +78,4 @@
 
     </div>
 </div>
-
 {% endblock %}

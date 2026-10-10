@@ -1,0 +1,23 @@
+<footer class="jt-footer border-top bg-white mt-auto">
+    <div class="container py-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2 text-muted small">
+                <span class="jt-footer-mark bg-primary bg-opacity-10 text-primary rounded-2 d-inline-flex align-items-center justify-content-center">
+                    <i class="bi bi-briefcase-fill"></i>
+                </span>
+                <span>&copy; {% now "Y" %} JobTrack &mdash; keep your job search organized.</span>
+            </div>
+            <nav class="d-flex flex-wrap justify-content-center gap-3 small">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard:dashboard' %}" class="text-decoration-none text-muted">Dashboard</a>
+                    <a href="{% url 'applications:list' %}" class="text-decoration-none text-muted">Applications</a>
+                    <a href="{% url 'interviews:list' %}" class="text-decoration-none text-muted">Interviews</a>
+                    <a href="{% url 'resumes:list' %}" class="text-decoration-none text-muted">Resume ATS</a>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="text-decoration-none text-muted">Login</a>
+                    <a href="{% url 'accounts:register' %}" class="text-decoration-none text-muted">Register</a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+</footer>

@@ -4,16 +4,6 @@
 Delete Interview - JobTrack
 {% endblock %}
 
-{% block extra_css %}
-
-<style>
-    .tracking-wide {
-        letter-spacing: 0.05em;
-    }
-</style>
-
-{% endblock %}
-
 {% block content %}
 <div class="container-fluid min-vh-100 d-flex flex-column justify-content-center bg-light py-5 px-3">
     <div class="row justify-content-center w-100 mx-auto">
@@ -57,14 +47,14 @@ Delete Interview - JobTrack
                     </div>
 
                     <!-- POST FORM & ACTIONS -->
-                    <form method="post">
+                    <form method="post" data-loading>
                         {% csrf_token %}
                         
                         <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
                             <a href="{% url 'interviews:details' interview.pk %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 rounded-3 order-2 order-sm-1 d-inline-flex align-items-center justify-content-center gap-1">
                                 <i class="bi bi-x-lg"></i> Cancel
                             </a>
-                            <button type="submit" class="btn btn-danger px-4 py-2.5 fw-semibold shadow-sm w-100 rounded-3 d-inline-flex align-items-center justify-content-center gap-2 order-1 order-sm-2">
+                            <button type="submit" data-loading-text="Deleting…" class="btn btn-danger px-4 py-2.5 fw-semibold shadow-sm w-100 rounded-3 d-inline-flex align-items-center justify-content-center gap-2 order-1 order-sm-2">
                                 <i class="bi bi-trash3"></i> Yes, Delete
                             </button>
                         </div>

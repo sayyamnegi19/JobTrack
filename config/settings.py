@@ -129,6 +129,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Project-level static assets (app.css, app.js, favicon)
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
 # Uploaded files (resumes)
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'

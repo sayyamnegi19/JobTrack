@@ -7,31 +7,12 @@ Dashboard - JobTrack
 {% block extra_css %}
 
 <style>
-    .tracking-wider {
-        letter-spacing: 0.05em;
-    }
-    .tracking-wide {
-        letter-spacing: 0.05em;
-    }
-    .hover-primary:hover {
-        color: var(--bs-primary) !important;
-    }
     /* Pure CSS variables mapping block preventing template linter issues */
     .progress {
         --applied-w: {% if total_applications > 0 %}{% widthratio applied_count total_applications 100 %}{% else %}0{% endif %}%;
         --interview-w: {% if total_applications > 0 %}{% widthratio interview_count total_applications 100 %}{% else %}0{% endif %}%;
         --offer-w: {% if total_applications > 0 %}{% widthratio offer_count total_applications 100 %}{% else %}0{% endif %}%;
         --rejected-w: {% if total_applications > 0 %}{% widthratio rejected_count total_applications 100 %}{% else %}0{% endif %}%;
-    }
-
-    .hover-shadow {
-        transition: all 0.2s ease-in-out;
-    }
-    .hover-shadow:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 .4rem .8rem rgba(0,0,0,.06)!important;
-        border-color: var(--bs-primary) !important;
-        background-color: #ffffff !important;
     }
 </style>
 
@@ -321,16 +302,7 @@ Dashboard - JobTrack
                         {% endfor %}
                     </div>
                 {% else %}
-                    <!-- Professional Compact Empty State -->
-                    <div class="text-center py-4">
-                        <div class="bg-light text-muted rounded-circle d-inline-flex align-items-center justify-content-center p-3 mb-2" style="width: 56px; height: 56px;">
-                            <i class="bi bi-calendar-x fs-4"></i>
-                        </div>
-                        <h3 class="h6 fw-bold text-dark mb-1">No upcoming interviews</h3>
-                        <p class="text-muted small mb-0">
-                            You don't have any scheduled interviews at the moment.
-                        </p>
-                    </div>
+                    {% include "includes/empty_state.html" with icon="bi-calendar-x" title="No upcoming interviews" text="You don't have any scheduled interviews at the moment." %}
                 {% endif %}
             </div>
         </div>
@@ -371,18 +343,12 @@ Dashboard - JobTrack
                                             <i class="bi bi-briefcase text-secondary me-1"></i> {{ application.company }}
                                         </td>
                                         <td class="py-3">
-                                            <span class="badge 
-                                                {% if 'interview'|lower in application.job_status|lower %} bg-success bg-opacity-10 text-success 
-                                                {% elif 'reject'|lower in application.job_status|lower %} bg-danger bg-opacity-10 text-danger 
-                                                {% elif 'offer'|lower in application.job_status|lower %} bg-warning bg-opacity-10 text-warning 
-                                                {% elif 'review'|lower in application.job_status|lower %} bg-warning bg-opacity-10 text-warning 
-                                                {% else %} bg-primary bg-opacity-10 text-primary {% endif %} 
-                                                px-3 py-2 rounded-pill fw-semibold small">
+                                            <span class="badge bg-{{ application.status_tone }} bg-opacity-10 text-{{ application.status_tone }} px-3 py-2 rounded-pill fw-semibold small">
                                                 {{ application.get_job_status_display }}
                                             </span>
                                         </td>
                                         <td class="text-muted text-end pe-3 py-3 small">
-                                            <i class="bi bi-calendar-event me-1"></i> {{ application.application_date }}
+                                            <i class="bi bi-calendar-event me-1"></i> {{ application.application_date|date:"d M Y" }}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -390,21 +356,8 @@ Dashboard - JobTrack
                         </table>
                     </div>
                 {% else %}
-                    <!-- EMPTY STATE -->
-                    <div class="text-center py-5">
-                        <div class="max-w-400 mx-auto">
-                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center p-4 mb-3 fs-2 shadow-sm" style="width: 75px; height: 75px;">
-                                <i class="bi bi-folder2-open"></i>
-                            </div>
-                            <h3 class="h5 fw-bold text-dark mb-2">No applications found</h3>
-                            <p class="text-muted small mb-4">
-                                Start tracking your career path by adding your first job application entry to the tracker.
-                            </p>
-                            <a href="{% url 'applications:add' %}" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm rounded-3">
-                                <i class="bi bi-plus-lg me-1"></i> Add Your First Application
-                            </a>
-                        </div>
-                    </div>
+                    {% url 'applications:add' as add_application_url %}
+                    {% include "includes/empty_state.html" with icon="bi-folder2-open" title="No applications found" text="Start tracking your career path by adding your first job application entry to the tracker." cta_url=add_application_url cta_label="Add Your First Application" cta_icon="bi-plus-lg" %}
                 {% endif %}
             </div>
         </div>

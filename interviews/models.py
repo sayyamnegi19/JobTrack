@@ -53,5 +53,14 @@ class Interview(models.Model):
         auto_now=True
     )
 
+    @property
+    def status_tone(self):
+        """Bootstrap contextual color for this status (used by templates)."""
+        return {
+            self.Status.UPCOMING: "primary",
+            self.Status.COMPLETED: "success",
+            self.Status.CANCELLED: "danger",
+        }.get(self.status, "secondary")
+
     def __str__(self):
         return f"{self.round_name} - {self.application}"

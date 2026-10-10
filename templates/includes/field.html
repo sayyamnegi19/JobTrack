@@ -1,0 +1,31 @@
+{# Usage: {% include "includes/field.html" with field=form.email %} #}
+{# For password fields: {% include "includes/field.html" with field=form.password1 password_toggle=True %} #}
+<div class="mb-3">
+    <label for="{{ field.id_for_label }}" class="jt-field-label form-label small fw-bold text-secondary text-uppercase mb-2">
+        {{ field.label }}{% if field.field.required %}<span class="text-danger ms-1">*</span>{% endif %}
+    </label>
+
+    {% if password_toggle %}
+        <div class="jt-password-wrap">
+            {{ field }}
+            <button type="button" class="jt-password-toggle"
+                    data-toggle-password="#{{ field.id_for_label }}" aria-label="Show password">
+                <i class="bi bi-eye"></i>
+            </button>
+        </div>
+    {% else %}
+        {{ field }}
+    {% endif %}
+
+    {% if field.help_text %}
+        <div class="jt-field-help form-text text-muted mt-1">{{ field.help_text|safe }}</div>
+    {% endif %}
+
+    {% if field.errors %}
+        <div class="jt-field-error invalid-feedback d-block mt-1">
+            {% for error in field.errors %}
+                <span><i class="bi bi-exclamation-triangle me-1"></i>{{ error }}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

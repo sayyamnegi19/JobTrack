@@ -6,19 +6,11 @@ Analyze Resume - JobTrack
 
 {% block content %}
 <div class="container py-5 px-3 px-md-4 bg-light min-vh-100">
-    <div class="mx-auto" style="max-width: 860px;">
+    <div class="max-w-800 mx-auto">
 
-        <!-- BACK LINK -->
-        <div class="mb-4">
-            <a href="{% url 'resumes:list' %}" class="text-decoration-none text-muted small fw-semibold d-inline-flex align-items-center gap-2">
-                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
-                    <i class="bi bi-arrow-left text-dark"></i>
-                </div>
-                <span>Back to Resume ATS</span>
-            </a>
-        </div>
+        {% url 'resumes:list' as back_url %}
+        {% include "includes/back_link.html" with url=back_url label="Back to Resume ATS" %}
 
-        <!-- FORM CARD -->
         <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden">
             <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
                 <div class="d-flex align-items-center gap-3">
@@ -36,7 +28,7 @@ Analyze Resume - JobTrack
             </div>
 
             <div class="card-body p-4 p-md-5 pt-4">
-                <form method="post" enctype="multipart/form-data" novalidate id="analyze-form">
+                <form method="post" enctype="multipart/form-data" novalidate id="analyze-form" data-loading>
                     {% csrf_token %}
 
                     {% if form.non_field_errors %}
@@ -52,15 +44,15 @@ Analyze Resume - JobTrack
                         <i class="bi bi-1-circle me-1"></i> Your Resume <span class="text-danger">*</span>
                     </h2>
 
-                    {% include "resumes/_field.html" with field=form.resume_choice %}
+                    {% include "includes/field.html" with field=form.resume_choice %}
 
                     <div class="text-center text-muted small my-3 fw-semibold">— OR —</div>
 
-                    {% include "resumes/_field.html" with field=form.resume_file %}
+                    {% include "includes/field.html" with field=form.resume_file %}
 
                     <div class="text-center text-muted small my-3 fw-semibold">— OR —</div>
 
-                    {% include "resumes/_field.html" with field=form.resume_text %}
+                    {% include "includes/field.html" with field=form.resume_text %}
 
                     <hr class="text-muted opacity-10 my-4">
 
@@ -73,9 +65,9 @@ Analyze Resume - JobTrack
                         Add a job for a match score, or leave everything empty for a general ATS analysis.
                     </p>
 
-                    {% include "resumes/_field.html" with field=form.job_application %}
-                    {% include "resumes/_field.html" with field=form.job_url %}
-                    {% include "resumes/_field.html" with field=form.job_description %}
+                    {% include "includes/field.html" with field=form.job_application %}
+                    {% include "includes/field.html" with field=form.job_url %}
+                    {% include "includes/field.html" with field=form.job_description %}
 
                     <div class="alert alert-info small rounded-3 d-flex gap-2 align-items-start">
                         <i class="bi bi-info-circle-fill mt-1"></i>
@@ -91,11 +83,9 @@ Analyze Resume - JobTrack
                         <a href="{% url 'resumes:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
                             Cancel
                         </a>
-                        <button type="submit" id="analyze-submit"
+                        <button type="submit" data-loading-text="Analyzing…"
                                 class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm w-100 w-sm-auto order-1 order-sm-2 rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
-                            <span id="analyze-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            <i class="bi bi-stars" id="analyze-icon"></i>
-                            <span id="analyze-label">Analyze Resume</span>
+                            <i class="bi bi-stars"></i> Analyze Resume
                         </button>
                     </div>
                 </form>
@@ -104,52 +94,4 @@ Analyze Resume - JobTrack
 
     </div>
 </div>
-
-<style>
-    .tracking-wide {
-        letter-spacing: 0.05em;
-    }
-
-    /* Professional SaaS input controls (matches the applications form) */
-    input[type="text"], input[type="url"], input[type="email"], select, textarea {
-        display: block;
-        width: 100%;
-        padding: 0.65rem 0.85rem;
-        font-size: 0.95rem;
-        font-weight: 400;
-        line-height: 1.5;
-        color: #212529;
-        background-color: #fcfdfd;
-        background-clip: padding-box;
-        border: 1px solid #ced4da;
-        appearance: none;
-        border-radius: 0.5rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
-    }
-    input[type="text"]:focus, input[type="url"]:focus, input[type="email"]:focus, select:focus, textarea:focus {
-        color: #212529;
-        background-color: #fff;
-        border-color: #0d6efd;
-        outline: 0;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
-    }
-    textarea {
-        min-height: 120px;
-    }
-    input[type="file"] {
-        display: block;
-        width: 100%;
-        font-size: 0.9rem;
-    }
-</style>
-
-<script>
-    document.getElementById("analyze-form").addEventListener("submit", function () {
-        const button = document.getElementById("analyze-submit");
-        button.disabled = true;
-        document.getElementById("analyze-spinner").classList.remove("d-none");
-        document.getElementById("analyze-icon").classList.add("d-none");
-        document.getElementById("analyze-label").textContent = "Analyzing…";
-    });
-</script>
 {% endblock %}

@@ -6,23 +6,10 @@ Resume ATS - JobTrack
 
 {% block content %}
 <div class="container-fluid py-4 px-3 px-md-5 bg-light min-vh-100">
-    <div class="w-100 mx-auto" style="max-width: 1400px;">
+    <div class="w-100 mx-auto max-w-1400">
 
-        <!-- HEADER -->
-        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
-            <div>
-                <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-2">
-                    <i class="bi bi-clipboard-data me-1"></i> Resume ATS
-                </span>
-                <h1 class="h3 fw-bold text-dark mb-1 text-break">Resume Score History</h1>
-                <p class="text-muted small mb-0">
-                    Analyze your resume against any job description and track how your ATS score improves.
-                </p>
-            </div>
-            <a href="{% url 'resumes:analyze' %}" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm rounded-3">
-                <i class="bi bi-stars me-1"></i> New Analysis
-            </a>
-        </div>
+        {% url 'resumes:analyze' as analyze_url %}
+        {% include "includes/page_header.html" with icon="bi-clipboard-data" badge="Resume ATS" title="Resume Score History" subtitle="Analyze your resume against any job description and track how your ATS score improves." cta_url=analyze_url cta_label="New Analysis" cta_icon="bi-stars" %}
 
         <!-- STATS -->
         <div class="row g-4 mb-4">
@@ -46,7 +33,7 @@ Resume ATS - JobTrack
                         <h2 class="display-6 fw-bold mb-1
                             {% if latest_analysis.overall_score >= 80 %}text-success
                             {% elif latest_analysis.overall_score >= 60 %}text-primary
-                            {% elif latest_analysis.overall_score >= 40 %}text-warning
+                            {% elif latest_analysis.overall_score >= 40 %}text-warning-emphasis
                             {% else %}text-danger{% endif %}">
                             {{ latest_analysis.overall_score }}<span class="fs-5 text-muted">/100</span>
                         </h2>
@@ -109,12 +96,14 @@ Resume ATS - JobTrack
                                             {% if resume.file %}
                                                 <a href="{% url 'resumes:resume_download' resume.pk %}"
                                                    class="btn btn-outline-secondary btn-sm fw-semibold rounded-3"
+                                                   aria-label="Download {{ resume.original_filename|default:'resume' }}"
                                                    title="Download original file">
                                                     <i class="bi bi-download"></i>
                                                 </a>
                                             {% endif %}
                                             <a href="{% url 'resumes:resume_delete' resume.pk %}"
                                                class="btn btn-outline-danger btn-sm fw-semibold rounded-3"
+                                               aria-label="Delete {{ resume.original_filename|default:'resume' }}"
                                                title="Delete resume and its analyses">
                                                 <i class="bi bi-trash3"></i>
                                             </a>
@@ -123,13 +112,7 @@ Resume ATS - JobTrack
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <div class="text-center py-4">
-                                <div class="bg-light text-muted rounded-circle d-inline-flex align-items-center justify-content-center p-3 mb-2" style="width: 56px; height: 56px;">
-                                    <i class="bi bi-file-earmark-plus fs-4"></i>
-                                </div>
-                                <h3 class="h6 fw-bold text-dark mb-1">No resumes yet</h3>
-                                <p class="text-muted small mb-0">Upload or paste one on your first analysis.</p>
-                            </div>
+                            {% include "includes/empty_state.html" with icon="bi-file-earmark-plus" title="No resumes yet" text="Upload or paste one on your first analysis." %}
                         {% endif %}
                     </div>
                 </div>
@@ -194,11 +177,13 @@ Resume ATS - JobTrack
                                                 </td>
                                                 <td class="text-end pe-3 py-3">
                                                     <a href="{% url 'resumes:analysis_detail' analysis.pk %}"
-                                                       class="btn btn-sm btn-outline-dark rounded-3" title="View analysis">
+                                                       class="btn btn-sm btn-outline-dark rounded-3"
+                                                       aria-label="View analysis" title="View analysis">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
                                                     <a href="{% url 'resumes:analysis_delete' analysis.pk %}"
-                                                       class="btn btn-sm btn-outline-danger rounded-3" title="Delete analysis">
+                                                       class="btn btn-sm btn-outline-danger rounded-3"
+                                                       aria-label="Delete analysis" title="Delete analysis">
                                                         <i class="bi bi-trash3"></i>
                                                     </a>
                                                 </td>
@@ -210,18 +195,8 @@ Resume ATS - JobTrack
 
                             {% include "includes/pagination.html" %}
                         {% else %}
-                            <div class="text-center py-5">
-                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center p-4 mb-3 fs-2 shadow-sm" style="width: 75px; height: 75px;">
-                                    <i class="bi bi-clipboard-data"></i>
-                                </div>
-                                <h3 class="h5 fw-bold text-dark mb-2">No analyses yet</h3>
-                                <p class="text-muted small mb-4">
-                                    Score your resume against a job description to see how ATS-friendly it is.
-                                </p>
-                                <a href="{% url 'resumes:analyze' %}" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm rounded-3">
-                                    <i class="bi bi-stars me-1"></i> Analyze Your Resume
-                                </a>
-                            </div>
+                            {% url 'resumes:analyze' as analyze_url %}
+                            {% include "includes/empty_state.html" with icon="bi-clipboard-data" title="No analyses yet" text="Score your resume against a job description to see how ATS-friendly it is." cta_url=analyze_url cta_label="Analyze Your Resume" cta_icon="bi-stars" %}
                         {% endif %}
                     </div>
                 </div>
@@ -230,10 +205,4 @@ Resume ATS - JobTrack
 
     </div>
 </div>
-
-<style>
-    .tracking-wide {
-        letter-spacing: 0.05em;
-    }
-</style>
 {% endblock %}
