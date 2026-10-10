@@ -5,7 +5,7 @@ Dashboard - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary min-vh-100 d-flex flex-column justify-content-between">
+<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary flex-grow-1 d-flex flex-column justify-content-between">
     <div class="w-100 mx-auto" style="max-width: 1400px;">
         
         <!-- DASHBOARD HEADER -->
@@ -156,7 +156,7 @@ Dashboard - JobTrack
                         {% if total_applications %}
                             <div class="row g-4 align-items-center">
                                 <div class="col-md-5">
-                                    <div class="position-relative mx-auto" style="height: 220px; max-width: 220px;">
+                                    <div class="position-relative mx-auto jt-chart-sm" style="max-width: 220px;">
                                         <canvas id="pipeline-chart" role="img" aria-label="Pipeline distribution by status"></canvas>
                                     </div>
                                 </div>
@@ -222,7 +222,7 @@ Dashboard - JobTrack
             </div>
             <div class="card-body p-4">
                 {% if total_applications %}
-                    <div class="position-relative" style="height: 260px;">
+                    <div class="position-relative jt-chart-md">
                         <canvas id="trend-chart" role="img" aria-label="Applications submitted per month"></canvas>
                     </div>
                 {% else %}

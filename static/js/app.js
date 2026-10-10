@@ -209,4 +209,71 @@
             });
         });
     })();
+
+    // 6. Segmented tabs (progressive enhancement) -----------------------------
+    // Without JS every panel stays visible (like a plain stacked form); with
+    // JS, switching tabs clears the other panels' inputs so "multiple resume
+    // sources" can never be submitted.
+    document.querySelectorAll("[data-tabs]").forEach(function (tabs) {
+        tabs.classList.add("jt-tabs-ready");
+
+        var buttons = tabs.querySelectorAll("[data-tab-target]");
+        var panels = tabs.querySelectorAll("[data-tab-panel]");
+
+        function clearPanel(panel) {
+            panel.querySelectorAll("input, select, textarea").forEach(function (input) {
+                if (input.type === "file" || input.type === "checkbox" || input.type === "radio") {
+                    input.value = "";
+                    input.checked = false;
+                } else {
+                    input.value = "";
+                }
+            });
+        }
+
+        function activate(target) {
+            buttons.forEach(function (button) {
+                var isActive = button.getAttribute("data-tab-target") === target;
+                button.classList.toggle("active", isActive);
+                button.setAttribute("aria-selected", isActive ? "true" : "false");
+            });
+
+            panels.forEach(function (panel) {
+                var isActive = panel.getAttribute("data-tab-panel") === target;
+                panel.classList.toggle("active", isActive);
+                if (!isActive) {
+                    clearPanel(panel);
+                }
+            });
+        }
+
+        buttons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                activate(button.getAttribute("data-tab-target"));
+            });
+        });
+    });
+
+    // 7. Form error affordances -----------------------------------------------
+    document.querySelectorAll(".jt-field").forEach(function (field) {
+        if (field.querySelector(".jt-field-error")) {
+            var input = field.querySelector("input, select, textarea");
+            if (input) {
+                input.setAttribute("aria-invalid", "true");
+            }
+        }
+    });
+
+    var firstError = document.querySelector(".jt-field-error");
+    if (firstError) {
+        var errorField = firstError.closest(".jt-field");
+        if (errorField) {
+            errorField.scrollIntoView({
+                block: "center",
+                behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                    ? "auto"
+                    : "smooth",
+            });
+        }
+    }
 })();

@@ -5,48 +5,69 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-5 px-3 px-md-4 bg-body-tertiary min-vh-100">
+<div class="container py-4 py-md-5 px-3 px-md-4 bg-body-tertiary flex-grow-1">
     <div class="max-w-800 mx-auto">
 
         {% url 'applications:list' as back_url %}
         {% include "includes/back_link.html" with url=back_url label="Back to Applications" %}
 
-        <div class="card border-0 shadow-lg rounded-4 bg-body overflow-hidden">
+        <div class="card border-0 shadow-lg rounded-4 bg-body">
+            {% include "includes/form_header.html" with icon="bi-briefcase-fill" title=page_title subtitle="Fill in the details below to keep your job search pipeline accurate and up to date." %}
 
-            <div class="card-header bg-body border-0 pt-4 px-4 px-md-5 pb-0">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm" style="width: 52px; height: 52px;">
-                        <i class="bi bi-briefcase-fill"></i>
+            <form method="post" novalidate data-loading>
+                {% csrf_token %}
+
+                <div class="card-body p-4 p-md-5 pt-4">
+                    {% include "includes/form_errors.html" %}
+
+                    <div class="jt-form-section">
+                        <h2 class="jt-form-section-title">Role details</h2>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.job_title %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.company %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.location %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.job_type %}
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h1 class="h4 fw-bold text-body mb-1">{{ page_title }}</h1>
-                        <p class="text-muted small mb-0">Fill in the details below to keep your job search pipeline accurate and up to date.</p>
+
+                    <div class="jt-form-section">
+                        <h2 class="jt-form-section-title">Application tracking</h2>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.application_date %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.job_status %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.salary %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="jt-form-section">
+                        <h2 class="jt-form-section-title">Links &amp; notes</h2>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                {% include "includes/field.html" with field=form.job_url %}
+                            </div>
+                            <div class="col-12">
+                                {% include "includes/field.html" with field=form.notes %}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <hr class="text-muted opacity-10 mt-4 mb-0">
-            </div>
 
-            <div class="card-body p-4 p-md-5 pt-4">
-                <form method="post" novalidate data-loading>
-                    {% csrf_token %}
-
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger py-2 small rounded-3 mb-4 shadow-sm" role="alert">
-                            {% for error in form.non_field_errors %}
-                                <div><i class="bi bi-exclamation-circle-fill me-1"></i> {{ error }}</div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    <div class="row g-4">
-                        {% for field in form %}
-                            <div class="col-md-6 {% if field.field.widget.input_type == 'textarea' or 'note' in field.name|lower or 'url' in field.name|lower or 'link' in field.name|lower or 'description' in field.name|lower %}col-md-12{% endif %}">
-                                {% include "includes/field.html" with field=field %}
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 pt-4 mt-5 border-top">
+                <div class="jt-form-actions border-top">
+                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 p-3 p-md-4">
                         <a href="{% url 'applications:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
                             Cancel
                         </a>
@@ -55,9 +76,8 @@
                             <i class="bi bi-check2-circle fs-5"></i> Save Application
                         </button>
                     </div>
-
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
 
     </div>

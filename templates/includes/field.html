@@ -1,7 +1,7 @@
 {# Usage: {% include "includes/field.html" with field=form.email %} #}
 {# For password fields: {% include "includes/field.html" with field=form.password1 password_toggle=True %} #}
-<div class="mb-3">
-    <label for="{{ field.id_for_label }}" class="jt-field-label form-label small fw-bold text-secondary text-uppercase mb-2">
+<div class="jt-field mb-3">
+    <label for="{{ field.id_for_label }}" class="jt-field-label form-label">
         {{ field.label }}{% if field.field.required %}<span class="text-danger ms-1">*</span>{% endif %}
     </label>
 
@@ -22,7 +22,7 @@
     {% endif %}
 
     {% if field.errors %}
-        <div class="jt-field-error invalid-feedback d-block mt-1">
+        <div class="jt-field-error invalid-feedback d-block mt-1" role="alert">
             {% for error in field.errors %}
                 <span><i class="bi bi-exclamation-triangle me-1"></i>{{ error }}</span>
             {% endfor %}

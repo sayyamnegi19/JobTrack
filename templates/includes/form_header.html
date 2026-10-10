@@ -1,0 +1,15 @@
+{# Usage: {% include "includes/form_header.html" with icon="bi-briefcase-fill" title="..." subtitle="..." %} #}
+<div class="card-header bg-body border-0 pt-4 px-4 px-md-5 pb-0">
+    <div class="d-flex align-items-center gap-3">
+        <div class="jt-icon-tile flex-shrink-0">
+            <i class="bi {{ icon }}"></i>
+        </div>
+        <div>
+            <h1 class="h4 fw-bold text-body mb-1">{{ title }}</h1>
+            {% if subtitle %}
+                <p class="text-muted small mb-0">{{ subtitle }}</p>
+            {% endif %}
+        </div>
+    </div>
+    <hr class="text-muted opacity-10 mt-4 mb-0">
+</div>

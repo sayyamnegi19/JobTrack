@@ -5,48 +5,57 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-5 px-3 px-md-4 bg-body-tertiary min-vh-100">
+<div class="container py-4 py-md-5 px-3 px-md-4 bg-body-tertiary flex-grow-1">
     <div class="max-w-800 mx-auto">
 
         {% url 'interviews:list' as back_url %}
         {% include "includes/back_link.html" with url=back_url label="Back to Interviews" %}
 
-        <div class="card border-0 shadow-lg rounded-4 bg-body overflow-hidden">
+        <div class="card border-0 shadow-lg rounded-4 bg-body">
+            {% include "includes/form_header.html" with icon="bi-calendar-event" title=page_title subtitle="Add or update the details of your interview schedule to keep your career pipeline organized." %}
 
-            <div class="card-header bg-body border-0 pt-4 px-4 px-md-5 pb-0">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm" style="width: 52px; height: 52px;">
-                        <i class="bi bi-calendar-event"></i>
+            <form method="post" novalidate data-loading>
+                {% csrf_token %}
+
+                <div class="card-body p-4 p-md-5 pt-4">
+                    {% include "includes/form_errors.html" %}
+
+                    <div class="jt-form-section">
+                        <h2 class="jt-form-section-title">Interview details</h2>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                {% include "includes/field.html" with field=form.application %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.round_name %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.interview_type %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.scheduled_at %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include "includes/field.html" with field=form.status %}
+                            </div>
+                            <div class="col-12">
+                                {% include "includes/field.html" with field=form.location %}
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h1 class="h4 fw-bold text-body mb-1">{{ page_title }}</h1>
-                        <p class="text-muted small mb-0">Add or update the details of your interview schedule to keep your career pipeline organized.</p>
+
+                    <div class="jt-form-section">
+                        <h2 class="jt-form-section-title">Notes</h2>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                {% include "includes/field.html" with field=form.notes %}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <hr class="text-muted opacity-10 mt-4 mb-0">
-            </div>
 
-            <div class="card-body p-4 p-md-5 pt-4">
-                <form method="post" novalidate data-loading>
-                    {% csrf_token %}
-
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger py-2 small rounded-3 mb-4 shadow-sm" role="alert">
-                            {% for error in form.non_field_errors %}
-                                <div><i class="bi bi-exclamation-circle-fill me-1"></i> {{ error }}</div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    <div class="row g-4">
-                        {% for field in form %}
-                            <div class="col-md-6 {% if field.field.widget.input_type == 'textarea' or 'note' in field.name|lower or 'detail' in field.name|lower or 'description' in field.name|lower or 'application' in field.name|lower %}col-md-12{% endif %}">
-                                {% include "includes/field.html" with field=field %}
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 pt-4 mt-5 border-top">
+                <div class="jt-form-actions border-top">
+                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 p-3 p-md-4">
                         <a href="{% url 'interviews:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
                             <i class="bi bi-x-lg me-1"></i> Cancel
                         </a>
@@ -55,9 +64,8 @@
                             <i class="bi bi-check-lg fs-5"></i> Save Interview
                         </button>
                     </div>
-
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
 
     </div>

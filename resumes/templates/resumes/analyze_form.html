@@ -5,81 +5,133 @@ Analyze Resume - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container py-5 px-3 px-md-4 bg-body-tertiary min-vh-100">
+<div class="container py-4 py-md-5 px-3 px-md-4 bg-body-tertiary flex-grow-1">
     <div class="max-w-800 mx-auto">
 
         {% url 'resumes:list' as back_url %}
         {% include "includes/back_link.html" with url=back_url label="Back to Resume ATS" %}
 
-        <div class="card border-0 shadow-lg rounded-4 bg-body overflow-hidden">
-            <div class="card-header bg-body border-0 pt-4 px-4 px-md-5 pb-0">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm" style="width: 52px; height: 52px;">
-                        <i class="bi bi-clipboard-data"></i>
-                    </div>
-                    <div>
-                        <h1 class="h4 fw-bold text-body mb-1">Analyze Your Resume</h1>
-                        <p class="text-muted small mb-0">
-                            Upload or paste your resume, then optionally add the job you are targeting.
-                        </p>
-                    </div>
-                </div>
-                <hr class="text-muted opacity-10 mt-4 mb-0">
-            </div>
+        <div class="card border-0 shadow-lg rounded-4 bg-body">
+            {% include "includes/form_header.html" with icon="bi-clipboard-data" title="Analyze Your Resume" subtitle="Upload or paste your resume, then optionally add the job you are targeting." %}
 
-            <div class="card-body p-4 p-md-5 pt-4">
-                <form method="post" enctype="multipart/form-data" novalidate id="analyze-form" data-loading>
-                    {% csrf_token %}
+            <form method="post" enctype="multipart/form-data" novalidate data-loading>
+                {% csrf_token %}
 
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger py-2 small rounded-3 mb-4 shadow-sm" role="alert">
-                            {% for error in form.non_field_errors %}
-                                <div><i class="bi bi-exclamation-circle-fill me-1"></i> {{ error }}</div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                <div class="card-body p-4 p-md-5 pt-4">
+                    {% include "includes/form_errors.html" %}
+
+                    <!-- STEP INDICATOR -->
+                    <div class="jt-steps-mini mb-4">
+                        <span class="jt-step active"><span class="jt-step-dot">1</span> Resume</span>
+                        <i class="bi bi-chevron-right jt-step-separator small"></i>
+                        <span class="jt-step"><span class="jt-step-dot">2</span> Job (optional)</span>
+                        <i class="bi bi-chevron-right jt-step-separator small"></i>
+                        <span class="jt-step"><span class="jt-step-dot">3</span> Analyze</span>
+                    </div>
 
                     <!-- SECTION 1: RESUME -->
-                    <h2 class="small fw-bold text-uppercase text-primary tracking-wide mb-3">
-                        <i class="bi bi-1-circle me-1"></i> Your Resume <span class="text-danger">*</span>
-                    </h2>
+                    <div class="jt-form-section">
+                        <h2 class="jt-form-section-title">Your resume <span class="text-danger">*</span></h2>
 
-                    {% include "includes/field.html" with field=form.resume_choice %}
+                        <div data-tabs>
+                            <div class="jt-segmented" role="tablist" aria-label="Resume source">
+                                <button type="button" role="tab" class="jt-segment {% if form.resume_choice.value %}active{% endif %}"
+                                        data-tab-target="resume-saved"
+                                        aria-selected="{% if form.resume_choice.value %}true{% else %}false{% endif %}">
+                                    <i class="bi bi-bookmark-check"></i> Saved
+                                </button>
+                                <button type="button" role="tab" class="jt-segment {% if not form.resume_choice.value and not form.resume_text.value %}active{% endif %}"
+                                        data-tab-target="resume-upload"
+                                        aria-selected="{% if not form.resume_choice.value and not form.resume_text.value %}true{% else %}false{% endif %}">
+                                    <i class="bi bi-upload"></i> Upload
+                                </button>
+                                <button type="button" role="tab" class="jt-segment {% if not form.resume_choice.value and form.resume_text.value %}active{% endif %}"
+                                        data-tab-target="resume-paste"
+                                        aria-selected="{% if not form.resume_choice.value and form.resume_text.value %}true{% else %}false{% endif %}">
+                                    <i class="bi bi-clipboard-text"></i> Paste
+                                </button>
+                            </div>
 
-                    <div class="text-center text-muted small my-3 fw-semibold">— OR —</div>
-
-                    {% include "includes/field.html" with field=form.resume_file %}
-
-                    <div class="text-center text-muted small my-3 fw-semibold">— OR —</div>
-
-                    {% include "includes/field.html" with field=form.resume_text %}
-
-                    <hr class="text-muted opacity-10 my-4">
-
-                    <!-- SECTION 2: JOB CONTEXT -->
-                    <h2 class="small fw-bold text-uppercase text-primary tracking-wide mb-3">
-                        <i class="bi bi-2-circle me-1"></i> Job Context
-                        <span class="text-muted fw-normal text-lowercase" style="font-size: 0.75rem;">(optional)</span>
-                    </h2>
-                    <p class="text-muted small">
-                        Add a job for a match score, or leave everything empty for a general ATS analysis.
-                    </p>
-
-                    {% include "includes/field.html" with field=form.job_application %}
-                    {% include "includes/field.html" with field=form.job_url %}
-                    {% include "includes/field.html" with field=form.job_description %}
-
-                    <div class="alert alert-info small rounded-3 d-flex gap-2 align-items-start">
-                        <i class="bi bi-info-circle-fill mt-1"></i>
-                        <div>
-                            The AI analysis usually takes 15–30 seconds — please don't close this page.
-                            <strong>Pasted job descriptions take priority</strong> over links; a link is only
-                            fetched when no description is pasted.
+                            <div class="mt-3">
+                                <div data-tab-panel="resume-saved"
+                                     class="jt-tab-panel {% if form.resume_choice.value %}active{% endif %}">
+                                    {% include "includes/field.html" with field=form.resume_choice %}
+                                </div>
+                                <div data-tab-panel="resume-upload"
+                                     class="jt-tab-panel {% if not form.resume_choice.value and not form.resume_text.value %}active{% endif %}">
+                                    {% include "includes/field.html" with field=form.resume_file %}
+                                </div>
+                                <div data-tab-panel="resume-paste"
+                                     class="jt-tab-panel {% if not form.resume_choice.value and form.resume_text.value %}active{% endif %}">
+                                    {% include "includes/field.html" with field=form.resume_text %}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- ACTIONS -->
-                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 pt-4 mt-4 border-top">
+                    <!-- SECTION 2: JOB CONTEXT -->
+                    <div class="jt-form-section">
+                        <h2 class="jt-form-section-title">Job context <span class="text-muted fw-normal text-lowercase" style="font-size: 0.75rem;">(optional)</span></h2>
+
+                        <div data-tabs>
+                            <div class="jt-segmented" role="tablist" aria-label="Job context">
+                                <button type="button" role="tab"
+                                        class="jt-segment {% if not form.job_description.value and not form.job_url.value and not form.job_application.value %}active{% endif %}"
+                                        data-tab-target="job-general"
+                                        aria-selected="{% if not form.job_description.value and not form.job_url.value and not form.job_application.value %}true{% else %}false{% endif %}">
+                                    <i class="bi bi-stars"></i> General
+                                </button>
+                                <button type="button" role="tab"
+                                        class="jt-segment {% if form.job_description.value %}active{% endif %}"
+                                        data-tab-target="job-paste"
+                                        aria-selected="{% if form.job_description.value %}true{% else %}false{% endif %}">
+                                    <i class="bi bi-clipboard-text"></i> Paste description
+                                </button>
+                                <button type="button" role="tab"
+                                        class="jt-segment {% if not form.job_description.value and form.job_url.value or not form.job_description.value and form.job_application.value %}active{% endif %}"
+                                        data-tab-target="job-link"
+                                        aria-selected="{% if not form.job_description.value and form.job_url.value or not form.job_description.value and form.job_application.value %}true{% else %}false{% endif %}">
+                                    <i class="bi bi-link-45deg"></i> Link / tracked app
+                                </button>
+                            </div>
+
+                            <div class="mt-3">
+                                <div data-tab-panel="job-general"
+                                     class="jt-tab-panel {% if not form.job_description.value and not form.job_url.value and not form.job_application.value %}active{% endif %}">
+                                    <p class="text-muted small mb-0">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        No job details — a general ATS analysis will run.
+                                    </p>
+                                </div>
+                                <div data-tab-panel="job-paste"
+                                     class="jt-tab-panel {% if form.job_description.value %}active{% endif %}">
+                                    {% include "includes/field.html" with field=form.job_description %}
+                                    <p class="text-muted small mb-0">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Pasting the description is the most reliable option — some sites block automated fetching.
+                                    </p>
+                                </div>
+                                <div data-tab-panel="job-link"
+                                     class="jt-tab-panel {% if not form.job_description.value and form.job_url.value or not form.job_description.value and form.job_application.value %}active{% endif %}">
+                                    {% include "includes/field.html" with field=form.job_application %}
+                                    {% include "includes/field.html" with field=form.job_url %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info small rounded-3 d-flex gap-2 align-items-start mt-4">
+                            <i class="bi bi-info-circle-fill mt-1"></i>
+                            <div>
+                                The AI analysis usually takes 15–30 seconds — please don't close this page.
+                                <strong>Pasted job descriptions take priority</strong> over links; a link is only
+                                fetched when no description is pasted.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="jt-form-actions border-top">
+                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 p-3 p-md-4">
                         <a href="{% url 'resumes:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
                             Cancel
                         </a>
@@ -88,8 +140,8 @@ Analyze Resume - JobTrack
                             <i class="bi bi-stars"></i> Analyze Resume
                         </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
 
     </div>

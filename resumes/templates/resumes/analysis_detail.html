@@ -5,7 +5,7 @@ ATS Analysis - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary min-vh-100">
+<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary flex-grow-1">
     <div class="w-100 mx-auto" style="max-width: 1100px;">
 
         {% url 'resumes:list' as back_url %}
@@ -128,7 +128,7 @@ ATS Analysis - JobTrack
                 {% endfor %}
                     </div>
                     <div class="col-lg-5">
-                        <div class="position-relative" style="height: 280px;">
+                        <div class="position-relative jt-chart-lg">
                             <canvas id="category-radar" role="img" aria-label="Category scores radar chart"></canvas>
                         </div>
                     </div>
@@ -146,7 +146,7 @@ ATS Analysis - JobTrack
                         </div>
                         <span class="badge bg-body-tertiary text-muted border px-3 py-2 rounded-pill small">{{ history_values|length }} analyses</span>
                     </div>
-                    <div class="position-relative" style="height: 220px;">
+                    <div class="position-relative jt-chart-md">
                         <canvas id="history-chart" role="img" aria-label="ATS score history chart"></canvas>
                     </div>
                 </div>

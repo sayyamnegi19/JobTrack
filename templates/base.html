@@ -43,7 +43,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="offcanvas offcanvas-end text-bg-dark w-50" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas offcanvas-end text-bg-dark jt-nav-offcanvas" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="offcanvasNavbarLabel">JobTrack</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -117,7 +117,7 @@
         </div>
     </nav>
 
-    <main id="main" class="flex-grow-1">
+    <main id="main" class="flex-grow-1 d-flex flex-column">
         {% if messages %}
             <div class="toast-container position-fixed end-0 p-3 jt-toast-container">
                 {% for message in messages %}

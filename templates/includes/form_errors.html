@@ -1,0 +1,16 @@
+{# Form-level error summary. Includes non-field errors so nothing gets lost. #}
+{% if form.errors %}
+    <div class="alert alert-danger d-flex gap-2 align-items-start rounded-3 shadow-sm small" role="alert">
+        <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+        <div>
+            <strong>Please fix the highlighted fields.</strong>
+            {% if form.non_field_errors %}
+                <div class="mt-1">
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

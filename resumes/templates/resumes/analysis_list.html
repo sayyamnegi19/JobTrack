@@ -5,7 +5,7 @@ Resume ATS - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary min-vh-100">
+<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary flex-grow-1">
     <div class="w-100 mx-auto max-w-1400">
 
         {% url 'resumes:analyze' as analyze_url %}
@@ -133,7 +133,7 @@ Resume ATS - JobTrack
                                         <tr>
                                             <th class="py-3 ps-3">Date</th>
                                             <th class="py-3">Resume</th>
-                                            <th class="py-3">Mode</th>
+                                            <th class="py-3 d-none d-lg-table-cell">Mode</th>
                                             <th class="py-3">Job</th>
                                             <th class="py-3">Score</th>
                                             <th class="py-3 text-end pe-3">Actions</th>
@@ -149,7 +149,7 @@ Resume ATS - JobTrack
                                                 <td class="py-3 fw-semibold text-body small">
                                                     {{ analysis.resume.original_filename|default:"Resume" }}
                                                 </td>
-                                                <td class="py-3">
+                                                <td class="py-3 d-none d-lg-table-cell">
                                                     <span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill fw-semibold">
                                                         {{ analysis.get_mode_display }}
                                                     </span>

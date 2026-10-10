@@ -5,7 +5,7 @@ Register - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid min-vh-100 d-flex flex-column justify-content-center bg-body-tertiary py-4">
+<div class="container-fluid flex-grow-1 d-flex flex-column justify-content-center bg-body-tertiary py-4">
     <div class="row justify-content-center align-items-center w-100 mx-auto max-w-900">
 
         <!-- Left Column: Branding / Visual Section (matched to login) -->
@@ -31,18 +31,19 @@ Register - JobTrack
         <div class="col-lg-6">
             <div class="card border-0 shadow-lg rounded-4 p-4 p-sm-4 bg-body">
 
+                <div class="text-center d-lg-none mb-3">
+                    <span class="jt-brand-mark text-white rounded-3 d-inline-flex align-items-center justify-content-center mb-2">
+                        <i class="bi bi-briefcase-fill"></i>
+                    </span>
+                    <div class="fw-bold text-body">JobTrack</div>
+                </div>
+
                 <div class="text-center mb-3">
                     <h2 class="fw-bold text-body fs-4 mb-1">Create Your Account</h2>
                     <p class="text-muted small mb-0">Start organizing your job search with JobTrack.</p>
                 </div>
 
-                {% if form.non_field_errors %}
-                    <div class="alert alert-danger py-2 small rounded-3 mb-3" role="alert">
-                        {% for error in form.non_field_errors %}
-                            <div><i class="bi bi-exclamation-circle-fill me-1"></i> {{ error }}</div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                {% include "includes/form_errors.html" %}
 
                 <form method="POST" novalidate data-loading>
                     {% csrf_token %}

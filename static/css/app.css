@@ -146,8 +146,10 @@ select {
 
 /* Field labels / help / errors (see includes/field.html) */
 .jt-field-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--bs-body-color);
+    margin-bottom: 0.375rem;
 }
 
 .jt-field-help {
@@ -698,4 +700,226 @@ a:focus-visible {
     [data-progress] {
         transition: none;
     }
+}
+
+/* --------------------------------------------------------------------------
+   11. Forms v2 & responsive layout
+   -------------------------------------------------------------------------- */
+
+/* --- Validation states ---------------------------------------------------- */
+
+/* A field containing an error gets a red border + focus ring (no JS needed). */
+.jt-field:has(.jt-field-error) :is(input, select, textarea) {
+    border-color: var(--bs-danger);
+}
+
+.jt-field:has(.jt-field-error) :is(input, select, textarea):focus {
+    border-color: var(--bs-danger);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-danger-rgb), 0.15);
+}
+
+/* --- File inputs ----------------------------------------------------------- */
+
+input[type="file"]::file-selector-button {
+    margin-right: 0.75rem;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--jt-primary);
+    background-color: transparent;
+    border: 1px solid var(--jt-primary);
+    border-radius: var(--jt-radius);
+    cursor: pointer;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+input[type="file"]::file-selector-button:hover {
+    color: #fff;
+    background-color: var(--jt-primary);
+}
+
+/* --- Sectioned forms -------------------------------------------------------- */
+
+.jt-form-section + .jt-form-section {
+    margin-top: 1.75rem;
+}
+
+.jt-form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--jt-primary);
+    margin-bottom: 1rem;
+}
+
+.jt-form-section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--bs-border-color);
+}
+
+/* --- Sticky mobile form actions --------------------------------------------- */
+
+.jt-form-actions {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+@media (max-width: 575.98px) {
+    .jt-form-actions {
+        position: sticky;
+        bottom: 0;
+        z-index: 1020;
+        background: var(--bs-body-bg);
+        box-shadow: 0 -10px 24px -16px rgba(16, 24, 40, 0.45);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* --- Segmented control (form tabs) ------------------------------------------ */
+
+.jt-segmented {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    background: var(--bs-tertiary-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.75rem;
+}
+
+.jt-segment {
+    border: 0;
+    background: transparent;
+    color: var(--bs-secondary-color);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 0.55rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+}
+
+.jt-segment:hover {
+    color: var(--bs-body-color);
+}
+
+.jt-segment.active {
+    background: var(--bs-body-bg);
+    color: var(--jt-primary);
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.14);
+}
+
+/* Only hide inactive panels once JS has taken over (progressive enhancement). */
+.jt-tabs-ready [data-tab-panel]:not(.active) {
+    display: none;
+}
+
+@media (max-width: 575.98px) {
+    .jt-segmented {
+        display: flex;
+        width: 100%;
+    }
+
+    .jt-segment {
+        flex: 1;
+        justify-content: center;
+        padding: 0.6rem 0.5rem;
+    }
+}
+
+/* --- Mini step indicator (analyze form) -------------------------------------- */
+
+.jt-steps-mini {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--bs-secondary-color);
+}
+
+.jt-steps-mini .jt-step-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    font-size: 0.7rem;
+    background: var(--bs-tertiary-bg);
+    border: 1px solid var(--bs-border-color);
+    color: var(--bs-secondary-color);
+}
+
+.jt-steps-mini .jt-step.active {
+    color: var(--jt-primary);
+}
+
+.jt-steps-mini .jt-step.active .jt-step-dot {
+    background-image: var(--jt-gradient);
+    border: 0;
+    color: #fff;
+}
+
+.jt-steps-mini .jt-step-separator {
+    color: var(--bs-border-color);
+}
+
+/* --- Responsive width utilities (Bootstrap has none) ------------------------- */
+
+@media (min-width: 576px) {
+    .w-sm-auto {
+        width: auto !important;
+    }
+
+    .w-sm-100 {
+        width: 100% !important;
+    }
+}
+
+/* --- Navbar offcanvas sizing -------------------------------------------------- */
+
+.jt-nav-offcanvas {
+    --bs-offcanvas-width: min(340px, 88vw);
+}
+
+@media (max-width: 991.98px) {
+    .offcanvas .nav-link {
+        padding-block: 0.6rem;
+    }
+}
+
+/* --- Fluid typography & responsive media -------------------------------------- */
+
+.jt-hero-title {
+    font-size: clamp(2.1rem, 5.2vw, 3.5rem);
+    line-height: 1.12;
+}
+
+.jt-chart-sm {
+    height: clamp(180px, 34vw, 220px);
+}
+
+.jt-chart-md {
+    height: clamp(200px, 38vw, 280px);
+}
+
+.jt-chart-lg {
+    height: clamp(220px, 42vw, 280px);
+}
+
+/* Toasts must never exceed the viewport on phones. */
+.jt-toast-container {
+    max-width: calc(100vw - 1.5rem);
 }
