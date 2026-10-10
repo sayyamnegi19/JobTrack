@@ -130,6 +130,9 @@ ATS Analysis - JobTrack
                     <div class="col-lg-5">
                         <div class="position-relative jt-chart-lg">
                             <canvas id="category-radar" role="img" aria-label="Category scores radar chart"></canvas>
+                            <p class="jt-chart-fallback d-none text-muted small mb-0">
+                                Charts couldn't load. Check your connection and refresh.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -148,6 +151,9 @@ ATS Analysis - JobTrack
                     </div>
                     <div class="position-relative jt-chart-md">
                         <canvas id="history-chart" role="img" aria-label="ATS score history chart"></canvas>
+                        <p class="jt-chart-fallback d-none text-muted small mb-0">
+                            Charts couldn't load. Check your connection and refresh.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -329,13 +335,32 @@ ATS Analysis - JobTrack
         }
 
         // Charts --------------------------------------------------------------
+        function showChartFallbacks() {
+            document.querySelectorAll(".jt-chart-fallback").forEach(function (el) {
+                el.classList.remove("d-none");
+                var canvas = el.parentElement.querySelector("canvas");
+                if (canvas) {
+                    canvas.classList.add("d-none");
+                }
+            });
+        }
+
         if (typeof Chart === "undefined" || !window.jtCharts) {
+            showChartFallbacks();
             return;
         }
 
         var charts = window.jtCharts;
         charts.applyDefaults();
         var colors = charts.themeColors();
+
+        function renderChart(canvas, config) {
+            try {
+                charts.register(new Chart(canvas, config));
+            } catch (error) {
+                showChartFallbacks();
+            }
+        }
 
         // Category radar ------------------------------------------------------
         var categoryEl = document.getElementById("category-data");
@@ -345,7 +370,7 @@ ATS Analysis - JobTrack
             var categories = JSON.parse(categoryEl.textContent);
 
             if (Array.isArray(categories) && categories.length) {
-                charts.register(new Chart(radarCanvas, {
+                renderChart(radarCanvas, {
                     type: "radar",
                     data: {
                         labels: categories.map(function (item) { return item.label; }),
@@ -379,7 +404,7 @@ ATS Analysis - JobTrack
                             }
                         }
                     }
-                }));
+                });
             }
         }
 
@@ -392,7 +417,7 @@ ATS Analysis - JobTrack
             var historyLabels = JSON.parse(historyLabelsEl.textContent) || [];
             var historyValues = JSON.parse(historyValuesEl.textContent) || [];
 
-            charts.register(new Chart(historyCanvas, {
+            renderChart(historyCanvas, {
                 type: "line",
                 data: {
                     labels: historyLabels,
@@ -426,7 +451,7 @@ ATS Analysis - JobTrack
                         }
                     }
                 }
-            }));
+            });
         }
     })();
 </script>

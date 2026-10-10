@@ -919,6 +919,16 @@ input[type="file"]::file-selector-button:hover {
     height: clamp(220px, 42vw, 280px);
 }
 
+/* Shown only when chart initialization fails (CDN down, etc.) */
+.jt-chart-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    padding: 1rem;
+}
+
 /* Toasts must never exceed the viewport on phones. */
 .jt-toast-container {
     max-width: calc(100vw - 1.5rem);
