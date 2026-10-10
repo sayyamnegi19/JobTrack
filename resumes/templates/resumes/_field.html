@@ -1,0 +1,21 @@
+{# Reusable form field block: label, widget, help text, errors. #}
+<div class="mb-3">
+    <label for="{{ field.id_for_label }}" class="form-label small fw-bold text-secondary mb-2 text-uppercase tracking-wide" style="font-size: 0.75rem;">
+        {{ field.label }}
+        {% if field.field.required %}<span class="text-danger ms-1">*</span>{% endif %}
+    </label>
+
+    {{ field }}
+
+    {% if field.help_text %}
+        <div class="form-text text-muted mt-1" style="font-size: 0.75rem;">{{ field.help_text|safe }}</div>
+    {% endif %}
+
+    {% if field.errors %}
+        <div class="invalid-feedback d-block small mt-1">
+            {% for error in field.errors %}
+                <span><i class="bi bi-exclamation-triangle me-1"></i>{{ error }}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

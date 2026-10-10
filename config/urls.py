@@ -27,5 +27,6 @@ urlpatterns = [
     path("dashboard/", include("dashboard.urls")),
     path("accounts/", include("accounts.urls")),
     path("applications/", include("applications.urls")),
-    path("interviews/", include("interviews.urls"))
+    path("interviews/", include("interviews.urls")),
+    path("resumes/", include("resumes.urls"))
 ]

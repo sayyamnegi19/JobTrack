@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 
 class Resume(models.Model):
@@ -109,3 +111,14 @@ class ResumeAnalysis(models.Model):
 
     def __str__(self):
         return f"{self.resume} - {self.get_mode_display()} ({self.overall_score})"
+
+
+@receiver(post_delete, sender=Resume)
+def delete_resume_file(sender, instance, **kwargs):
+    """Remove the stored file when its Resume row is deleted.
+
+    Django does not delete files on model deletion, so without this hook
+    deleted resumes would leave orphaned personal documents on disk.
+    """
+    if instance.file:
+        instance.file.delete(save=False)

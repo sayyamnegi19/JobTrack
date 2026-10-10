@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block title %}
+ATS Analysis - JobTrack
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 px-3 px-md-5 bg-light min-vh-100">
+    <div class="w-100 mx-auto" style="max-width: 1100px;">
+
+        <!-- BACK LINK -->
+        <div class="mb-4">
+            <a href="{% url 'resumes:list' %}" class="text-decoration-none text-muted small fw-semibold d-inline-flex align-items-center gap-2">
+                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                    <i class="bi bi-arrow-left text-dark"></i>
+                </div>
+                <span>Back to Resume ATS</span>
+            </a>
+        </div>
+
+        <!-- SCORE HEADER -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4 overflow-hidden">
+            <div class="card-body p-4 p-md-5">
+                <div class="d-flex flex-column flex-md-row align-items-center gap-4 gap-md-5">
+
+                    <!-- GAUGE -->
+                    <div class="score-gauge flex-shrink-0"
+                         style="--score: {{ analysis.overall_score }}; --tone: var(--bs-{{ score_tone }});">
+                        <div class="score-gauge-inner">
+                            <span class="display-5 fw-bold text-dark">{{ analysis.overall_score }}</span>
+                            <span class="text-muted small">/ 100</span>
+                        </div>
+                    </div>
+
+                    <!-- SUMMARY + META -->
+                    <div class="flex-grow-1 text-center text-md-start">
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-start align-items-center gap-2 mb-2">
+                            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold">
+                                {{ analysis.get_mode_display }}
+                            </span>
+                            {% if analysis.job_application %}
+                                <a href="{% url 'applications:details' analysis.job_application.pk %}"
+                                   class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold text-decoration-none">
+                                    <i class="bi bi-briefcase me-1"></i>{{ analysis.job_application.job_title }} @ {{ analysis.job_application.company }}
+                                </a>
+                            {% elif analysis.job_url %}
+                                <a href="{{ analysis.job_url }}" target="_blank" rel="noopener noreferrer"
+                                   class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold text-decoration-none">
+                                    <i class="bi bi-link-45deg me-1"></i>Job link
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        <h1 class="h4 fw-bold text-dark mb-2">Resume Analysis Result</h1>
+                        <p class="text-muted mb-3">{{ analysis.result.summary }}</p>
+
+                        <div class="text-muted" style="font-size: 0.75rem;">
+                            <i class="bi bi-calendar3 me-1"></i>{{ analysis.created_at|date:"d M Y, H:i" }}
+                            <span class="mx-2">·</span>
+                            <i class="bi bi-cpu me-1"></i>{{ analysis.ai_model }}
+                            {% if analysis.prompt_tokens %}
+                                <span class="mx-2">·</span>
+                                {{ analysis.prompt_tokens }} in / {{ analysis.output_tokens }} out tokens
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- SEMANTIC SIMILARITY -->
+        {% if analysis.semantic_similarity is not None %}
+            <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-2">
+                        <div>
+                            <span class="text-primary fw-semibold text-uppercase small tracking-wide">Semantic Match</span>
+                            <h2 class="h6 fw-bold text-dark mb-0">
+                                Resume ↔ Job description similarity
+                            </h2>
+                        </div>
+                        <span class="badge text-bg-primary px-3 py-2 rounded-pill fw-semibold">
+                            {% widthratio analysis.semantic_similarity 1 100 %}%
+                        </span>
+                    </div>
+                    <div class="progress rounded-pill bg-light" style="height: 10px;">
+                        <div class="progress-bar bg-primary" role="progressbar"
+                             style="width: {% widthratio analysis.semantic_similarity 1 100 %}%;"
+                             aria-valuenow="{% widthratio analysis.semantic_similarity 1 100 %}"
+                             aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="text-muted small mt-2 mb-0">
+                        Embedding-based measure of how close the two texts are in meaning. It is a
+                        supporting signal — the score above comes from the full rubric evaluation.
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- CATEGORY SCORES -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                <span class="text-primary fw-semibold text-uppercase small tracking-wide">Breakdown</span>
+                <h2 class="h5 fw-bold text-dark mb-0">Category Scores</h2>
+            </div>
+            <div class="card-body p-4">
+                {% for category in analysis.result.categories %}
+                    <div class="{% if not forloop.last %}mb-4{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-semibold text-dark">{{ category.label }}</span>
+                            <span class="badge px-3 py-2 rounded-pill fw-semibold
+                                {% if category.score >= 80 %}text-bg-success
+                                {% elif category.score >= 60 %}text-bg-primary
+                                {% elif category.score >= 40 %}text-bg-warning
+                                {% else %}text-bg-danger{% endif %}">
+                                {{ category.score }}/100
+                            </span>
+                        </div>
+                        <div class="progress rounded-pill bg-light" style="height: 8px;">
+                            <div class="progress-bar
+                                {% if category.score >= 80 %}bg-success
+                                {% elif category.score >= 60 %}bg-primary
+                                {% elif category.score >= 40 %}bg-warning
+                                {% else %}bg-danger{% endif %}"
+                                role="progressbar" style="width: {{ category.score }}%;"
+                                aria-valuenow="{{ category.score }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p class="text-muted small mb-0 mt-2">{{ category.feedback }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- KEYWORDS -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h6 fw-bold text-success mb-3">
+                            <i class="bi bi-check-circle-fill me-1"></i>
+                            Matched Keywords
+                            <span class="badge bg-success bg-opacity-10 text-success ms-1">{{ analysis.result.matched_keywords|length }}</span>
+                        </h2>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for keyword in analysis.result.matched_keywords %}
+                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold">{{ keyword }}</span>
+                            {% empty %}
+                                <span class="text-muted small">No matched keywords found.</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h6 fw-bold text-danger mb-3">
+                            <i class="bi bi-exclamation-circle-fill me-1"></i>
+                            Missing Keywords
+                            <span class="badge bg-danger bg-opacity-10 text-danger ms-1">{{ analysis.result.missing_keywords|length }}</span>
+                        </h2>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for keyword in analysis.result.missing_keywords %}
+                                <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill fw-semibold">{{ keyword }}</span>
+                            {% empty %}
+                                <span class="text-muted small">No missing keywords — great match!</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STRENGTHS & IMPROVEMENTS -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-hand-thumbs-up-fill text-success me-1"></i> Strengths</h2>
+                        <ul class="list-unstyled mb-0 small">
+                            {% for strength in analysis.result.strengths %}
+                                <li class="d-flex gap-2 py-2 {% if not forloop.last %}border-bottom{% endif %}">
+                                    <i class="bi bi-check2 text-success mt-1"></i>
+                                    <span class="text-muted">{{ strength }}</span>
+                                </li>
+                            {% empty %}
+                                <li class="text-muted">No strengths recorded.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-lightbulb-fill text-warning me-1"></i> Improvements</h2>
+                        <ul class="list-unstyled mb-0 small">
+                            {% for improvement in analysis.result.improvements %}
+                                <li class="d-flex gap-2 py-2 {% if not forloop.last %}border-bottom{% endif %}">
+                                    <span class="badge flex-shrink-0
+                                        {% if improvement.priority == 'high' %}text-bg-danger
+                                        {% elif improvement.priority == 'medium' %}text-bg-warning
+                                        {% else %}text-bg-secondary{% endif %}"
+                                        style="font-size: 0.65rem;">
+                                        {{ improvement.priority|upper }}
+                                    </span>
+                                    <span class="text-muted">{{ improvement.suggestion }}</span>
+                                </li>
+                            {% empty %}
+                                <li class="text-muted">No improvements recorded.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JOB DESCRIPTION USED (transparency) -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+                    <div>
+                        <h2 class="h6 fw-bold text-dark mb-1"><i class="bi bi-file-text me-1"></i> Job Description Used</h2>
+                        <p class="text-muted small mb-0">
+                            {% if analysis.mode == "JOB_MATCH" %}
+                                This is the exact text the AI compared your resume against.
+                            {% else %}
+                                This analysis was general — no job description was used.
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% if analysis.job_description %}
+                        <button class="btn btn-outline-secondary btn-sm fw-semibold rounded-3" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#jobDescriptionPanel"
+                                aria-expanded="false" aria-controls="jobDescriptionPanel">
+                            <i class="bi bi-eye me-1"></i>Show text
+                        </button>
+                    {% endif %}
+                </div>
+
+                {% if analysis.job_description %}
+                    <div class="collapse mt-3" id="jobDescriptionPanel">
+                        <div class="bg-light border rounded-3 p-3">
+                            <pre class="small text-muted mb-0" style="white-space: pre-wrap; max-height: 320px; overflow-y: auto;">{{ analysis.job_description }}</pre>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-stretch align-items-sm-center gap-3 mb-5">
+            <a href="{% url 'resumes:analysis_delete' analysis.pk %}" class="btn btn-outline-danger px-4 py-2.5 fw-semibold rounded-3 order-3 order-sm-1">
+                <i class="bi bi-trash3 me-1"></i> Delete Analysis
+            </a>
+            <div class="d-flex flex-column flex-sm-row gap-2 order-1 order-sm-2">
+                {% if analysis.resume.file %}
+                    <a href="{% url 'resumes:resume_download' analysis.resume.pk %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold rounded-3">
+                        <i class="bi bi-download me-1"></i> Download Resume
+                    </a>
+                {% endif %}
+                <a href="{% url 'resumes:analyze' %}?resume={{ analysis.resume.pk }}" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm rounded-3">
+                    <i class="bi bi-arrow-repeat me-1"></i> Analyze Again
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .tracking-wide {
+        letter-spacing: 0.05em;
+    }
+
+    /* Pure-CSS circular score gauge — no chart library needed. */
+    .score-gauge {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: conic-gradient(var(--tone) calc(var(--score) * 1%), #e9ecef 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.06);
+    }
+    .score-gauge-inner {
+        width: 124px;
+        height: 124px;
+        border-radius: 50%;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.1;
+    }
+</style>
+{% endblock %}

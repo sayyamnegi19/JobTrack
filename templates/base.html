@@ -47,6 +47,10 @@
                                 Interviews
                             </a>
 
+                            <a href="{% url 'resumes:list' %}" class="nav-link link-light link-opacity-100 link-opacity-75-hover">
+                                Resume ATS
+                            </a>
+
                             <form method="post" action="{% url 'accounts:logout' %}" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="nav-link link-light link-opacity-100 link-opacity-75-hover bg-transparent border-0 text-start">

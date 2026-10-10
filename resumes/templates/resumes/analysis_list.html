@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}
+Resume ATS - JobTrack
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 px-3 px-md-5 bg-light min-vh-100">
+    <div class="w-100 mx-auto" style="max-width: 1400px;">
+
+        <!-- HEADER -->
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+            <div>
+                <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-2">
+                    <i class="bi bi-clipboard-data me-1"></i> Resume ATS
+                </span>
+                <h1 class="h3 fw-bold text-dark mb-1 text-break">Resume Score History</h1>
+                <p class="text-muted small mb-0">
+                    Analyze your resume against any job description and track how your ATS score improves.
+                </p>
+            </div>
+            <a href="{% url 'resumes:analyze' %}" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm rounded-3">
+                <i class="bi bi-stars me-1"></i> New Analysis
+            </a>
+        </div>
+
+        <!-- STATS -->
+        <div class="row g-4 mb-4">
+            <div class="col-sm-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-primary border-4">
+                    <span class="text-muted small d-block text-uppercase fw-bold tracking-wide mb-2" style="font-size: 0.7rem;">Total Analyses</span>
+                    <h2 class="display-6 fw-bold text-dark mb-1">{{ total_analyses }}</h2>
+                    <span class="text-muted small"><i class="bi bi-clock-history me-1"></i>Across all resumes</span>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-4
+                    {% if latest_analysis %}
+                        {% if latest_analysis.overall_score >= 80 %}border-success
+                        {% elif latest_analysis.overall_score >= 60 %}border-primary
+                        {% elif latest_analysis.overall_score >= 40 %}border-warning
+                        {% else %}border-danger{% endif %}
+                    {% else %}border-secondary{% endif %}">
+                    <span class="text-muted small d-block text-uppercase fw-bold tracking-wide mb-2" style="font-size: 0.7rem;">Latest ATS Score</span>
+                    {% if latest_analysis %}
+                        <h2 class="display-6 fw-bold mb-1
+                            {% if latest_analysis.overall_score >= 80 %}text-success
+                            {% elif latest_analysis.overall_score >= 60 %}text-primary
+                            {% elif latest_analysis.overall_score >= 40 %}text-warning
+                            {% else %}text-danger{% endif %}">
+                            {{ latest_analysis.overall_score }}<span class="fs-5 text-muted">/100</span>
+                        </h2>
+                        <span class="text-muted small"><i class="bi bi-calendar3 me-1"></i>{{ latest_analysis.created_at|date:"d M Y" }}</span>
+                    {% else %}
+                        <h2 class="display-6 fw-bold text-muted mb-1">—</h2>
+                        <span class="text-muted small">No analyses yet</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-success border-4">
+                    <span class="text-muted small d-block text-uppercase fw-bold tracking-wide mb-2" style="font-size: 0.7rem;">Saved Resumes</span>
+                    <h2 class="display-6 fw-bold text-dark mb-1">{{ resumes|length }}</h2>
+                    <span class="text-muted small"><i class="bi bi-file-earmark-text me-1"></i>Ready to re-analyze</span>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-warning border-4">
+                    <span class="text-muted small d-block text-uppercase fw-bold tracking-wide mb-2" style="font-size: 0.7rem;">Today's Usage</span>
+                    <h2 class="display-6 fw-bold text-dark mb-1">{{ today_count }}<span class="fs-5 text-muted">/{{ daily_limit }}</span></h2>
+                    <span class="text-muted small"><i class="bi bi-speedometer2 me-1"></i>Daily analysis limit</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- RESUME LIBRARY -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                    <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                        <h2 class="h5 fw-bold text-dark mb-1">Your Resumes</h2>
+                        <p class="text-muted small mb-0">Reuse a saved resume for a new job.</p>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if resumes %}
+                            <div class="d-flex flex-column gap-3">
+                                {% for resume in resumes %}
+                                    <div class="border rounded-4 p-3 bg-light bg-opacity-50">
+                                        <div class="d-flex align-items-start gap-3">
+                                            <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                                <i class="bi bi-file-earmark-text"></i>
+                                            </div>
+                                            <div class="overflow-hidden">
+                                                <div class="fw-semibold text-dark text-truncate">
+                                                    {{ resume.original_filename|default:"Resume" }}
+                                                </div>
+                                                <div class="text-muted" style="font-size: 0.75rem;">
+                                                    {{ resume.created_at|date:"d M Y" }} ·
+                                                    {% if resume.file %}File{% else %}Pasted text{% endif %} ·
+                                                    {{ resume.analysis_count }} analysis{{ resume.analysis_count|pluralize }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-2 mt-3">
+                                            <a href="{% url 'resumes:analyze' %}?resume={{ resume.pk }}"
+                                               class="btn btn-outline-primary btn-sm fw-semibold rounded-3">
+                                                <i class="bi bi-arrow-repeat me-1"></i>Analyze
+                                            </a>
+                                            {% if resume.file %}
+                                                <a href="{% url 'resumes:resume_download' resume.pk %}"
+                                                   class="btn btn-outline-secondary btn-sm fw-semibold rounded-3"
+                                                   title="Download original file">
+                                                    <i class="bi bi-download"></i>
+                                                </a>
+                                            {% endif %}
+                                            <a href="{% url 'resumes:resume_delete' resume.pk %}"
+                                               class="btn btn-outline-danger btn-sm fw-semibold rounded-3"
+                                               title="Delete resume and its analyses">
+                                                <i class="bi bi-trash3"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-center py-4">
+                                <div class="bg-light text-muted rounded-circle d-inline-flex align-items-center justify-content-center p-3 mb-2" style="width: 56px; height: 56px;">
+                                    <i class="bi bi-file-earmark-plus fs-4"></i>
+                                </div>
+                                <h3 class="h6 fw-bold text-dark mb-1">No resumes yet</h3>
+                                <p class="text-muted small mb-0">Upload or paste one on your first analysis.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYSIS HISTORY -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                    <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                        <h2 class="h5 fw-bold text-dark mb-1">Analysis History</h2>
+                        <p class="text-muted small mb-0">Every past score, newest first.</p>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if page_obj.paginator.count %}
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0" style="min-width: 640px;">
+                                    <thead class="text-muted border-bottom small text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+                                        <tr>
+                                            <th class="py-3 ps-3">Date</th>
+                                            <th class="py-3">Resume</th>
+                                            <th class="py-3">Mode</th>
+                                            <th class="py-3">Job</th>
+                                            <th class="py-3">Score</th>
+                                            <th class="py-3 text-end pe-3">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for analysis in page_obj %}
+                                            <tr>
+                                                <td class="text-muted small py-3 ps-3">
+                                                    {{ analysis.created_at|date:"d M Y" }}<br>
+                                                    {{ analysis.created_at|time:"H:i" }}
+                                                </td>
+                                                <td class="py-3 fw-semibold text-dark small">
+                                                    {{ analysis.resume.original_filename|default:"Resume" }}
+                                                </td>
+                                                <td class="py-3">
+                                                    <span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill fw-semibold">
+                                                        {{ analysis.get_mode_display }}
+                                                    </span>
+                                                </td>
+                                                <td class="py-3 small">
+                                                    {% if analysis.job_application %}
+                                                        <span class="fw-medium text-dark">{{ analysis.job_application.job_title }}</span>
+                                                        <span class="text-muted">@ {{ analysis.job_application.company }}</span>
+                                                    {% elif analysis.job_url %}
+                                                        <a href="{{ analysis.job_url }}" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                                                            Job link <i class="bi bi-box-arrow-up-right small"></i>
+                                                        </a>
+                                                    {% else %}
+                                                        <span class="text-muted">—</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="py-3">
+                                                    <span class="badge px-3 py-2 rounded-pill fw-semibold
+                                                        {% if analysis.overall_score >= 80 %}text-bg-success
+                                                        {% elif analysis.overall_score >= 60 %}text-bg-primary
+                                                        {% elif analysis.overall_score >= 40 %}text-bg-warning
+                                                        {% else %}text-bg-danger{% endif %}">
+                                                        {{ analysis.overall_score }}/100
+                                                    </span>
+                                                </td>
+                                                <td class="text-end pe-3 py-3">
+                                                    <a href="{% url 'resumes:analysis_detail' analysis.pk %}"
+                                                       class="btn btn-sm btn-outline-dark rounded-3" title="View analysis">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                    <a href="{% url 'resumes:analysis_delete' analysis.pk %}"
+                                                       class="btn btn-sm btn-outline-danger rounded-3" title="Delete analysis">
+                                                        <i class="bi bi-trash3"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {% include "includes/pagination.html" %}
+                        {% else %}
+                            <div class="text-center py-5">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center p-4 mb-3 fs-2 shadow-sm" style="width: 75px; height: 75px;">
+                                    <i class="bi bi-clipboard-data"></i>
+                                </div>
+                                <h3 class="h5 fw-bold text-dark mb-2">No analyses yet</h3>
+                                <p class="text-muted small mb-4">
+                                    Score your resume against a job description to see how ATS-friendly it is.
+                                </p>
+                                <a href="{% url 'resumes:analyze' %}" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm rounded-3">
+                                    <i class="bi bi-stars me-1"></i> Analyze Your Resume
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .tracking-wide {
+        letter-spacing: 0.05em;
+    }
+</style>
+{% endblock %}

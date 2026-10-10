@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}
+Analyze Resume - JobTrack
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 px-3 px-md-4 bg-light min-vh-100">
+    <div class="mx-auto" style="max-width: 860px;">
+
+        <!-- BACK LINK -->
+        <div class="mb-4">
+            <a href="{% url 'resumes:list' %}" class="text-decoration-none text-muted small fw-semibold d-inline-flex align-items-center gap-2">
+                <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                    <i class="bi bi-arrow-left text-dark"></i>
+                </div>
+                <span>Back to Resume ATS</span>
+            </a>
+        </div>
+
+        <!-- FORM CARD -->
+        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden">
+            <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm" style="width: 52px; height: 52px;">
+                        <i class="bi bi-clipboard-data"></i>
+                    </div>
+                    <div>
+                        <h1 class="h4 fw-bold text-dark mb-1">Analyze Your Resume</h1>
+                        <p class="text-muted small mb-0">
+                            Upload or paste your resume, then optionally add the job you are targeting.
+                        </p>
+                    </div>
+                </div>
+                <hr class="text-muted opacity-10 mt-4 mb-0">
+            </div>
+
+            <div class="card-body p-4 p-md-5 pt-4">
+                <form method="post" enctype="multipart/form-data" novalidate id="analyze-form">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger py-2 small rounded-3 mb-4 shadow-sm" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <div><i class="bi bi-exclamation-circle-fill me-1"></i> {{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- SECTION 1: RESUME -->
+                    <h2 class="small fw-bold text-uppercase text-primary tracking-wide mb-3">
+                        <i class="bi bi-1-circle me-1"></i> Your Resume <span class="text-danger">*</span>
+                    </h2>
+
+                    {% include "resumes/_field.html" with field=form.resume_choice %}
+
+                    <div class="text-center text-muted small my-3 fw-semibold">— OR —</div>
+
+                    {% include "resumes/_field.html" with field=form.resume_file %}
+
+                    <div class="text-center text-muted small my-3 fw-semibold">— OR —</div>
+
+                    {% include "resumes/_field.html" with field=form.resume_text %}
+
+                    <hr class="text-muted opacity-10 my-4">
+
+                    <!-- SECTION 2: JOB CONTEXT -->
+                    <h2 class="small fw-bold text-uppercase text-primary tracking-wide mb-3">
+                        <i class="bi bi-2-circle me-1"></i> Job Context
+                        <span class="text-muted fw-normal text-lowercase" style="font-size: 0.75rem;">(optional)</span>
+                    </h2>
+                    <p class="text-muted small">
+                        Add a job for a match score, or leave everything empty for a general ATS analysis.
+                    </p>
+
+                    {% include "resumes/_field.html" with field=form.job_application %}
+                    {% include "resumes/_field.html" with field=form.job_url %}
+                    {% include "resumes/_field.html" with field=form.job_description %}
+
+                    <div class="alert alert-info small rounded-3 d-flex gap-2 align-items-start">
+                        <i class="bi bi-info-circle-fill mt-1"></i>
+                        <div>
+                            The AI analysis usually takes 15–30 seconds — please don't close this page.
+                            <strong>Pasted job descriptions take priority</strong> over links; a link is only
+                            fetched when no description is pasted.
+                        </div>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 pt-4 mt-4 border-top">
+                        <a href="{% url 'resumes:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
+                            Cancel
+                        </a>
+                        <button type="submit" id="analyze-submit"
+                                class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm w-100 w-sm-auto order-1 order-sm-2 rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                            <span id="analyze-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            <i class="bi bi-stars" id="analyze-icon"></i>
+                            <span id="analyze-label">Analyze Resume</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .tracking-wide {
+        letter-spacing: 0.05em;
+    }
+
+    /* Professional SaaS input controls (matches the applications form) */
+    input[type="text"], input[type="url"], input[type="email"], select, textarea {
+        display: block;
+        width: 100%;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fcfdfd;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        appearance: none;
+        border-radius: 0.5rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    }
+    input[type="text"]:focus, input[type="url"]:focus, input[type="email"]:focus, select:focus, textarea:focus {
+        color: #212529;
+        background-color: #fff;
+        border-color: #0d6efd;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    }
+    textarea {
+        min-height: 120px;
+    }
+    input[type="file"] {
+        display: block;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+</style>
+
+<script>
+    document.getElementById("analyze-form").addEventListener("submit", function () {
+        const button = document.getElementById("analyze-submit");
+        button.disabled = true;
+        document.getElementById("analyze-spinner").classList.remove("d-none");
+        document.getElementById("analyze-icon").classList.add("d-none");
+        document.getElementById("analyze-label").textContent = "Analyzing…";
+    });
+</script>
+{% endblock %}

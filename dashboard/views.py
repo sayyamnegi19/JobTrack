@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from applications.models import JobApplication
 from django.utils import timezone
 from interviews.models import Interview
+from resumes.models import ResumeAnalysis
 
 # Create your views here.
 @login_required
@@ -46,7 +47,10 @@ def dashboard(request):
         "recent_applications": applications.order_by(
             "-application_date", "-created_at"
         )[:5],
-        "upcoming_interviews": upcoming_interviews
+        "upcoming_interviews": upcoming_interviews,
+        "latest_analysis": ResumeAnalysis.objects.filter(
+            resume__user=user
+        ).select_related("resume").order_by("-created_at").first()
     }
 
     return render(
