@@ -5,7 +5,7 @@ Resume ATS - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-3 px-md-5 bg-light min-vh-100">
+<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary min-vh-100">
     <div class="w-100 mx-auto max-w-1400">
 
         {% url 'resumes:analyze' as analyze_url %}
@@ -14,14 +14,14 @@ Resume ATS - JobTrack
         <!-- STATS -->
         <div class="row g-4 mb-4">
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-primary border-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 border-start border-primary border-4">
                     <span class="text-muted small d-block text-uppercase fw-bold tracking-wide mb-2" style="font-size: 0.7rem;">Total Analyses</span>
-                    <h2 class="display-6 fw-bold text-dark mb-1">{{ total_analyses }}</h2>
+                    <h2 class="display-6 fw-bold text-body mb-1">{{ total_analyses }}</h2>
                     <span class="text-muted small"><i class="bi bi-clock-history me-1"></i>Across all resumes</span>
                 </div>
             </div>
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-4
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 border-start border-4
                     {% if latest_analysis %}
                         {% if latest_analysis.overall_score >= 80 %}border-success
                         {% elif latest_analysis.overall_score >= 60 %}border-primary
@@ -45,16 +45,16 @@ Resume ATS - JobTrack
                 </div>
             </div>
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-success border-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 border-start border-success border-4">
                     <span class="text-muted small d-block text-uppercase fw-bold tracking-wide mb-2" style="font-size: 0.7rem;">Saved Resumes</span>
-                    <h2 class="display-6 fw-bold text-dark mb-1">{{ resumes|length }}</h2>
+                    <h2 class="display-6 fw-bold text-body mb-1">{{ resumes|length }}</h2>
                     <span class="text-muted small"><i class="bi bi-file-earmark-text me-1"></i>Ready to re-analyze</span>
                 </div>
             </div>
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-warning border-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 border-start border-warning border-4">
                     <span class="text-muted small d-block text-uppercase fw-bold tracking-wide mb-2" style="font-size: 0.7rem;">Today's Usage</span>
-                    <h2 class="display-6 fw-bold text-dark mb-1">{{ today_count }}<span class="fs-5 text-muted">/{{ daily_limit }}</span></h2>
+                    <h2 class="display-6 fw-bold text-body mb-1">{{ today_count }}<span class="fs-5 text-muted">/{{ daily_limit }}</span></h2>
                     <span class="text-muted small"><i class="bi bi-speedometer2 me-1"></i>Daily analysis limit</span>
                 </div>
             </div>
@@ -63,22 +63,22 @@ Resume ATS - JobTrack
         <div class="row g-4">
             <!-- RESUME LIBRARY -->
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
-                    <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
-                        <h2 class="h5 fw-bold text-dark mb-1">Your Resumes</h2>
+                <div class="card border-0 shadow-sm rounded-4 bg-body h-100">
+                    <div class="card-header bg-body border-0 pt-4 px-4 pb-0">
+                        <h2 class="h5 fw-bold text-body mb-1">Your Resumes</h2>
                         <p class="text-muted small mb-0">Reuse a saved resume for a new job.</p>
                     </div>
                     <div class="card-body p-4">
                         {% if resumes %}
                             <div class="d-flex flex-column gap-3">
                                 {% for resume in resumes %}
-                                    <div class="border rounded-4 p-3 bg-light bg-opacity-50">
+                                    <div class="border rounded-4 p-3 bg-body-tertiary bg-opacity-50">
                                         <div class="d-flex align-items-start gap-3">
                                             <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
                                                 <i class="bi bi-file-earmark-text"></i>
                                             </div>
                                             <div class="overflow-hidden">
-                                                <div class="fw-semibold text-dark text-truncate">
+                                                <div class="fw-semibold text-body text-truncate">
                                                     {{ resume.original_filename|default:"Resume" }}
                                                 </div>
                                                 <div class="text-muted" style="font-size: 0.75rem;">
@@ -120,9 +120,9 @@ Resume ATS - JobTrack
 
             <!-- ANALYSIS HISTORY -->
             <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
-                    <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
-                        <h2 class="h5 fw-bold text-dark mb-1">Analysis History</h2>
+                <div class="card border-0 shadow-sm rounded-4 bg-body h-100">
+                    <div class="card-header bg-body border-0 pt-4 px-4 pb-0">
+                        <h2 class="h5 fw-bold text-body mb-1">Analysis History</h2>
                         <p class="text-muted small mb-0">Every past score, newest first.</p>
                     </div>
                     <div class="card-body p-4">
@@ -146,7 +146,7 @@ Resume ATS - JobTrack
                                                     {{ analysis.created_at|date:"d M Y" }}<br>
                                                     {{ analysis.created_at|time:"H:i" }}
                                                 </td>
-                                                <td class="py-3 fw-semibold text-dark small">
+                                                <td class="py-3 fw-semibold text-body small">
                                                     {{ analysis.resume.original_filename|default:"Resume" }}
                                                 </td>
                                                 <td class="py-3">
@@ -156,7 +156,7 @@ Resume ATS - JobTrack
                                                 </td>
                                                 <td class="py-3 small">
                                                     {% if analysis.job_application %}
-                                                        <span class="fw-medium text-dark">{{ analysis.job_application.job_title }}</span>
+                                                        <span class="fw-medium text-body">{{ analysis.job_application.job_title }}</span>
                                                         <span class="text-muted">@ {{ analysis.job_application.company }}</span>
                                                     {% elif analysis.job_url %}
                                                         <a href="{{ analysis.job_url }}" target="_blank" rel="noopener noreferrer" class="text-decoration-none">

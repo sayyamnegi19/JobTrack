@@ -190,12 +190,22 @@ def analysis_detail(request, pk):
         resume__user=request.user,
     )
 
+    history = list(
+        analysis.resume.analyses.order_by("created_at").values(
+            "created_at", "overall_score"
+        )
+    )
+
     return render(
         request,
         "resumes/analysis_detail.html",
         {
             "analysis": analysis,
             "score_tone": _score_tone(analysis.overall_score),
+            "history_labels": [
+                item["created_at"].strftime("%d %b") for item in history
+            ],
+            "history_values": [item["overall_score"] for item in history],
         },
     )
 

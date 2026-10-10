@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-5 px-3 px-md-4 bg-light min-vh-100">
+<div class="container py-5 px-3 px-md-4 bg-body-tertiary min-vh-100">
     <div class="max-w-900 mx-auto">
 
         {% url 'applications:list' as back_url %}
         {% include "includes/back_link.html" with url=back_url label="Back to Applications" %}
 
         <!-- APPLICATION HEADER -->
-        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden mb-4">
+        <div class="card border-0 shadow-lg rounded-4 bg-body overflow-hidden mb-4">
             <div class="card-body p-4 p-md-5">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4">
                     <div class="d-flex align-items-start gap-3">
@@ -20,7 +20,7 @@
                             <i class="bi bi-building"></i>
                         </div>
                         <div>
-                            <h1 class="h3 fw-bold text-dark mb-1">{{ application.job_title }}</h1>
+                            <h1 class="h3 fw-bold text-body mb-1">{{ application.job_title }}</h1>
                             <p class="text-muted fs-5 mb-0 d-flex align-items-center gap-2">
                                 <i class="bi bi-briefcase text-secondary fs-6"></i> {{ application.company }}
                             </p>
@@ -36,9 +36,9 @@
         </div>
 
         <!-- APPLICATION DETAILS -->
-        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden mb-4">
-            <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
-                <h2 class="h5 fw-bold text-dark mb-0">Application Details</h2>
+        <div class="card border-0 shadow-lg rounded-4 bg-body overflow-hidden mb-4">
+            <div class="card-header bg-body border-0 pt-4 px-4 px-md-5 pb-0">
+                <h2 class="h5 fw-bold text-body mb-0">Application Details</h2>
                 <hr class="text-muted opacity-10 mt-3 mb-0">
             </div>
             <div class="card-body p-4 p-md-5 pt-4">
@@ -46,48 +46,48 @@
 
                     <div class="col-md-6">
                         <div class="d-flex align-items-start gap-3">
-                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                            <div class="bg-body-tertiary text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
                                 <i class="bi bi-geo-alt-fill"></i>
                             </div>
                             <div>
                                 <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Location</span>
-                                <span class="text-dark fw-medium">{{ application.location|default:"Not specified" }}</span>
+                                <span class="text-body fw-medium">{{ application.location|default:"Not specified" }}</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="d-flex align-items-start gap-3">
-                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                            <div class="bg-body-tertiary text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
                                 <i class="bi bi-clock-fill"></i>
                             </div>
                             <div>
                                 <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Job Type</span>
-                                <span class="text-dark fw-medium">{{ application.get_job_type_display }}</span>
+                                <span class="text-body fw-medium">{{ application.get_job_type_display }}</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="d-flex align-items-start gap-3">
-                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                            <div class="bg-body-tertiary text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
                                 <i class="bi bi-calendar-event-fill"></i>
                             </div>
                             <div>
                                 <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Application Date</span>
-                                <span class="text-dark fw-medium">{{ application.application_date|date:"d M Y" }}</span>
+                                <span class="text-body fw-medium">{{ application.application_date|date:"d M Y" }}</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="d-flex align-items-start gap-3">
-                            <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                            <div class="bg-body-tertiary text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
                                 <i class="bi bi-currency-rupee"></i>
                             </div>
                             <div>
                                 <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Salary</span>
-                                <span class="text-dark fw-medium">{{ application.salary|default:"Not specified" }}</span>
+                                <span class="text-body fw-medium">{{ application.salary|default:"Not specified" }}</span>
                             </div>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
                     {% if application.job_url %}
                         <div class="col-12 pt-2">
                             <div class="d-flex align-items-start gap-3">
-                                <div class="bg-light text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
+                                <div class="bg-body-tertiary text-secondary rounded-3 d-flex align-items-center justify-content-center p-2 fs-5" style="width: 42px; height: 42px;">
                                     <i class="bi bi-link-45deg"></i>
                                 </div>
                                 <div>
@@ -115,16 +115,16 @@
 
         <!-- NOTES -->
         {% if application.notes %}
-            <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden mb-4">
-                <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
+            <div class="card border-0 shadow-lg rounded-4 bg-body overflow-hidden mb-4">
+                <div class="card-header bg-body border-0 pt-4 px-4 px-md-5 pb-0">
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-journal-text text-primary fs-5"></i>
-                        <h2 class="h5 fw-bold text-dark mb-0">Notes</h2>
+                        <h2 class="h5 fw-bold text-body mb-0">Notes</h2>
                     </div>
                     <hr class="text-muted opacity-10 mt-3 mb-0">
                 </div>
                 <div class="card-body p-4 p-md-5 pt-4">
-                    <div class="bg-light p-4 rounded-3 text-secondary text-break" style="line-height: 1.6;">
+                    <div class="bg-body-tertiary p-4 rounded-3 text-secondary text-break" style="line-height: 1.6;">
                         {{ application.notes|linebreaksbr }}
                     </div>
                 </div>
@@ -132,7 +132,7 @@
         {% endif %}
 
         <!-- ACTIONS -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+        <div class="card border-0 shadow-sm rounded-4 bg-body p-4">
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
                 <a href="{% url 'applications:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-arrow-left"></i> Back to Applications

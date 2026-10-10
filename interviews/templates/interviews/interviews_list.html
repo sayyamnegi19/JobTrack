@@ -5,7 +5,7 @@ Interviews - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-3 px-md-4 bg-light min-vh-100">
+<div class="container-fluid py-4 px-3 px-md-4 bg-body-tertiary min-vh-100">
     <div class="max-w-1200 mx-auto">
 
         {% url 'interviews:add' as add_interview_url %}
@@ -14,8 +14,8 @@ Interviews - JobTrack
         {% if page_obj %}
             <div class="row g-4">
                 {% for interview in page_obj %}
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between hover-shadow transition position-relative">
+                    <div class="col-md-6 col-lg-4 jt-reveal">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 d-flex flex-column justify-content-between hover-shadow transition position-relative">
                             <div>
                                 <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
                                     <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 42px; height: 42px;">
@@ -26,14 +26,14 @@ Interviews - JobTrack
                                     </span>
                                 </div>
 
-                                <h2 class="h5 fw-bold text-dark mb-2">
-                                    <a href="{% url 'interviews:details' interview.pk %}" class="text-dark text-decoration-none stretched-link-custom">
+                                <h2 class="h5 fw-bold text-body mb-2">
+                                    <a href="{% url 'interviews:details' interview.pk %}" class="text-body text-decoration-none stretched-link-custom">
                                         {{ interview.round_name }}
                                     </a>
                                 </h2>
 
                                 <div class="mb-3">
-                                    <p class="fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                    <p class="fw-bold text-body mb-1 d-flex align-items-center gap-1">
                                         <i class="bi bi-building text-secondary"></i> {{ interview.application.company }}
                                     </p>
                                     <p class="text-muted small mb-0 d-flex align-items-center gap-1">

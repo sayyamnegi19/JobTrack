@@ -4,8 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Set the theme before CSS paints to avoid a flash of the wrong theme.
+        (function () {
+            try {
+                var stored = localStorage.getItem("jt-theme");
+                var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                document.documentElement.setAttribute("data-bs-theme", theme);
+            } catch (e) { /* localStorage unavailable — keep the default theme */ }
+        })();
+    </script>
     <title>{% block title %} JobTrack {% endblock %}</title>
     <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -20,7 +33,7 @@
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
         <div class="container">
             <a href="{% url 'home' %}" class="navbar-brand fw-bold d-inline-flex align-items-center gap-2">
-                <span class="jt-brand-mark bg-primary text-white rounded-3 d-inline-flex align-items-center justify-content-center">
+                <span class="jt-brand-mark text-white rounded-3 d-inline-flex align-items-center justify-content-center">
                     <i class="bi bi-briefcase-fill"></i>
                 </span>
                 JobTrack
@@ -92,6 +105,12 @@
 
                         {% endif %}
 
+                        <button type="button" data-theme-toggle
+                                class="nav-link link-light link-opacity-100 link-opacity-75-hover bg-transparent border-0 text-start"
+                                aria-label="Switch theme" aria-pressed="false">
+                            <i class="bi bi-moon-stars" aria-hidden="true"></i>
+                        </button>
+
                     </div>
                 </div>
             </div>
@@ -132,5 +151,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/app.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

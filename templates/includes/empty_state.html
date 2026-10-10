@@ -1,9 +1,9 @@
 {# Usage: {% include "includes/empty_state.html" with icon="bi-folder2-open" title="..." text="..." cta_url=... cta_label=... cta_icon=... %} #}
 <div class="text-center py-5">
-    <div class="jt-empty-icon bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center fs-2 shadow-sm">
+    <div class="jt-empty-icon jt-gradient text-white rounded-circle d-inline-flex align-items-center justify-content-center fs-2">
         <i class="bi {{ icon }}"></i>
     </div>
-    <h3 class="h5 fw-bold text-dark mt-3 mb-2">{{ title }}</h3>
+    <h3 class="h5 fw-bold text-body mt-3 mb-2">{{ title }}</h3>
     <p class="text-muted small mb-4 mx-auto max-w-400">{{ text }}</p>
     {% if cta_url %}
         <a href="{{ cta_url }}" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm rounded-3">

@@ -5,21 +5,21 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-5 px-3 px-md-4 bg-light min-vh-100">
+<div class="container py-5 px-3 px-md-4 bg-body-tertiary min-vh-100">
     <div class="max-w-800 mx-auto">
 
         {% url 'applications:list' as back_url %}
         {% include "includes/back_link.html" with url=back_url label="Back to Applications" %}
 
-        <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden">
+        <div class="card border-0 shadow-lg rounded-4 bg-body overflow-hidden">
 
-            <div class="card-header bg-white border-0 pt-4 px-4 px-md-5 pb-0">
+            <div class="card-header bg-body border-0 pt-4 px-4 px-md-5 pb-0">
                 <div class="d-flex align-items-center gap-3">
                     <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm" style="width: 52px; height: 52px;">
                         <i class="bi bi-briefcase-fill"></i>
                     </div>
                     <div>
-                        <h1 class="h4 fw-bold text-dark mb-1">{{ page_title }}</h1>
+                        <h1 class="h4 fw-bold text-body mb-1">{{ page_title }}</h1>
                         <p class="text-muted small mb-0">Fill in the details below to keep your job search pipeline accurate and up to date.</p>
                     </div>
                 </div>

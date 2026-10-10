@@ -5,30 +5,30 @@ Delete Analysis - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid min-vh-100 d-flex flex-column justify-content-center bg-light py-5 px-3">
+<div class="container-fluid min-vh-100 d-flex flex-column justify-content-center bg-body-tertiary py-5 px-3">
     <div class="row justify-content-center w-100 mx-auto">
         <div class="col-md-8 col-lg-6 col-xl-5">
 
-            <div class="card border-0 shadow-lg rounded-4 bg-white overflow-hidden text-center p-4 p-sm-5">
+            <div class="card border-0 shadow-lg rounded-4 bg-body overflow-hidden text-center p-4 p-sm-5">
                 <div class="card-body p-0">
 
                     <div class="bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-4 shadow-sm" style="width: 70px; height: 70px;">
                         <i class="bi bi-trash3 fs-3"></i>
                     </div>
 
-                    <h1 class="h3 fw-bold text-dark mb-2">Delete Analysis?</h1>
+                    <h1 class="h3 fw-bold text-body mb-2">Delete Analysis?</h1>
                     <p class="text-muted small mb-4">
                         This will permanently remove this resume analysis. This action cannot be undone.
                     </p>
 
-                    <div class="bg-light border rounded-3 p-3 mb-4 text-start shadow-sm">
+                    <div class="bg-body-tertiary border rounded-3 p-3 mb-4 text-start shadow-sm">
                         <div class="d-flex align-items-center gap-3">
                             <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 45px; height: 45px;">
                                 <i class="bi bi-clipboard-data fs-5"></i>
                             </div>
                             <div class="overflow-hidden">
                                 <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.65rem;">Analysis</span>
-                                <h2 class="h6 fw-bold text-dark mb-0 text-truncate">
+                                <h2 class="h6 fw-bold text-body mb-0 text-truncate">
                                     {{ analysis.resume.original_filename|default:"Resume" }} — {{ analysis.overall_score }}/100
                                 </h2>
                                 <p class="text-muted small mb-0 text-truncate">

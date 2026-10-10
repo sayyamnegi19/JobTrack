@@ -5,22 +5,23 @@ ATS Analysis - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-3 px-md-5 bg-light min-vh-100">
+<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary min-vh-100">
     <div class="w-100 mx-auto" style="max-width: 1100px;">
 
         {% url 'resumes:list' as back_url %}
         {% include "includes/back_link.html" with url=back_url label="Back to Resume ATS" %}
 
         <!-- SCORE HEADER -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4 overflow-hidden">
+        <div class="card border-0 shadow-sm rounded-4 bg-body mb-4 overflow-hidden">
             <div class="card-body p-4 p-md-5">
                 <div class="d-flex flex-column flex-md-row align-items-center gap-4 gap-md-5">
 
                     <!-- GAUGE -->
                     <div class="score-gauge flex-shrink-0"
+                         data-score="{{ analysis.overall_score }}"
                          style="--score: {{ analysis.overall_score }}; --tone: var(--bs-{{ score_tone }});">
                         <div class="score-gauge-inner">
-                            <span class="display-5 fw-bold text-dark">{{ analysis.overall_score }}</span>
+                            <span class="score-gauge-value display-5 fw-bold text-body">{{ analysis.overall_score }}</span>
                             <span class="text-muted small">/ 100</span>
                         </div>
                     </div>
@@ -44,7 +45,7 @@ ATS Analysis - JobTrack
                             {% endif %}
                         </div>
 
-                        <h1 class="h4 fw-bold text-dark mb-2">Resume Analysis Result</h1>
+                        <h1 class="h4 fw-bold text-body mb-2">Resume Analysis Result</h1>
                         <p class="text-muted mb-3">{{ analysis.result.summary }}</p>
 
                         <div class="text-muted" style="font-size: 0.75rem;">
@@ -64,12 +65,12 @@ ATS Analysis - JobTrack
 
         <!-- SEMANTIC SIMILARITY -->
         {% if analysis.semantic_similarity is not None %}
-            <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card border-0 shadow-sm rounded-4 bg-body mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-2">
                         <div>
                             <span class="text-primary fw-semibold text-uppercase small tracking-wide">Semantic Match</span>
-                            <h2 class="h6 fw-bold text-dark mb-0">
+                            <h2 class="h6 fw-bold text-body mb-0">
                                 Resume ↔ Job description similarity
                             </h2>
                         </div>
@@ -77,8 +78,9 @@ ATS Analysis - JobTrack
                             {% widthratio analysis.semantic_similarity 1 100 %}%
                         </span>
                     </div>
-                    <div class="progress rounded-pill bg-light" style="height: 10px;">
+                    <div class="progress rounded-pill bg-body-tertiary" style="height: 10px;">
                         <div class="progress-bar bg-primary" role="progressbar"
+                             data-progress="{% widthratio analysis.semantic_similarity 1 100 %}"
                              style="width: {% widthratio analysis.semantic_similarity 1 100 %}%;"
                              aria-valuenow="{% widthratio analysis.semantic_similarity 1 100 %}"
                              aria-valuemin="0" aria-valuemax="100"></div>
@@ -92,16 +94,18 @@ ATS Analysis - JobTrack
         {% endif %}
 
         <!-- CATEGORY SCORES -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+        <div class="card border-0 shadow-sm rounded-4 bg-body mb-4">
+            <div class="card-header bg-body border-0 pt-4 px-4 pb-0">
                 <span class="text-primary fw-semibold text-uppercase small tracking-wide">Breakdown</span>
-                <h2 class="h5 fw-bold text-dark mb-0">Category Scores</h2>
+                <h2 class="h5 fw-bold text-body mb-0">Category Scores</h2>
             </div>
             <div class="card-body p-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7">
                 {% for category in analysis.result.categories %}
                     <div class="{% if not forloop.last %}mb-4{% endif %}">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="fw-semibold text-dark">{{ category.label }}</span>
+                            <span class="fw-semibold text-body">{{ category.label }}</span>
                             <span class="badge px-3 py-2 rounded-pill fw-semibold
                                 {% if category.score >= 80 %}text-bg-success
                                 {% elif category.score >= 60 %}text-bg-primary
@@ -110,25 +114,49 @@ ATS Analysis - JobTrack
                                 {{ category.score }}/100
                             </span>
                         </div>
-                        <div class="progress rounded-pill bg-light" style="height: 8px;">
+                        <div class="progress rounded-pill bg-body-tertiary" style="height: 8px;">
                             <div class="progress-bar
                                 {% if category.score >= 80 %}bg-success
                                 {% elif category.score >= 60 %}bg-primary
                                 {% elif category.score >= 40 %}bg-warning
                                 {% else %}bg-danger{% endif %}"
-                                role="progressbar" style="width: {{ category.score }}%;"
+                                role="progressbar" data-progress="{{ category.score }}" style="width: {{ category.score }}%;"
                                 aria-valuenow="{{ category.score }}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <p class="text-muted small mb-0 mt-2">{{ category.feedback }}</p>
                     </div>
                 {% endfor %}
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="position-relative" style="height: 280px;">
+                            <canvas id="category-radar" role="img" aria-label="Category scores radar chart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        {% if history_values|length > 1 %}
+            <div class="card border-0 shadow-sm rounded-4 bg-body mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
+                        <div>
+                            <span class="text-primary fw-semibold text-uppercase small tracking-wide">Progress</span>
+                            <h2 class="h6 fw-bold text-body mb-0">Score History for This Resume</h2>
+                        </div>
+                        <span class="badge bg-body-tertiary text-muted border px-3 py-2 rounded-pill small">{{ history_values|length }} analyses</span>
+                    </div>
+                    <div class="position-relative" style="height: 220px;">
+                        <canvas id="history-chart" role="img" aria-label="ATS score history chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
 
         <!-- KEYWORDS -->
         <div class="row g-4 mb-4">
             <div class="col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                <div class="card border-0 shadow-sm rounded-4 bg-body h-100">
                     <div class="card-body p-4">
                         <h2 class="h6 fw-bold text-success mb-3">
                             <i class="bi bi-check-circle-fill me-1"></i>
@@ -146,7 +174,7 @@ ATS Analysis - JobTrack
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                <div class="card border-0 shadow-sm rounded-4 bg-body h-100">
                     <div class="card-body p-4">
                         <h2 class="h6 fw-bold text-danger mb-3">
                             <i class="bi bi-exclamation-circle-fill me-1"></i>
@@ -168,9 +196,9 @@ ATS Analysis - JobTrack
         <!-- STRENGTHS & IMPROVEMENTS -->
         <div class="row g-4 mb-4">
             <div class="col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                <div class="card border-0 shadow-sm rounded-4 bg-body h-100">
                     <div class="card-body p-4">
-                        <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-hand-thumbs-up-fill text-success me-1"></i> Strengths</h2>
+                        <h2 class="h6 fw-bold text-body mb-3"><i class="bi bi-hand-thumbs-up-fill text-success me-1"></i> Strengths</h2>
                         <ul class="list-unstyled mb-0 small">
                             {% for strength in analysis.result.strengths %}
                                 <li class="d-flex gap-2 py-2 {% if not forloop.last %}border-bottom{% endif %}">
@@ -185,9 +213,9 @@ ATS Analysis - JobTrack
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
+                <div class="card border-0 shadow-sm rounded-4 bg-body h-100">
                     <div class="card-body p-4">
-                        <h2 class="h6 fw-bold text-dark mb-3"><i class="bi bi-lightbulb-fill text-warning me-1"></i> Improvements</h2>
+                        <h2 class="h6 fw-bold text-body mb-3"><i class="bi bi-lightbulb-fill text-warning me-1"></i> Improvements</h2>
                         <ul class="list-unstyled mb-0 small">
                             {% for improvement in analysis.result.improvements %}
                                 <li class="d-flex gap-2 py-2 {% if not forloop.last %}border-bottom{% endif %}">
@@ -210,11 +238,11 @@ ATS Analysis - JobTrack
         </div>
 
         <!-- JOB DESCRIPTION USED (transparency) -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+        <div class="card border-0 shadow-sm rounded-4 bg-body mb-4">
             <div class="card-body p-4">
                 <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
                     <div>
-                        <h2 class="h6 fw-bold text-dark mb-1"><i class="bi bi-file-text me-1"></i> Job Description Used</h2>
+                        <h2 class="h6 fw-bold text-body mb-1"><i class="bi bi-file-text me-1"></i> Job Description Used</h2>
                         <p class="text-muted small mb-0">
                             {% if analysis.mode == "JOB_MATCH" %}
                                 This is the exact text the AI compared your resume against.
@@ -234,7 +262,7 @@ ATS Analysis - JobTrack
 
                 {% if analysis.job_description %}
                     <div class="collapse mt-3" id="jobDescriptionPanel">
-                        <div class="bg-light border rounded-3 p-3">
+                        <div class="bg-body-tertiary border rounded-3 p-3">
                             <pre class="small text-muted mb-0" style="white-space: pre-wrap; max-height: 320px; overflow-y: auto;">{{ analysis.job_description }}</pre>
                         </div>
                     </div>
@@ -262,4 +290,144 @@ ATS Analysis - JobTrack
     </div>
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+{{ analysis.result.categories|json_script:"category-data" }}
+{% if history_values|length > 1 %}
+    {{ history_labels|json_script:"history-labels" }}
+    {{ history_values|json_script:"history-values" }}
+{% endif %}
+<script>
+    (function () {
+        // Animated score gauge (respects reduced motion) ----------------------
+        var gauge = document.querySelector(".score-gauge");
+        var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (gauge && !reduced) {
+            var target = parseInt(gauge.dataset.score || "0", 10);
+            var valueEl = gauge.querySelector(".score-gauge-value");
+            var duration = 900;
+            var start = null;
+
+            gauge.style.setProperty("--score", 0);
+            if (valueEl) { valueEl.textContent = "0"; }
+
+            var step = function (timestamp) {
+                if (start === null) { start = timestamp; }
+                var progress = Math.min((timestamp - start) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                var value = Math.round(target * eased);
+
+                gauge.style.setProperty("--score", value);
+                if (valueEl) { valueEl.textContent = value; }
+
+                if (progress < 1) { window.requestAnimationFrame(step); }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Charts --------------------------------------------------------------
+        if (typeof Chart === "undefined" || !window.jtCharts) {
+            return;
+        }
+
+        var charts = window.jtCharts;
+        charts.applyDefaults();
+        var colors = charts.themeColors();
+
+        // Category radar ------------------------------------------------------
+        var categoryEl = document.getElementById("category-data");
+        var radarCanvas = document.getElementById("category-radar");
+
+        if (categoryEl && radarCanvas) {
+            var categories = JSON.parse(categoryEl.textContent);
+
+            if (Array.isArray(categories) && categories.length) {
+                charts.register(new Chart(radarCanvas, {
+                    type: "radar",
+                    data: {
+                        labels: categories.map(function (item) { return item.label; }),
+                        datasets: [{
+                            label: "Score",
+                            data: categories.map(function (item) { return item.score; }),
+                            borderColor: colors.primary,
+                            backgroundColor: colors.gradientFill,
+                            pointBackgroundColor: colors.violet,
+                            pointBorderColor: colors.violet,
+                            borderWidth: 2,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    stepSize: 25,
+                                    color: colors.muted,
+                                    backdropColor: "transparent",
+                                    showLabelBackdrop: false
+                                },
+                                grid: { color: colors.border },
+                                angleLines: { color: colors.border },
+                                pointLabels: { color: colors.muted, font: { size: 11, weight: 600 } }
+                            }
+                        }
+                    }
+                }));
+            }
+        }
+
+        // Score history -------------------------------------------------------
+        var historyLabelsEl = document.getElementById("history-labels");
+        var historyValuesEl = document.getElementById("history-values");
+        var historyCanvas = document.getElementById("history-chart");
+
+        if (historyLabelsEl && historyValuesEl && historyCanvas) {
+            var historyLabels = JSON.parse(historyLabelsEl.textContent) || [];
+            var historyValues = JSON.parse(historyValuesEl.textContent) || [];
+
+            charts.register(new Chart(historyCanvas, {
+                type: "line",
+                data: {
+                    labels: historyLabels,
+                    datasets: [{
+                        label: "ATS Score",
+                        data: historyValues,
+                        borderColor: colors.primary,
+                        backgroundColor: colors.gradientFill,
+                        fill: true,
+                        tension: 0.35,
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        pointBackgroundColor: colors.violet
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: colors.muted },
+                            border: { color: colors.border }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { stepSize: 25, color: colors.muted },
+                            grid: { color: colors.border },
+                            border: { display: false }
+                        }
+                    }
+                }
+            }));
+        }
+    })();
+</script>
 {% endblock %}

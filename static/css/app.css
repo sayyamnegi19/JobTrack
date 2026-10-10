@@ -1,32 +1,82 @@
 /* ==========================================================================
-   JobTrack — shared application styles.
+   JobTrack — shared application styles (Modern SaaS theme).
 
-   Consolidates the styles that used to be duplicated as <style> blocks in
-   individual templates. Loaded after Bootstrap, so same-specificity
-   overrides here win.
+   Loaded after Bootstrap, so same-specificity overrides here win.
 
    Sections:
-     1. Tokens
-     2. Form controls
-     3. Layout utilities (formerly per-template one-offs)
-     4. Components (back links, page bits, score gauge, password toggle)
-     5. Navbar & footer
-     6. Focus & motion accessibility
+     1. Tokens & brand palette (Bootstrap variable overrides)
+     2. Typography
+     3. Form controls
+     4. Bootstrap component accents (buttons, pagination, checks)
+     5. Layout utilities
+     6. Components (back links, empty states, gauge, password toggle…)
+     7. Navbar, footer, scrollbar, selection
+     8. Focus & motion accessibility
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. Tokens
+   1. Tokens & brand palette
    -------------------------------------------------------------------------- */
 
 :root {
+    /* Brand: indigo primary (AA on white), gradient for expressive accents. */
+    --jt-primary: #4f46e5;
+    --jt-primary-rgb: 79, 70, 229;
+    --jt-primary-hover: #4338ca;
+    --jt-accent: #8b5cf6;
+    --jt-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+
+    /* Theme-aware component tokens */
     --jt-form-bg: #fcfdfd;
-    --jt-form-border: #ced4da;
-    --jt-focus-ring: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    --jt-form-border: var(--bs-border-color);
+    --jt-focus-ring: 0 0 0 0.25rem rgba(79, 70, 229, 0.16);
     --jt-radius: 0.5rem;
+
+    /* Bootstrap overrides: .text-primary/.bg-primary/.border-primary derive
+       from --bs-primary-rgb automatically. */
+    --bs-primary: var(--jt-primary);
+    --bs-primary-rgb: 79, 70, 229;
+    --bs-link-color: var(--jt-primary);
+    --bs-link-color-rgb: 79, 70, 229;
+    --bs-link-hover-color: var(--jt-primary-hover);
+    --bs-link-hover-color-rgb: 67, 56, 202;
+    --bs-focus-ring-color: rgba(79, 70, 229, 0.2);
 }
 
 /* --------------------------------------------------------------------------
-   2. Form controls — one canonical style for the whole app
+   2. Typography
+   -------------------------------------------------------------------------- */
+
+:root {
+    --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.display-1, .display-2, .display-3, .display-4,
+.display-5, .display-6 {
+    letter-spacing: -0.02em;
+}
+
+.jt-gradient {
+    background-image: var(--jt-gradient);
+}
+
+.jt-gradient-text {
+    background-image: var(--jt-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   3. Form controls — one canonical style for the whole app
    -------------------------------------------------------------------------- */
 
 input[type="text"],
@@ -43,10 +93,11 @@ textarea {
     display: block;
     width: 100%;
     padding: 0.65rem 0.85rem;
+    font-family: inherit;
     font-size: 0.95rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #212529;
+    color: var(--bs-body-color);
     background-color: var(--jt-form-bg);
     background-clip: padding-box;
     border: 1px solid var(--jt-form-border);
@@ -67,9 +118,9 @@ input[type="search"]:focus,
 input[type="tel"]:focus,
 select:focus,
 textarea:focus {
-    color: #212529;
-    background-color: #fff;
-    border-color: #0d6efd;
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: var(--jt-primary);
     outline: 0;
     box-shadow: var(--jt-focus-ring);
 }
@@ -86,7 +137,7 @@ input[type="file"] {
 
 /* appearance:none removes the native arrow; draw one ourselves. */
 select {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 0.85rem center;
     background-size: 14px 10px;
@@ -113,7 +164,66 @@ select {
 }
 
 /* --------------------------------------------------------------------------
-   3. Layout utilities
+   4. Bootstrap component accents
+   -------------------------------------------------------------------------- */
+
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--jt-primary);
+    --bs-btn-border-color: var(--jt-primary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--jt-primary-hover);
+    --bs-btn-hover-border-color: var(--jt-primary-hover);
+    --bs-btn-focus-shadow-rgb: 79, 70, 229;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #3d33bf;
+    --bs-btn-active-border-color: #3930b3;
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: var(--jt-primary);
+    --bs-btn-disabled-border-color: var(--jt-primary);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--jt-primary);
+    --bs-btn-border-color: var(--jt-primary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--jt-primary);
+    --bs-btn-hover-border-color: var(--jt-primary);
+    --bs-btn-focus-shadow-rgb: 79, 70, 229;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--jt-primary);
+    --bs-btn-active-border-color: var(--jt-primary);
+    --bs-btn-disabled-color: var(--jt-primary);
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: var(--jt-primary);
+    --bs-gradient: none;
+}
+
+.progress {
+    --bs-progress-bar-bg: var(--jt-primary);
+}
+
+.pagination {
+    --bs-pagination-color: var(--jt-primary);
+    --bs-pagination-hover-color: var(--jt-primary-hover);
+    --bs-pagination-focus-color: var(--jt-primary-hover);
+    --bs-pagination-focus-box-shadow: var(--jt-focus-ring);
+    --bs-pagination-active-bg: var(--jt-primary);
+    --bs-pagination-active-border-color: var(--jt-primary);
+}
+
+.form-check-input:checked {
+    background-color: var(--jt-primary);
+    border-color: var(--jt-primary);
+}
+
+.form-check-input:focus {
+    border-color: #a5b4fc;
+    box-shadow: var(--jt-focus-ring);
+}
+
+/* --------------------------------------------------------------------------
+   5. Layout utilities
    -------------------------------------------------------------------------- */
 
 .max-w-400 { max-width: 400px; }
@@ -138,7 +248,7 @@ select {
 
 .hover-shadow:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 0.5rem 1rem rgba(16, 24, 40, 0.08) !important;
 }
 
 .hover-primary:hover,
@@ -162,8 +272,24 @@ select {
     z-index: 2;
 }
 
+/* Softer, layered shadows for a modern depth feel. */
+.shadow-sm {
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06),
+        0 1px 3px rgba(16, 24, 40, 0.1) !important;
+}
+
+.shadow {
+    box-shadow: 0 2px 4px -1px rgba(16, 24, 40, 0.08),
+        0 4px 10px -2px rgba(16, 24, 40, 0.08) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 12px 24px -6px rgba(16, 24, 40, 0.12),
+        0 4px 8px -4px rgba(16, 24, 40, 0.06) !important;
+}
+
 /* --------------------------------------------------------------------------
-   4. Components
+   6. Components
    -------------------------------------------------------------------------- */
 
 /* Back link (see includes/back_link.html) */
@@ -191,18 +317,21 @@ select {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    background: conic-gradient(var(--tone) calc(var(--score) * 1%), #e9ecef 0);
+    background: conic-gradient(
+        var(--tone) calc(var(--score) * 1%),
+        var(--bs-secondary-bg) 0
+    );
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.06);
+    box-shadow: 0 12px 24px -6px rgba(16, 24, 40, 0.12);
 }
 
 .score-gauge-inner {
     width: 124px;
     height: 124px;
     border-radius: 50%;
-    background: #fff;
+    background: var(--bs-body-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -226,15 +355,15 @@ select {
     transform: translateY(-50%);
     border: 0;
     background: transparent;
-    color: #6c757d;
+    color: var(--bs-secondary-color);
     padding: 0.3rem 0.55rem;
     border-radius: 0.375rem;
     line-height: 1;
 }
 
 .jt-password-toggle:hover {
-    color: #212529;
-    background: rgba(0, 0, 0, 0.05);
+    color: var(--bs-body-color);
+    background: rgba(var(--bs-emphasis-color-rgb), 0.08);
 }
 
 /* Toasts */
@@ -249,7 +378,7 @@ select {
     top: 0.75rem;
     left: 0.75rem;
     z-index: 2000;
-    background: #fff;
+    background: var(--bs-body-bg);
     color: var(--bs-primary);
     font-weight: 600;
     padding: 0.5rem 1rem;
@@ -259,13 +388,14 @@ select {
 }
 
 /* --------------------------------------------------------------------------
-   5. Navbar & footer
+   7. Navbar, footer, scrollbar, selection
    -------------------------------------------------------------------------- */
 
 .jt-brand-mark {
     width: 32px;
     height: 32px;
     font-size: 0.95rem;
+    background-image: var(--jt-gradient);
 }
 
 .navbar .nav-link {
@@ -285,14 +415,14 @@ select {
     bottom: 0.1rem;
     height: 2px;
     border-radius: 2px;
-    background: #fff;
-    opacity: 0.85;
+    background: var(--jt-gradient);
 }
 
 .jt-footer-mark {
     width: 24px;
     height: 24px;
     font-size: 0.7rem;
+    background-image: var(--jt-gradient);
 }
 
 .jt-footer a {
@@ -303,12 +433,42 @@ select {
     color: var(--bs-primary) !important;
 }
 
+/* Custom scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--jt-primary-rgb), 0.35) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--jt-primary-rgb), 0.3);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(var(--jt-primary-rgb), 0.5);
+}
+
+::selection {
+    background: rgba(var(--jt-primary-rgb), 0.18);
+}
+
 /* --------------------------------------------------------------------------
-   6. Focus & motion accessibility
+   8. Focus & motion accessibility
    -------------------------------------------------------------------------- */
 
 a:focus-visible {
-    outline: 2px solid rgba(13, 110, 253, 0.55);
+    outline: 2px solid rgba(var(--jt-primary-rgb), 0.55);
     outline-offset: 2px;
     border-radius: 0.25rem;
 }
@@ -327,5 +487,215 @@ a:focus-visible {
 
     .hover-shadow:hover {
         transform: none;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   9. Dark theme refinements (data-bs-theme="dark")
+   -------------------------------------------------------------------------- */
+
+[data-bs-theme="dark"] {
+    /* Deeper, layered surfaces: cards (body) sit above the page (tertiary). */
+    --bs-body-bg: #1d2025;
+    --bs-body-color: #e4e7ec;
+    --bs-secondary-color: #a1a7b3;
+    --bs-tertiary-bg: #16181c;
+    --bs-secondary-bg: #262b32;
+    --bs-border-color: #2f353d;
+    --jt-form-bg: #14161a;
+    color-scheme: dark;
+}
+
+[data-bs-theme="dark"] select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23a1a7b3' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+[data-bs-theme="dark"] .navbar.bg-dark {
+    background-color: #111318 !important;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+/* Semantic text colors: brighter variants for readable contrast on dark. */
+[data-bs-theme="dark"] .text-primary { color: #a5b4fc !important; }
+[data-bs-theme="dark"] .text-success { color: #4ade80 !important; }
+[data-bs-theme="dark"] .text-danger { color: #f87171 !important; }
+[data-bs-theme="dark"] .text-warning { color: #fbbf24 !important; }
+[data-bs-theme="dark"] .text-info { color: #38bdf8 !important; }
+[data-bs-theme="dark"] .text-secondary { color: #9ca3af !important; }
+
+/* Outline buttons need lighter borders on dark surfaces. */
+[data-bs-theme="dark"] .btn-outline-dark {
+    --bs-btn-color: #e4e7ec;
+    --bs-btn-border-color: #4b5563;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #374151;
+    --bs-btn-hover-border-color: #374151;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #374151;
+    --bs-btn-active-border-color: #374151;
+    --bs-btn-disabled-color: #9ca3af;
+    --bs-btn-disabled-border-color: #4b5563;
+}
+
+[data-bs-theme="dark"] .btn-outline-secondary {
+    --bs-btn-color: #cbd5e1;
+    --bs-btn-border-color: #4b5563;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #374151;
+    --bs-btn-hover-border-color: #374151;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #374151;
+    --bs-btn-active-border-color: #374151;
+}
+
+/* --------------------------------------------------------------------------
+   10. Motion & landing
+   -------------------------------------------------------------------------- */
+
+/* Reveal on scroll (class added by app.js when the element enters view) */
+.jt-reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+
+.jt-reveal-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Navbar lifts once the page is scrolled */
+.navbar.jt-scrolled {
+    box-shadow: 0 6px 20px rgba(16, 24, 40, 0.16);
+}
+
+/* Landing hero: radial glow + faint grid, masked towards the mockup */
+.jt-hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.jt-hero::before {
+    content: "";
+    position: absolute;
+    top: -220px;
+    right: -140px;
+    width: 640px;
+    height: 640px;
+    background: radial-gradient(closest-side, rgba(99, 102, 241, 0.25), transparent 72%);
+    pointer-events: none;
+}
+
+.jt-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(99, 102, 241, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.07) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse at 72% 12%, #000 0%, transparent 68%);
+    mask-image: radial-gradient(ellipse at 72% 12%, #000 0%, transparent 68%);
+    pointer-events: none;
+}
+
+.jt-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+.jt-hero-mockup {
+    animation: jt-float 6s ease-in-out infinite;
+}
+
+@keyframes jt-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Gradient icon tiles (landing features) */
+.jt-icon-tile {
+    width: 52px;
+    height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    border-radius: 0.85rem;
+    color: #fff;
+    background-image: var(--jt-gradient);
+    box-shadow: 0 8px 18px -8px rgba(99, 102, 241, 0.65);
+}
+
+/* Connector line behind the "how it works" steps */
+@media (min-width: 768px) {
+    .jt-steps {
+        position: relative;
+    }
+
+    .jt-steps::before {
+        content: "";
+        position: absolute;
+        top: 84px;
+        left: 16.66%;
+        right: 16.66%;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(99, 102, 241, 0.4), rgba(139, 92, 246, 0.4));
+    }
+}
+
+.jt-steps .jt-step-number {
+    position: relative;
+    z-index: 1;
+}
+
+/* Gradient buttons: subtle hover lift */
+.btn.jt-gradient {
+    border: 0;
+    color: #fff;
+    transition: filter 0.15s ease-in-out, transform 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+}
+
+.btn.jt-gradient:hover,
+.btn.jt-gradient:focus {
+    color: #fff;
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px -8px rgba(99, 102, 241, 0.6);
+}
+
+/* Empty-state icon glow */
+.jt-empty-icon {
+    box-shadow: 0 12px 26px -10px rgba(99, 102, 241, 0.55);
+}
+
+/* Progress bars are animated from 0 by app.js ([data-progress]) */
+[data-progress] {
+    transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .jt-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .jt-hero-mockup {
+        animation: none;
+    }
+
+    .btn.jt-gradient {
+        transition: none;
+    }
+
+    .btn.jt-gradient:hover {
+        transform: none;
+    }
+
+    [data-progress] {
+        transition: none;
     }
 }

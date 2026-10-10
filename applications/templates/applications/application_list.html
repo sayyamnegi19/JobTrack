@@ -5,7 +5,7 @@ My Applications - JobTrack
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4 px-3 px-md-4 bg-light min-vh-100">
+<div class="container-fluid py-4 px-3 px-md-4 bg-body-tertiary min-vh-100">
     <div class="max-w-1200 mx-auto">
 
         {% url 'applications:add' as add_application_url %}
@@ -14,8 +14,8 @@ My Applications - JobTrack
         {% if page_obj %}
             <div class="row g-3">
                 {% for application in page_obj %}
-                    <div class="col-md-6 col-xl-4">
-                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between transition hover-shadow">
+                    <div class="col-md-6 col-xl-4 jt-reveal">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 d-flex flex-column justify-content-between transition hover-shadow">
                             <div>
                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                     <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold" style="width: 45px; height: 45px;">
@@ -27,7 +27,7 @@ My Applications - JobTrack
                                 </div>
 
                                 <h3 class="h6 fw-bold mb-1">
-                                    <a href="{% url 'applications:details' application.pk %}" class="text-dark text-decoration-none stretched-link-custom">
+                                    <a href="{% url 'applications:details' application.pk %}" class="text-body text-decoration-none stretched-link-custom">
                                         {{ application.job_title }}
                                     </a>
                                 </h3>

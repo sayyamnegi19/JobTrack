@@ -4,22 +4,8 @@
 Dashboard - JobTrack
 {% endblock %}
 
-{% block extra_css %}
-
-<style>
-    /* Pure CSS variables mapping block preventing template linter issues */
-    .progress {
-        --applied-w: {% if total_applications > 0 %}{% widthratio applied_count total_applications 100 %}{% else %}0{% endif %}%;
-        --interview-w: {% if total_applications > 0 %}{% widthratio interview_count total_applications 100 %}{% else %}0{% endif %}%;
-        --offer-w: {% if total_applications > 0 %}{% widthratio offer_count total_applications 100 %}{% else %}0{% endif %}%;
-        --rejected-w: {% if total_applications > 0 %}{% widthratio rejected_count total_applications 100 %}{% else %}0{% endif %}%;
-    }
-</style>
-
-{% endblock %}
-
 {% block content %}
-<div class="container-fluid py-4 px-3 px-md-5 bg-light min-vh-100 d-flex flex-column justify-content-between">
+<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary min-vh-100 d-flex flex-column justify-content-between">
     <div class="w-100 mx-auto" style="max-width: 1400px;">
         
         <!-- DASHBOARD HEADER -->
@@ -28,7 +14,7 @@ Dashboard - JobTrack
                 <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold px-3 py-2 rounded-pill mb-2">
                     <i class="bi bi-speedometer2 me-1"></i> Career Command Center
                 </span>
-                <h1 class="h3 fw-bold text-dark mb-1 text-break">
+                <h1 class="h3 fw-bold text-body mb-1 text-break">
                     Welcome back, {{ user.first_name|default:user.email }}
                 </h1>
                 <p class="text-muted small mb-0">
@@ -49,14 +35,14 @@ Dashboard - JobTrack
         <div class="row g-4 mb-4">
             <!-- Applications Card -->
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-primary border-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 border-start border-primary border-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Total Volume</span>
                         <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center p-3 fs-4 flex-shrink-0" style="width: 48px; height: 48px;">
                             <i class="bi bi-folder-fill"></i>
                         </div>
                     </div>
-                    <h2 class="display-6 fw-bold text-dark mb-1">{{ total_applications }}</h2>
+                    <h2 class="display-6 fw-bold text-body mb-1" data-countup="{{ total_applications }}">{{ total_applications }}</h2>
                     <div class="d-flex align-items-center gap-2 text-muted small pt-2 border-top">
                         <span><i class="text-primary fw-bold">Active tracker records</i></span>
                     </div>
@@ -65,14 +51,14 @@ Dashboard - JobTrack
 
             <!-- Interviews Card -->
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-success border-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 border-start border-success border-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Interview Stage</span>
                         <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center p-3 fs-4 flex-shrink-0" style="width: 48px; height: 48px;">
                             <i class="bi bi-chat-dots-fill"></i>
                         </div>
                     </div>
-                    <h2 class="display-6 fw-bold text-success mb-1">{{ interview_count }}</h2>
+                    <h2 class="display-6 fw-bold text-success mb-1" data-countup="{{ interview_count }}">{{ interview_count }}</h2>
                     <div class="d-flex align-items-center gap-2 text-muted small pt-2 border-top">
                         <span><i class="bi bi-calendar-check text-success me-1"></i>Applications in the interview stage</span>
                     </div>
@@ -81,14 +67,14 @@ Dashboard - JobTrack
 
             <!-- Offers Card -->
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-warning border-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 border-start border-warning border-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Offers Secured</span>
                         <div class="bg-warning bg-opacity-10 text-warning rounded-3 d-flex align-items-center justify-content-center p-3 fs-4 flex-shrink-0" style="width: 48px; height: 48px;">
                             <i class="bi bi-trophy-fill"></i>
                         </div>
                     </div>
-                    <h2 class="display-6 fw-bold text-warning mb-1">{{ offer_count }}</h2>
+                    <h2 class="display-6 fw-bold text-warning mb-1" data-countup="{{ offer_count }}">{{ offer_count }}</h2>
                     <div class="d-flex align-items-center gap-2 text-muted small pt-2 border-top">
                         <span><i class="bi bi-stars text-warning me-1"></i>Successful conversion</span>
                     </div>
@@ -97,14 +83,14 @@ Dashboard - JobTrack
 
             <!-- Rejections Card -->
             <div class="col-sm-6 col-xl-3">
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-danger border-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 border-start border-danger border-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span class="text-muted small d-block text-uppercase fw-bold tracking-wide" style="font-size: 0.7rem;">Closed / Rejected</span>
                         <div class="bg-danger bg-opacity-10 text-danger rounded-3 d-flex align-items-center justify-content-center p-3 fs-4 flex-shrink-0" style="width: 48px; height: 48px;">
                             <i class="bi bi-x-octagon-fill"></i>
                         </div>
                     </div>
-                    <h2 class="display-6 fw-bold text-danger mb-1">{{ rejected_count }}</h2>
+                    <h2 class="display-6 fw-bold text-danger mb-1" data-countup="{{ rejected_count }}">{{ rejected_count }}</h2>
                     <div class="d-flex align-items-center gap-2 text-muted small pt-2 border-top">
                         <span><i class="bi bi-archive text-danger me-1"></i>Archived opportunities</span>
                     </div>
@@ -113,7 +99,7 @@ Dashboard - JobTrack
         </div>
 
         <!-- RESUME ATS CARD -->
-        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
+        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-body">
             <div class="card-body p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                 <div class="d-flex align-items-center gap-3">
                     <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
@@ -122,7 +108,7 @@ Dashboard - JobTrack
                     <div>
                         <span class="text-primary fw-semibold text-uppercase tracking-wide" style="font-size: 0.7rem;">Resume ATS</span>
                         {% if latest_analysis %}
-                            <h2 class="h5 fw-bold text-dark mb-1">
+                            <h2 class="h5 fw-bold text-body mb-1">
                                 Latest score:
                                 <span class="{% if latest_analysis.overall_score >= 80 %}text-success{% elif latest_analysis.overall_score >= 60 %}text-primary{% elif latest_analysis.overall_score >= 40 %}text-warning{% else %}text-danger{% endif %}">
                                     {{ latest_analysis.overall_score }}/100
@@ -135,7 +121,7 @@ Dashboard - JobTrack
                                 {{ latest_analysis.resume.original_filename|default:"Resume" }} · {{ latest_analysis.created_at|date:"d M Y" }}
                             </p>
                         {% else %}
-                            <h2 class="h5 fw-bold text-dark mb-1">Score your resume</h2>
+                            <h2 class="h5 fw-bold text-body mb-1">Score your resume</h2>
                             <p class="small text-muted mb-0">Get an ATS score and concrete improvement suggestions in seconds.</p>
                         {% endif %}
                     </div>
@@ -157,58 +143,47 @@ Dashboard - JobTrack
         <div class="row g-4 mb-4">
             <div class="col-lg-8">
                 <!-- PIPELINE DISTRIBUTION SECTION (Exact working method preserved) -->
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 justify-content-between">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 justify-content-between">
                     <div>
                         <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
                             <div>
                                 <span class="text-primary fw-semibold text-uppercase tracking-wider small">Pipeline Analytics</span>
-                                <h2 class="h5 fw-bold text-dark mb-4">Pipeline Distribution Breakdown</h2>
+                                <h2 class="h5 fw-bold text-body mb-4">Pipeline Distribution Breakdown</h2>
                             </div>
-                            <span class="badge bg-light text-muted border px-3 py-2 rounded-pill small align-self-start align-self-sm-auto">Total Submissions: {{ total_applications }}</span>
+                            <span class="badge bg-body-tertiary text-muted border px-3 py-2 rounded-pill small align-self-start align-self-sm-auto">Total Submissions: {{ total_applications }}</span>
                         </div>
 
-                        <!-- Dynamic Progress Bar -->
-                        <div class="progress mb-4 shadow-none bg-grey rounded-pill overflow-hidden" style="height: 14px;">
-                            <div class="progress-bar bg-primary" role="progressbar" 
-                                 style="width: var(--applied-w);" 
-                                 title="Applied: {{ applied_count }}"></div>
-                            <div class="progress-bar bg-success" role="progressbar" 
-                                 style="width: var(--interview-w);" 
-                                 title="Interview: {{ interview_count }}"></div>
-                            <div class="progress-bar bg-warning" role="progressbar" 
-                                 style="width: var(--offer-w);" 
-                                 title="Offer: {{ offer_count }}"></div>
-                            <div class="progress-bar bg-danger" role="progressbar" 
-                                 style="width: var(--rejected-w);" 
-                                 title="Rejected: {{ rejected_count }}"></div>
-                        </div>
-
-                        <!-- Distribution Legend & Counts -->
-                        <div class="row g-2 text-muted small pt-1">
-                            <div class="col-6 col-md-3 d-flex align-items-center gap-2">
-                                <span class="badge bg-primary rounded-circle p-1 flex-shrink-0"></span> 
-                                <span class="text-truncate">Applied: <strong class="text-dark">{{ applied_count }}</strong></span>
+                        {% if total_applications %}
+                            <div class="row g-4 align-items-center">
+                                <div class="col-md-5">
+                                    <div class="position-relative mx-auto" style="height: 220px; max-width: 220px;">
+                                        <canvas id="pipeline-chart" role="img" aria-label="Pipeline distribution by status"></canvas>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <ul class="list-unstyled mb-0 small">
+                                        {% for item in status_breakdown %}
+                                            <li class="d-flex justify-content-between align-items-center py-2 {% if not forloop.last %}border-bottom{% endif %}">
+                                                <span class="d-flex align-items-center gap-2 text-muted text-truncate pe-2">
+                                                    <span class="rounded-circle flex-shrink-0 d-inline-block" style="width: 10px; height: 10px; background-color: {{ item.color }};"></span>
+                                                    {{ item.label }}
+                                                </span>
+                                                <strong class="text-body">{{ item.value }}</strong>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="col-6 col-md-3 d-flex align-items-center gap-2">
-                                <span class="badge bg-success rounded-circle p-1 flex-shrink-0"></span> 
-                                <span class="text-truncate">Interview: <strong class="text-dark">{{ interview_count }}</strong></span>
-                            </div>
-                            <div class="col-6 col-md-3 d-flex align-items-center gap-2">
-                                <span class="badge bg-warning rounded-circle p-1 flex-shrink-0"></span> 
-                                <span class="text-truncate">Offer: <strong class="text-dark">{{ offer_count }}</strong></span>
-                            </div>
-                            <div class="col-6 col-md-3 d-flex align-items-center gap-2">
-                                <span class="badge bg-danger rounded-circle p-1 flex-shrink-0"></span> 
-                                <span class="text-truncate">Rejected: <strong class="text-dark">{{ rejected_count }}</strong></span>
-                            </div>
-                        </div>
+                        {% else %}
+                            <p class="text-muted small mb-0">Add applications to see your pipeline distribution.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <!-- OTHER APPLICATIONS SECTION (Saved, Withdrawn, Accepted) -->
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body h-100 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <span class="text-primary fw-semibold text-uppercase tracking-wider small">Other Statuses</span>
@@ -217,11 +192,11 @@ Dashboard - JobTrack
                         <ul class="list-unstyled mb-0 small">
                             <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
                                 <span class="text-muted text-truncate pe-2"><i class="bi bi-bookmark-fill text-secondary me-2"></i>Saved Applications</span>
-                                <span class="fw-bold text-dark bg-light px-2 py-1 rounded-3 flex-shrink-0">{{ saved_count|default:"0" }}</span>
+                                <span class="fw-bold text-body bg-body-tertiary px-2 py-1 rounded-3 flex-shrink-0">{{ saved_count|default:"0" }}</span>
                             </li>
                             <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
                                 <span class="text-muted text-truncate pe-2"><i class="bi bi-dash-circle-fill text-muted me-2"></i>Withdrawn</span>
-                                <span class="fw-bold text-dark bg-light px-2 py-1 rounded-3 flex-shrink-0">{{ withdrawn_count|default:"0" }}</span>
+                                <span class="fw-bold text-body bg-body-tertiary px-2 py-1 rounded-3 flex-shrink-0">{{ withdrawn_count|default:"0" }}</span>
                             </li>
                             <li class="d-flex justify-content-between align-items-center py-2">
                                 <span class="text-muted text-truncate pe-2"><i class="bi bi-check-all text-success me-2"></i>Accepted / Confirmed</span>
@@ -236,15 +211,35 @@ Dashboard - JobTrack
             </div>
         </div>
 
-        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white overflow-hidden">
+        <!-- APPLICATIONS OVER TIME -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-body">
+            <div class="card-header bg-body border-0 pt-4 px-4 pb-0 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+                <div>
+                    <span class="text-primary fw-semibold text-uppercase tracking-wider small">Activity</span>
+                    <h2 class="h5 fw-bold text-body mb-0">Applications Over Time</h2>
+                </div>
+                <span class="badge bg-body-tertiary text-muted border px-3 py-2 rounded-pill small">Last 6 months</span>
+            </div>
+            <div class="card-body p-4">
+                {% if total_applications %}
+                    <div class="position-relative" style="height: 260px;">
+                        <canvas id="trend-chart" role="img" aria-label="Applications submitted per month"></canvas>
+                    </div>
+                {% else %}
+                    <p class="text-muted small mb-0">No application activity yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-body overflow-hidden">
             <!-- Section Header -->
-            <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+            <div class="card-header bg-body border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-3">
                     <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 42px; height: 42px;">
                         <i class="bi bi-calendar-event fs-5"></i>
                     </div>
                     <div>
-                        <h2 class="h5 fw-bold text-dark mb-1">Upcoming Interviews</h2>
+                        <h2 class="h5 fw-bold text-body mb-1">Upcoming Interviews</h2>
                         <p class="text-muted small mb-0">Stay prepared for your upcoming interview rounds.</p>
                     </div>
                 </div>
@@ -255,7 +250,7 @@ Dashboard - JobTrack
                     <div class="list-group list-group-flush gap-3">
                         {% for interview in upcoming_interviews %}
                             <a href="{% url 'interviews:details' interview.pk %}"
-                            class="list-group-item list-group-item-action border rounded-4 p-3 bg-light hover-shadow transition text-decoration-none">
+                            class="list-group-item list-group-item-action border rounded-4 p-3 bg-body-tertiary hover-shadow transition text-decoration-none">
                                 
                                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                                     
@@ -266,7 +261,7 @@ Dashboard - JobTrack
                                         </div>
                                         <div>
                                             <div class="d-flex align-items-center gap-2 mb-1">
-                                                <h3 class="h6 fw-bold text-dark mb-0">
+                                                <h3 class="h6 fw-bold text-body mb-0">
                                                     {{ interview.round_name }}
                                                 </h3>
                                                 <span class="badge bg-primary bg-opacity-10 text-primary px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.7rem;">
@@ -274,7 +269,7 @@ Dashboard - JobTrack
                                                 </span>
                                             </div>
                                             <p class="text-muted small mb-0 d-flex align-items-center gap-1 text-break">
-                                                <span class="fw-medium text-dark">{{ interview.application.job_title }}</span>
+                                                <span class="fw-medium text-body">{{ interview.application.job_title }}</span>
                                                 <span>at</span>
                                                 <span class="fw-semibold text-secondary"><i class="bi bi-building me-1"></i>{{ interview.application.company }}</span>
                                             </p>
@@ -284,7 +279,7 @@ Dashboard - JobTrack
                                     <!-- Right Side: Date & Time Badge -->
                                     <div class="d-flex align-items-center justify-content-between justify-content-md-end gap-3 pt-2 pt-md-0 border-top border-md-0">
                                         <div class="text-start text-md-end">
-                                            <div class="fw-bold text-dark small d-flex align-items-center gap-1">
+                                            <div class="fw-bold text-body small d-flex align-items-center gap-1">
                                                 <i class="bi bi-calendar3 text-muted"></i> {{ interview.scheduled_at|date:"d M Y" }}
                                             </div>
                                             <div class="text-muted" style="font-size: 0.75rem;">
@@ -308,11 +303,11 @@ Dashboard - JobTrack
         </div>
 
         <!-- RECENT APPLICATIONS TABLE SECTION -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden mb-4">
-            <div class="card-header bg-white border-0 pt-4 px-4 px-md-4 pb-0 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+        <div class="card border-0 shadow-sm rounded-4 bg-body overflow-hidden mb-4">
+            <div class="card-header bg-body border-0 pt-4 px-4 px-md-4 pb-0 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
                 <div>
                     <span class="text-primary fw-semibold text-uppercase tracking-wider small">Pipeline Activity</span>
-                    <h2 class="h5 fw-bold text-dark mb-0">Recent Applications Overview</h2>
+                    <h2 class="h5 fw-bold text-body mb-0">Recent Applications Overview</h2>
                 </div>
                 <a href="{% url 'applications:list' %}" class="btn btn-outline-dark btn-sm px-3 fw-semibold rounded-pill align-self-start align-self-sm-auto">
                     View All Submissions <i class="bi bi-arrow-right ms-1"></i>
@@ -335,7 +330,7 @@ Dashboard - JobTrack
                                 {% for application in recent_applications %}
                                     <tr>
                                         <td class="fw-semibold ps-3 py-3">
-                                            <a href="{% url 'applications:details' application.pk %}" class="text-dark text-decoration-none hover-primary">
+                                            <a href="{% url 'applications:details' application.pk %}" class="text-body text-decoration-none hover-primary">
                                                 {{ application.job_title }}
                                             </a>
                                         </td>
@@ -365,4 +360,96 @@ Dashboard - JobTrack
     </div>
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+{{ status_breakdown|json_script:"pipeline-data" }}
+{{ trend_labels|json_script:"trend-labels" }}
+{{ trend_values|json_script:"trend-values" }}
+<script>
+    (function () {
+        if (typeof Chart === "undefined" || !window.jtCharts) {
+            return;
+        }
+
+        var charts = window.jtCharts;
+        charts.applyDefaults();
+        var colors = charts.themeColors();
+
+        // Pipeline doughnut ---------------------------------------------------
+        var pipelineEl = document.getElementById("pipeline-data");
+        var pipelineCanvas = document.getElementById("pipeline-chart");
+
+        if (pipelineEl && pipelineCanvas) {
+            var pipelineData = JSON.parse(pipelineEl.textContent) || [];
+
+            if (pipelineData.length) {
+                charts.register(new Chart(pipelineCanvas, {
+                    type: "doughnut",
+                    data: {
+                        labels: pipelineData.map(function (item) { return item.label; }),
+                        datasets: [{
+                            data: pipelineData.map(function (item) { return item.value; }),
+                            backgroundColor: pipelineData.map(function (item) { return item.color; }),
+                            borderWidth: 0,
+                            hoverOffset: 6,
+                            spacing: 2
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        cutout: "68%",
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { displayColors: false }
+                        }
+                    }
+                }));
+            }
+        }
+
+        // Applications per month ----------------------------------------------
+        var labelsEl = document.getElementById("trend-labels");
+        var valuesEl = document.getElementById("trend-values");
+        var trendCanvas = document.getElementById("trend-chart");
+
+        if (labelsEl && valuesEl && trendCanvas) {
+            var labels = JSON.parse(labelsEl.textContent) || [];
+            var values = JSON.parse(valuesEl.textContent) || [];
+
+            charts.register(new Chart(trendCanvas, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Applications",
+                        data: values,
+                        backgroundColor: colors.primary,
+                        hoverBackgroundColor: colors.violet,
+                        borderRadius: 6,
+                        maxBarThickness: 42
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: colors.muted },
+                            border: { color: colors.border }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0, color: colors.muted },
+                            grid: { color: colors.border },
+                            border: { display: false }
+                        }
+                    }
+                }
+            }));
+        }
+    })();
+</script>
 {% endblock %}
