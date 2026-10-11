@@ -5,67 +5,103 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-4 py-md-5 px-3 px-md-4 bg-body-tertiary flex-grow-1">
-    <div class="max-w-800 mx-auto">
+<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary flex-grow-1">
+    <div class="max-w-1400 mx-auto">
 
         {% url 'interviews:list' as back_url %}
         {% include "includes/back_link.html" with url=back_url label="Back to Interviews" %}
 
-        <div class="card border-0 shadow-lg rounded-4 bg-body">
-            {% include "includes/form_header.html" with icon="bi-calendar-event" title=page_title subtitle="Add or update the details of your interview schedule to keep your career pipeline organized." %}
+        <div class="row g-4">
+            <!-- FORM -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg rounded-4 bg-body">
+                    {% include "includes/form_header.html" with icon="bi-calendar-event" title=page_title subtitle="Add or update the details of your interview schedule to keep your career pipeline organized." %}
 
-            <form method="post" novalidate data-loading>
-                {% csrf_token %}
+                    <form method="post" novalidate data-loading>
+                        {% csrf_token %}
 
-                <div class="card-body p-4 p-md-5 pt-4">
-                    {% include "includes/form_errors.html" %}
+                        <div class="card-body p-4 p-md-5 pt-4">
+                            {% include "includes/form_errors.html" %}
 
-                    <div class="jt-form-section">
-                        <h2 class="jt-form-section-title">Interview details</h2>
-                        <div class="row g-3">
-                            <div class="col-12">
-                                {% include "includes/field.html" with field=form.application %}
+                            <div class="jt-form-section">
+                                <h2 class="jt-form-section-title">Interview details</h2>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        {% include "includes/field.html" with field=form.application %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% include "includes/field.html" with field=form.round_name %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% include "includes/field.html" with field=form.interview_type %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% include "includes/field.html" with field=form.scheduled_at %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% include "includes/field.html" with field=form.status %}
+                                    </div>
+                                    <div class="col-12">
+                                        {% include "includes/field.html" with field=form.location %}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.round_name %}
-                            </div>
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.interview_type %}
-                            </div>
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.scheduled_at %}
-                            </div>
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.status %}
-                            </div>
-                            <div class="col-12">
-                                {% include "includes/field.html" with field=form.location %}
+
+                            <div class="jt-form-section">
+                                <h2 class="jt-form-section-title">Notes</h2>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        {% include "includes/field.html" with field=form.notes %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="jt-form-section">
-                        <h2 class="jt-form-section-title">Notes</h2>
-                        <div class="row g-3">
-                            <div class="col-12">
-                                {% include "includes/field.html" with field=form.notes %}
+                        <div class="jt-form-actions border-top">
+                            <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 p-3 p-md-4">
+                                <a href="{% url 'interviews:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
+                                    <i class="bi bi-x-lg me-1"></i> Cancel
+                                </a>
+                                <button type="submit" data-loading-text="Saving…"
+                                        class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm w-100 w-sm-auto order-1 order-sm-2 rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                                    <i class="bi bi-check-lg fs-5"></i> Save Interview
+                                </button>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
+            </div>
 
-                <div class="jt-form-actions border-top">
-                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 p-3 p-md-4">
-                        <a href="{% url 'interviews:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
-                            <i class="bi bi-x-lg me-1"></i> Cancel
-                        </a>
-                        <button type="submit" data-loading-text="Saving…"
-                                class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm w-100 w-sm-auto order-1 order-sm-2 rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
-                            <i class="bi bi-check-lg fs-5"></i> Save Interview
-                        </button>
+            <!-- SIDE PANEL -->
+            <div class="col-lg-4">
+                <div class="jt-side-panel">
+                    <div class="jt-side-card">
+                        <h2 class="jt-side-card-title"><i class="bi bi-lightbulb"></i> Prep tips</h2>
+                        <ul class="jt-side-list">
+                            <li><i class="bi bi-check2"></i><span>Name the round clearly — <strong>"Technical Round 2"</strong> beats "Interview".</span></li>
+                            <li><i class="bi bi-check2"></i><span>Put the <strong>meeting link or address</strong> in Location so it's one tap away.</span></li>
+                            <li><i class="bi bi-check2"></i><span>Use Notes for <strong>questions to ask</strong> and feedback after the call.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="jt-side-card">
+                        <h2 class="jt-side-card-title"><i class="bi bi-signpost-split"></i> Status guide</h2>
+                        <ul class="jt-side-list">
+                            <li><span class="jt-side-dot bg-primary" aria-hidden="true"></span><span><strong>Upcoming</strong> — scheduled and upcoming.</span></li>
+                            <li><span class="jt-side-dot bg-success" aria-hidden="true"></span><span><strong>Completed</strong> — the round is done.</span></li>
+                            <li><span class="jt-side-dot bg-danger" aria-hidden="true"></span><span><strong>Cancelled</strong> — called off by either side.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="jt-side-card">
+                        <h2 class="jt-side-card-title"><i class="bi bi-calendar-check"></i> Reminder</h2>
+                        <p class="small text-muted mb-0">
+                            Upcoming interviews appear on your <a href="{% url 'dashboard:dashboard' %}" class="text-decoration-none fw-semibold">dashboard</a>
+                            and on the <a href="{% url 'interviews:list' %}" class="text-decoration-none fw-semibold">Interviews</a> page, sorted by date.
+                        </p>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
 
     </div>

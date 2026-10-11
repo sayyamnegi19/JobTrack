@@ -179,7 +179,14 @@ def analyze(request):
     else:
         form = ResumeAnalysisForm(request.user, initial=initial)
 
-    return render(request, "resumes/analyze_form.html", {"form": form})
+    return render(
+        request,
+        "resumes/analyze_form.html",
+        {
+            "form": form,
+            "daily_limit": settings.ATS_DAILY_LIMIT,
+        },
+    )
 
 
 @login_required

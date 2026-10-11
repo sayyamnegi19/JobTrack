@@ -5,79 +5,122 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-4 py-md-5 px-3 px-md-4 bg-body-tertiary flex-grow-1">
-    <div class="max-w-800 mx-auto">
+<div class="container-fluid py-4 px-3 px-md-5 bg-body-tertiary flex-grow-1">
+    <div class="max-w-1400 mx-auto">
 
         {% url 'applications:list' as back_url %}
         {% include "includes/back_link.html" with url=back_url label="Back to Applications" %}
 
-        <div class="card border-0 shadow-lg rounded-4 bg-body">
-            {% include "includes/form_header.html" with icon="bi-briefcase-fill" title=page_title subtitle="Fill in the details below to keep your job search pipeline accurate and up to date." %}
+        <div class="row g-4">
+            <!-- FORM -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg rounded-4 bg-body">
+                    {% include "includes/form_header.html" with icon="bi-briefcase-fill" title=page_title subtitle="Fill in the details below to keep your job search pipeline accurate and up to date." %}
 
-            <form method="post" novalidate data-loading>
-                {% csrf_token %}
+                    <form method="post" novalidate data-loading>
+                        {% csrf_token %}
 
-                <div class="card-body p-4 p-md-5 pt-4">
-                    {% include "includes/form_errors.html" %}
+                        <div class="card-body p-4 p-md-5 pt-4">
+                            {% include "includes/form_errors.html" %}
 
-                    <div class="jt-form-section">
-                        <h2 class="jt-form-section-title">Role details</h2>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.job_title %}
+                            <div class="jt-form-section">
+                                <h2 class="jt-form-section-title">Role details</h2>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        {% include "includes/field.html" with field=form.job_title %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% include "includes/field.html" with field=form.company %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% include "includes/field.html" with field=form.location %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% include "includes/field.html" with field=form.job_type %}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.company %}
+
+                            <div class="jt-form-section">
+                                <h2 class="jt-form-section-title">Application tracking</h2>
+                                <div class="row g-3">
+                                    <div class="col-md-6 col-lg-4">
+                                        {% include "includes/field.html" with field=form.application_date %}
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        {% include "includes/field.html" with field=form.job_status %}
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        {% include "includes/field.html" with field=form.salary %}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.location %}
-                            </div>
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.job_type %}
+
+                            <div class="jt-form-section">
+                                <h2 class="jt-form-section-title">Links &amp; notes</h2>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        {% include "includes/field.html" with field=form.job_url %}
+                                    </div>
+                                    <div class="col-12">
+                                        {% include "includes/field.html" with field=form.notes %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="jt-form-section">
-                        <h2 class="jt-form-section-title">Application tracking</h2>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.application_date %}
-                            </div>
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.job_status %}
-                            </div>
-                            <div class="col-md-6">
-                                {% include "includes/field.html" with field=form.salary %}
+                        <div class="jt-form-actions border-top">
+                            <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 p-3 p-md-4">
+                                <a href="{% url 'applications:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
+                                    Cancel
+                                </a>
+                                <button type="submit" data-loading-text="Saving…"
+                                        class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm w-100 w-sm-auto order-1 order-sm-2 rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
+                                    <i class="bi bi-check2-circle fs-5"></i> Save Application
+                                </button>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="jt-form-section">
-                        <h2 class="jt-form-section-title">Links &amp; notes</h2>
-                        <div class="row g-3">
-                            <div class="col-12">
-                                {% include "includes/field.html" with field=form.job_url %}
-                            </div>
-                            <div class="col-12">
-                                {% include "includes/field.html" with field=form.notes %}
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
+            </div>
 
-                <div class="jt-form-actions border-top">
-                    <div class="d-flex flex-column flex-sm-row justify-content-end align-items-center gap-3 p-3 p-md-4">
-                        <a href="{% url 'applications:list' %}" class="btn btn-outline-secondary px-4 py-2.5 fw-semibold w-100 w-sm-auto order-2 order-sm-1 rounded-3">
-                            Cancel
+            <!-- SIDE PANEL -->
+            <div class="col-lg-4">
+                <div class="jt-side-panel">
+                    <div class="jt-side-card">
+                        <h2 class="jt-side-card-title"><i class="bi bi-lightbulb"></i> Make it count</h2>
+                        <ul class="jt-side-list">
+                            <li><i class="bi bi-check2"></i><span>Record the <strong>exact job title</strong> from the posting — it makes later resume matching accurate.</span></li>
+                            <li><i class="bi bi-check2"></i><span>Add the <strong>job link</strong> so you can score your resume against it with Resume ATS.</span></li>
+                            <li><i class="bi bi-check2"></i><span>Keep the <strong>status current</strong> — your dashboard charts read from it.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="jt-side-card">
+                        <h2 class="jt-side-card-title"><i class="bi bi-signpost-split"></i> Status guide</h2>
+                        <ul class="jt-side-list">
+                            <li><span class="jt-side-dot bg-secondary" aria-hidden="true"></span><span><strong>Saved</strong> — shortlisted, not applied yet.</span></li>
+                            <li><span class="jt-side-dot bg-primary" aria-hidden="true"></span><span><strong>Applied</strong> — submitted, waiting for a reply.</span></li>
+                            <li><span class="jt-side-dot bg-info" aria-hidden="true"></span><span><strong>Under review</strong> — the recruiter is screening.</span></li>
+                            <li><span class="jt-side-dot bg-success" aria-hidden="true"></span><span><strong>Interview</strong> — active interview process.</span></li>
+                            <li><span class="jt-side-dot bg-warning" aria-hidden="true"></span><span><strong>Offer</strong> — an offer has been made.</span></li>
+                            <li><span class="jt-side-dot bg-danger" aria-hidden="true"></span><span><strong>Rejected</strong> — closed by the company.</span></li>
+                            <li><span class="jt-side-dot bg-secondary" aria-hidden="true"></span><span><strong>Withdrawn / Accepted</strong> — you stepped away or signed.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="jt-side-card">
+                        <h2 class="jt-side-card-title"><i class="bi bi-stars"></i> Resume ATS</h2>
+                        <p class="small text-muted mb-3">
+                            Have the job description? Score your resume against it and get matched keywords,
+                            formatting checks and prioritized fixes.
+                        </p>
+                        <a href="{% url 'resumes:analyze' %}" class="btn btn-outline-primary btn-sm fw-semibold rounded-3">
+                            <i class="bi bi-clipboard-data me-1"></i>Analyze resume
                         </a>
-                        <button type="submit" data-loading-text="Saving…"
-                                class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm w-100 w-sm-auto order-1 order-sm-2 rounded-3 d-inline-flex align-items-center justify-content-center gap-2">
-                            <i class="bi bi-check2-circle fs-5"></i> Save Application
-                        </button>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
 
     </div>
