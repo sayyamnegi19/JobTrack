@@ -27,9 +27,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=p64k)3c#xja%7$a=o#2@9(6&flje2ub5d&9g$k^%c%a&0&ug4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Controlled via .env: DEBUG=True for development, DEBUG=False for
+# production-style runs (WhiteNoise serves static files in that mode).
+DEBUG = os.getenv("DEBUG", "True").strip().lower() in ("1", "true", "yes", "on")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+    if host.strip()
+]
+
+# Used by django.template.context_processors.debug (dev-only template extras)
+INTERNAL_IPS = ["127.0.0.1", "::1"]
 
 
 # Application definition
@@ -50,6 +59,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,6 +77,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -131,6 +142,26 @@ STATIC_URL = 'static/'
 
 # Project-level static assets (app.css, app.js, favicon)
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# collectstatic target. WhiteNoise serves files from here when DEBUG=False,
+# so no web server (nginx) is needed for static assets.
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        # Dev: plain storage (runserver serves unhashed files).
+        # Production: content-hashed filenames + gzip/brotli compression,
+        # served by WhiteNoise with long-lived cache headers.
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.StaticFilesStorage"
+            if DEBUG
+            else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        ),
+    },
+}
 
 # Uploaded files (resumes)
 MEDIA_URL = 'media/'
