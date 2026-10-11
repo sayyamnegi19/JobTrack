@@ -15,15 +15,16 @@
         })();
     </script>
     <title>{% block title %} JobTrack {% endblock %}</title>
-    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+    {% block meta %}{% endblock %}
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}?v={% now 'U' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- JobTrack shared styles -->
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <!-- JobTrack shared styles (versioned query busts stale dev caches) -->
+    <link rel="stylesheet" href="{% static 'css/app.css' %}?v={% now 'U' %}">
 
     {% block extra_css %} {% endblock %}
 </head>
@@ -150,8 +151,8 @@
     {% include "includes/footer.html" %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'js/app.js' %}"></script>
-    <script src="{% static 'js/charts.js' %}"></script>
+    <script src="{% static 'js/app.js' %}?v={% now 'U' %}"></script>
+    <script src="{% static 'js/charts.js' %}?v={% now 'U' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

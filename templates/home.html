@@ -2,7 +2,85 @@
 
 {% block title %} Home - JobTrack {% endblock %}
 
+{% block meta %}
+<meta name="description" content="JobTrack — track job applications and interviews, and score your resume against any job with AI-powered ATS feedback.">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Landing-only preview visuals.
+       Kept in the page (not app.css) so they can never be served stale. */
+
+    .jt-sample-chip {
+        background: rgba(var(--jt-primary-rgb), 0.12);
+        color: var(--jt-primary);
+        border: 1px solid rgba(var(--jt-primary-rgb), 0.25);
+    }
+
+    .jt-preview-donut {
+        width: 168px;
+        height: 168px;
+        border-radius: 50%;
+        background-color: var(--bs-secondary-bg); /* fallback; gradient set inline */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 24px -10px rgba(16, 24, 40, 0.25);
+    }
+
+    .jt-preview-donut-inner {
+        width: 116px;
+        height: 116px;
+        border-radius: 50%;
+        background: var(--bs-body-bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.1;
+    }
+
+    .jt-preview-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.75rem;
+        height: 180px;
+    }
+
+    .jt-preview-bar-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+    }
+
+    .jt-preview-bar-track {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .jt-preview-bar {
+        width: 100%;
+        flex-shrink: 0;
+        border-radius: 0.5rem 0.5rem 0.25rem 0.25rem;
+        background-image: var(--jt-gradient);
+    }
+
+    .jt-preview-bar-label {
+        margin-top: 0.5rem;
+        font-size: 0.7rem;
+        color: var(--bs-secondary-color);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+
+<!-- landing-preview v2 -->
 
 <!-- HERO SECTION -->
 <section class="jt-hero py-5 bg-body-tertiary border-bottom">
@@ -39,16 +117,16 @@
                 </div>
             </div>
 
-            <!-- Hero Dashboard Mockup (Using Bootstrap Components) -->
+            <!-- Hero Dashboard Mockup (decorative) -->
             <div class="col-lg-6 jt-reveal">
-                <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-body jt-hero-mockup">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-body jt-hero-mockup" aria-hidden="true">
                     <div class="card-header bg-dark text-white px-4 py-3 d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center gap-2">
                             <span class="badge bg-danger rounded-circle p-1"></span>
                             <span class="badge bg-warning rounded-circle p-1"></span>
                             <span class="badge bg-success rounded-circle p-1"></span>
                         </div>
-                        <span class="small font-monospace text-muted">JobTrack Dashboard Preview</span>
+                        <span class="small font-monospace text-white-50">Preview</span>
                     </div>
                     <div class="card-body p-4 bg-body-tertiary">
                         <!-- Quick Stats Mini Row -->
@@ -56,13 +134,13 @@
                             <div class="col-6">
                                 <div class="p-3 bg-body rounded-3 shadow-sm border-start border-primary border-4">
                                     <small class="text-muted d-block">Applications</small>
-                                    <h4 class="fw-bold mb-0 text-body">24</h4>
+                                    <h4 class="fw-bold mb-0 text-body">{{ preview_total }}</h4>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="p-3 bg-body rounded-3 shadow-sm border-start border-success border-4">
                                     <small class="text-muted d-block">Interviews</small>
-                                    <h4 class="fw-bold mb-0 text-success">6</h4>
+                                    <h4 class="fw-bold mb-0 text-success">{{ preview_interviews }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -72,34 +150,28 @@
                                 <span class="fw-semibold small text-body">Recent Applications</span>
                                 <span class="badge bg-body-tertiary text-body border">View All</span>
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-sm align-middle mb-0 small">
-                                    <thead class="text-muted border-bottom">
+                            <table class="table table-sm align-middle mb-0 small">
+                                <thead class="text-muted border-bottom">
+                                    <tr>
+                                        <th>Role</th>
+                                        <th>Company</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in preview_recent %}
                                         <tr>
-                                            <th>Role</th>
-                                            <th>Company</th>
-                                            <th>Status</th>
+                                            <td class="fw-medium">{{ item.job_title }}</td>
+                                            <td>{{ item.company }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ item.status_tone }} bg-opacity-10 text-{{ item.status_tone }}">
+                                                    {{ item.status_label }}
+                                                </span>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="fw-medium">Frontend Dev</td>
-                                            <td>TechCorp</td>
-                                            <td><span class="badge bg-success bg-opacity-10 text-success">Interview</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-medium">Backend Engineer</td>
-                                            <td>DataFlow</td>
-                                            <td><span class="badge bg-warning bg-opacity-10 text-warning">Pending</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-medium">Full Stack Lead</td>
-                                            <td>InnoSoft</td>
-                                            <td><span class="badge bg-info bg-opacity-10 text-info">Applied</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -150,7 +222,7 @@
                             <i class="bi bi-alarm-fill"></i>
                         </div>
                         <h3 class="h5 fw-bold text-body">Upcoming Interviews</h3>
-                        <p class="text-muted small mb-0">Never miss a meeting with dedicated notifications and timeline alerts for scheduled interviews.</p>
+                        <p class="text-muted small mb-0">See every upcoming round on your dashboard, sorted by date, with the details that matter one tap away.</p>
                     </div>
                 </div>
             </div>
@@ -249,19 +321,32 @@
     <div class="container py-xxl-4">
         <div class="text-center max-w-700 mx-auto mb-5 jt-reveal">
             <span class="text-primary fw-semibold text-uppercase tracking-wider small">Preview</span>
-            <h2 class="fw-bold text-body mt-1">A Visual Look Inside Your Dashboard</h2>
-            <p class="text-muted">Designed to cut clutter and display high-impact metrics straight away.</p>
+            <h2 class="fw-bold text-body mt-1">
+                {% if preview_has_data %}Your Dashboard, Right Now{% else %}A Visual Look Inside Your Dashboard{% endif %}
+            </h2>
+            <p class="text-muted mb-2">
+                {% if preview_has_data %}
+                    Live numbers from your tracker — exactly what you'll see inside the app.
+                {% else %}
+                    Designed to cut clutter and display high-impact metrics straight away.
+                {% endif %}
+            </p>
+            {% if preview_is_sample and not preview_zero_data %}
+                <span class="badge jt-sample-chip px-3 py-2 rounded-pill fw-semibold">
+                    <i class="bi bi-eye me-1"></i> Sample preview
+                </span>
+            {% endif %}
         </div>
 
-        <div class="card border-0 shadow-lg rounded-4 p-4 bg-body-tertiary">
+        <div class="card border-0 shadow-lg rounded-4 p-4 bg-body-tertiary" {% if preview_is_sample %}aria-hidden="true"{% endif %}>
             <div class="row g-4 mb-4">
                 <!-- Stat Card 1 -->
                 <div class="col-sm-6 col-xl-3">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-body">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-body h-100 border-start border-primary border-4">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <span class="text-muted small d-block">Total Applications</span>
-                                <h3 class="fw-bold text-body mb-0">24</h3>
+                                <h3 class="fw-bold text-body mb-0">{{ preview_total }}</h3>
                             </div>
                             <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3 fs-4">
                                 <i class="bi bi-folder-fill"></i>
@@ -271,11 +356,11 @@
                 </div>
                 <!-- Stat Card 2 -->
                 <div class="col-sm-6 col-xl-3">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-body">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-body h-100 border-start border-success border-4">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <span class="text-muted small d-block">Interviews</span>
-                                <h3 class="fw-bold text-success mb-0">6</h3>
+                                <h3 class="fw-bold text-success mb-0">{{ preview_interviews }}</h3>
                             </div>
                             <div class="bg-success bg-opacity-10 text-success p-3 rounded-3 fs-4">
                                 <i class="bi bi-chat-dots-fill"></i>
@@ -285,11 +370,11 @@
                 </div>
                 <!-- Stat Card 3 -->
                 <div class="col-sm-6 col-xl-3">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-body">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-body h-100 border-start border-warning border-4">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <span class="text-muted small d-block">Upcoming Interviews</span>
-                                <h3 class="fw-bold text-warning mb-0">3</h3>
+                                <h3 class="fw-bold text-warning mb-0">{{ preview_upcoming }}</h3>
                             </div>
                             <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-3 fs-4">
                                 <i class="bi bi-calendar-event-fill"></i>
@@ -299,11 +384,11 @@
                 </div>
                 <!-- Stat Card 4 -->
                 <div class="col-sm-6 col-xl-3">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-body">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-body h-100 border-start border-danger border-4">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <span class="text-muted small d-block">Rejections</span>
-                                <h3 class="fw-bold text-danger mb-0">8</h3>
+                                <h3 class="fw-bold text-danger mb-0">{{ preview_rejected }}</h3>
                             </div>
                             <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-3 fs-4">
                                 <i class="bi bi-x-octagon-fill"></i>
@@ -313,23 +398,68 @@
                 </div>
             </div>
 
-            <!-- Visualization / Progress Bar Breakdown -->
-            <div class="card border-0 shadow-sm rounded-3 p-4 bg-body">
-                <h5 class="fw-bold text-body mb-3 small text-uppercase">Pipeline Distribution</h5>
-                <div class="progress mb-3" style="height: 12px;">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 35%;" title="Applied"></div>
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" title="Interviewing"></div>
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 15%;" title="Offer"></div>
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" title="Rejected"></div>
+            <!-- VISUALIZATIONS -->
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="card border-0 shadow-sm rounded-3 p-4 bg-body h-100">
+                        <h5 class="small text-uppercase fw-bold text-body mb-3">Pipeline Distribution</h5>
+                        {% if preview_breakdown %}
+                            <div class="d-flex flex-column flex-sm-row align-items-center gap-4">
+                                <div class="jt-preview-donut flex-shrink-0" style="background-image: {{ preview_donut }};">
+                                    <div class="jt-preview-donut-inner">
+                                        <span class="fs-4 fw-bold text-body">{{ preview_total }}</span>
+                                        <span class="text-muted" style="font-size: 0.7rem;">Total</span>
+                                    </div>
+                                </div>
+                                <ul class="jt-side-list flex-grow-1 w-100 mb-0">
+                                    {% for item in preview_breakdown %}
+                                        <li>
+                                            <span class="jt-side-dot" style="background-color: {{ item.color }};" aria-hidden="true"></span>
+                                            <span class="d-flex justify-content-between w-100 gap-3">
+                                                <span>{{ item.label }}</span>
+                                                <strong>{{ item.count }} &middot; {{ item.percent }}%</strong>
+                                            </span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% else %}
+                            <p class="text-muted small mb-0">No data yet.</p>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="d-flex flex-wrap gap-4 text-muted small">
-                    <div><span class="badge bg-primary rounded-circle p-1 me-1"></span> Applied (35%)</div>
-                    <div><span class="badge bg-success rounded-circle p-1 me-1"></span> Interviewing (25%)</div>
-                    <div><span class="badge bg-warning rounded-circle p-1 me-1"></span> Offer (15%)</div>
-                    <div><span class="badge bg-danger rounded-circle p-1 me-1"></span> Rejected (25%)</div>
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm rounded-3 p-4 bg-body h-100">
+                        <h5 class="small text-uppercase fw-bold text-body mb-3">Applications Over Time</h5>
+                        {% if preview_trend %}
+                            <div class="jt-preview-bars">
+                                {% for bar in preview_trend %}
+                                    <div class="jt-preview-bar-col">
+                                        <div class="jt-preview-bar-track">
+                                            <div class="jt-preview-bar" style="height: {{ bar.px }}px;" title="{{ bar.count }} in {{ bar.label }}"></div>
+                                        </div>
+                                        <span class="jt-preview-bar-label">{{ bar.label }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted small mb-0">No data yet.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
+
+        {% if preview_zero_data %}
+            <div class="text-center mt-4 jt-reveal">
+                <p class="text-muted small mb-3">
+                    You haven't added any applications yet — this is what your dashboard will look like once you do.
+                </p>
+                <a href="{% url 'applications:add' %}" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm rounded-3">
+                    <i class="bi bi-plus-lg me-1"></i> Add your first application
+                </a>
+            </div>
+        {% endif %}
     </div>
 </section>
 
